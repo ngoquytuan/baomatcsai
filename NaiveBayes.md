@@ -623,7 +623,7 @@ Rất hay 👌. Tôi sẽ làm cho bạn cả **sơ đồ khối tiến hóa Ant
 ```mermaid
 flowchart LR
     A[2000s<br>Naive Bayes] --> B[2005-2012<br>SVM & Tree Models]
-    B --> C[2013-2018<br>Deep Learning<br>(CNN, RNN, LSTM)]
+    B --> C[2013-2018<br>Deep Learning<br>CNN, RNN, LSTM]
     C --> D[2019-2024<br>LLM & Hybrid AI]
     style A fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
     style B fill:#ffe0b2,stroke:#ef6c00,stroke-width:2px
