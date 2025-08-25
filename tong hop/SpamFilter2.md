@@ -2384,7 +2384,7 @@ spam_filter_demo/
 
 **Demo by**: Spam Filter Team
 **License**: MIT
-```
+
 
 Bây giờ bạn có một hệ thống demo hoàn chỉnh! Để chạy:
 
@@ -2394,3 +2394,148 @@ Bây giờ bạn có một hệ thống demo hoàn chỉnh! Để chạy:
 4. **Mở browser**: http://localhost:5000
 
 Hệ thống sẽ hoạt động ngay cả khi không có API key (dùng mock analysis). Bạn có thể test với các tin nhắn mẫu hoặc nhập tin nhắn tự do để xem pipeline AI hoạt động!
+Naive Bayes được ứng dụng rộng rãi trong nhiều lĩnh vực thực tế nhờ tính đơn giản, hiệu quả và khả năng hoạt động tốt với dữ liệu nhỏ. Dưới đây là các lĩnh vực chính:
+
+## 🔍 **Text Classification & NLP**
+
+### Spam/Ham Detection
+- **Email spam filtering**: Gmail, Outlook sử dụng NB làm một trong các thành phần chính
+- **SMS spam detection**: Lọc tin nhắn rác trên điện thoại
+- **Social media content filtering**: Facebook, Twitter lọc nội dung độc hại
+- **Comment moderation**: YouTube, Reddit tự động ẩn bình luận spam
+
+### Sentiment Analysis
+- **Product reviews**: Amazon, Shopee phân tích sentiment đánh giá sản phẩm
+- **Social listening**: Thương hiệu theo dõi cảm xúc khách hàng trên mạng xã hội
+- **Customer feedback**: Phân loại phản hồi tích cực/tiêu cực
+- **Movie/restaurant reviews**: IMDB, Yelp phân tích đánh giá
+
+### Document Classification
+- **News categorization**: Tự động phân loại tin tức theo chủ đề
+- **Legal document sorting**: Phân loại hợp đồng, văn bản pháp lý
+- **Academic paper classification**: Phân loại bài báo khoa học theo lĩnh vực
+- **Patent classification**: USPTO sử dụng để phân loại bằng sáng chế
+
+## 🏥 **Medical & Healthcare**
+
+### Disease Diagnosis
+- **Medical diagnosis support**: Dự đoán bệnh dựa trên triệu chứng
+- **Drug discovery**: Phân loại tính chất của thuốc mới
+- **Radiology**: Hỗ trợ phân tích X-ray, CT scan (kết hợp với deep learning)
+- **Electronic Health Records**: Phân loại và tổ chức hồ sơ bệnh án
+
+### Epidemiology
+- **Disease outbreak prediction**: Dự báo dịch bệnh dựa trên các yếu tố
+- **Public health monitoring**: Theo dõi xu hướng sức khỏe cộng đồng
+
+## 💰 **Finance & Banking**
+
+### Fraud Detection
+- **Credit card fraud**: Phát hiện giao dịch bất thường
+- **Insurance fraud**: Phát hiện khiếu nại bảo hiểm giả mạo
+- **Money laundering detection**: Phát hiện rửa tiền
+- **Online payment fraud**: PayPal, Visa sử dụng để phát hiện gian lận
+
+### Credit Scoring
+- **Loan approval**: Đánh giá khả năng trả nợ của khách hàng
+- **Risk assessment**: Phân loại mức độ rủi ro đầu tư
+- **Customer segmentation**: Phân khúc khách hàng cho sản phẩm tài chính
+
+## 🛡️ **Cybersecurity**
+
+### Network Security
+- **Intrusion detection**: Phát hiện xâm nhập mạng
+- **Malware classification**: Phân loại malware, virus
+- **Phishing detection**: Phát hiện website/email lừa đảo
+- **Anomaly detection**: Phát hiện hành vi bất thường trong hệ thống
+
+### Information Security
+- **Access control**: Quyết định cấp quyền truy cập
+- **Security incident classification**: Phân loại mức độ nghiêm trọng sự cố
+
+## 🎯 **Marketing & E-commerce**
+
+### Customer Analytics
+- **Customer segmentation**: Phân nhóm khách hàng theo hành vi
+- **Churn prediction**: Dự đoán khách hàng có thể rời bỏ
+- **Cross-selling**: Gợi ý sản phẩm bổ sung
+- **Price optimization**: Tối ưu giá dựa trên phản ứng khách hàng
+
+### Recommendation Systems
+- **Content filtering**: Netflix, Spotify lọc nội dung phù hợp
+- **Product recommendations**: Amazon, Lazada gợi ý sản phẩm
+- **Ad targeting**: Google Ads, Facebook Ads nhắm mục tiêu quảng cáo
+
+## 🔬 **Scientific Research**
+
+### Bioinformatics
+- **Gene classification**: Phân loại gen, protein
+- **Drug-target interaction**: Dự đoán tương tác thuốc-mục tiêu
+- **Species classification**: Phân loại loài dựa trên DNA
+
+### Environmental Science
+- **Weather prediction**: Dự báo thời tiết (component trong ensemble models)
+- **Climate modeling**: Mô hình hóa biến đổi khí hậu
+- **Pollution monitoring**: Phân loại mức độ ô nhiễm
+
+## 🏭 **Manufacturing & IoT**
+
+### Quality Control
+- **Defect detection**: Phát hiện lỗi sản phẩm
+- **Predictive maintenance**: Dự báo khi nào cần bảo trì thiết bị
+- **Supply chain optimization**: Tối ưu chuỗi cung ứng
+
+### IoT Applications
+- **Smart home**: Phân loại hành vi người dùng
+- **Industrial IoT**: Monitor và phân loại trạng thái máy móc
+- **Smart city**: Phân tích traffic, năng lượng
+
+## 🎮 **Gaming & Entertainment**
+
+### Game Development
+- **Player behavior analysis**: Phân loại kiểu chơi của người chơi
+- **Cheat detection**: Phát hiện gian lận trong game
+- **Content recommendation**: Steam, Epic Games gợi ý game
+
+### Content Creation
+- **Automated content tagging**: YouTube tự động gắn tag video
+- **Content moderation**: Twitch, Discord lọc nội dung không phù hợp
+
+## 🏛️ **Government & Public Services**
+
+### Law Enforcement
+- **Crime prediction**: Dự đoán tội phạm dựa trên patterns
+- **Case classification**: Phân loại vụ việc pháp lý
+- **Traffic monitoring**: Phân tích vi phạm giao thông
+
+### Public Administration
+- **Document processing**: Tự động xử lý đơn từ, hồ sơ
+- **Citizen service optimization**: Phân loại yêu cầu dịch vụ công
+
+## 🏫 **Education**
+
+### Learning Analytics
+- **Student performance prediction**: Dự đoán kết quả học tập
+- **Course recommendation**: Coursera, edX gợi ý khóa học
+- **Plagiarism detection**: Phát hiện đạo văn
+- **Automated grading**: Chấm điểm tự động cho bài tự luận
+
+## 🌟 **Tại sao Naive Bayes được ưa chuộng?**
+
+### Ưu điểm trong thực tế:
+- **Fast training & prediction**: Rất nhanh, phù hợp real-time
+- **Small data friendly**: Hoạt động tốt với ít dữ liệu training
+- **Interpretable**: Dễ hiểu, dễ giải thích kết quả
+- **Memory efficient**: Không tốn nhiều bộ nhớ
+- **Baseline model**: Tạo baseline tốt để so sánh với models khác
+- **Probabilistic output**: Cho confidence score, không chỉ classification
+
+### Khi nào nên dùng:
+- Dữ liệu training nhỏ
+- Cần kết quả nhanh
+- Features độc lập (hoặc gần độc lập)
+- Cần probabilistic output
+- Làm baseline hoặc ensemble component
+- Text classification với bag-of-words
+
+Naive Bayes thường không được dùng standalone mà kết hợp với các techniques khác như ensemble methods, hoặc làm preprocessing step cho deep learning models. Trong thời đại AI hiện tại, nó vẫn giữ vai trò quan trọng nhờ tính đơn giản và hiệu quả!
