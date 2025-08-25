@@ -784,13 +784,13 @@ flowchart LR
 
     subgraph AIGateway[SMTP AI Gateway]
         P1[Postfix SMTP Proxy]
-        F1[AI Filter Engine<br/>(ML/NLP Phishing Detection)]
-        R1[Rule-based Filters<br/>(SPF/DKIM/DMARC, RBL, Lookalike Domain)]
+        F1[AI Filter Engine<br/>ML/NLP Phishing Detection]
+        R1[Rule-based Filters<br/>SPF/DKIM/DMARC, RBL, Lookalike Domain]
     end
 
     subgraph InternalMail[MDaemon Mail Server]
-        M1[Mail Routing<br/>(User Mailboxes, OWA/IMAP/POP3)]
-        M2[MDaemon Security<br/>(SpamAssassin, AV, TLS)]
+        M1[Mail Routing<br/>User Mailboxes, OWA/IMAP/POP3]
+        M2[MDaemon Security<br/>SpamAssassin, AV, TLS]
     end
 
     E1 --> P1 --> F1 --> R1 --> M1 --> M2
@@ -892,8 +892,8 @@ flowchart TD
         A[Incoming Email]
     end
 
-    subgraph AI_Gateway["SMTP AI Gateway (Postfix + AI Filter)"]
-        B[SMTP Receive (Postfix)]
+    subgraph AI_Gateway["SMTP AI Gateway <br>Postfix + AI Filter"]
+        B[SMTP Receive <br>Postfix]
         C[AI Pre-Filter]
         D{AI Decision}
         E[Safe Mailbox Queue]
@@ -939,6 +939,95 @@ flowchart TD
 
 Bạn có muốn tôi bổ sung luôn **data pipeline chi tiết cho AI filter** (ví dụ: NLP preprocessing → Embedding → Classification → Decision)?
 
+Đúng rồi, để demo ý tưởng **AI Gateway chống BEC/phishing** thì bạn **không cần dựng cả MDaemon hay Exchange** (rất nặng, khó cấu hình). Bạn có thể dựng **một chat server giả lập email** → AI filter → inbox, để minh hoạ rõ data flow.
+
+### Cách demo đơn giản:
+
+1. **Thay email bằng chat server/websocket**
+
+   * Client A (giả lập người gửi email)
+   * AI Gateway (proxy)
+   * Client B (giả lập người nhận email)
+
+2. **Luồng hoạt động**
+
+   * Client A gửi "email" (tin nhắn text) → Gateway.
+   * Gateway gọi AI model check (phishing?, domain giả?, nội dung nhạy cảm?).
+   * Nếu an toàn → chuyển tiếp sang Client B.
+   * Nếu nghi ngờ → gắn cảnh báo hoặc chặn.
+
+3. **Công nghệ đơn giản để demo**
+
+   * **Python Flask/FastAPI** làm Gateway.
+   * **WebSocket/HTTP API** để nhận và gửi message.
+   * **SQLite hoặc memory queue** làm “inbox”.
+   * **LLM mini** (vd: Llama.cpp, GPT4All, hoặc gọi API OpenAI) để phân tích.
+
+---
+
+### Data Flow (Mermaid cho demo Chat Gateway)
+
+```mermaid
+flowchart LR
+    subgraph Sender
+        A[Client A - giả lập người gửi]
+    end
+
+    subgraph Gateway
+        G1[Receive API] --> G2[AI Filter]
+        G2 -->|Safe| G3[Forward to Inbox]
+        G2 -->|Suspicious| G4[Flag/Block]
+    end
+
+    subgraph Receiver
+        B[Client B - giả lập người nhận]
+    end
+
+    A --> G1
+    G3 --> B
+```
+
+---
+
+### Ví dụ code mini (FastAPI demo)
+
+```python
+from fastapi import FastAPI, Request
+from pydantic import BaseModel
+
+app = FastAPI()
+inbox = []
+
+class Message(BaseModel):
+    sender: str
+    receiver: str
+    subject: str
+    body: str
+
+def ai_filter(msg: Message) -> bool:
+    # giả lập AI check phishing
+    if "chuyển khoản" in msg.body.lower() and "tài khoản mới" in msg.body.lower():
+        return False  # nghi ngờ
+    return True
+
+@app.post("/send")
+def send(msg: Message):
+    if ai_filter(msg):
+        inbox.append(msg)
+        return {"status": "delivered", "msg": msg}
+    else:
+        return {"status": "blocked", "reason": "suspected phishing"}
+
+@app.get("/inbox")
+def get_inbox():
+    return inbox
+```
+
+👉 Cái này chạy xong là bạn có một **mini gateway**: gửi tin nhắn bằng API `/send`, check AI rule, và đọc inbox bằng `/inbox`.
+
+---
+
+Bạn muốn tôi viết luôn **bản nâng cấp** để thay rule tĩnh thành gọi **LLM (AI model)** thực sự không? Ví dụ gửi nội dung message lên model và phân tích rồi quyết định chặn/deliver?
 
 
 
