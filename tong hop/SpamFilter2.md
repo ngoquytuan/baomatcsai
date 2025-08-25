@@ -2539,3 +2539,663 @@ Naive Bayes được ứng dụng rộng rãi trong nhiều lĩnh vực thực t
 - Text classification với bag-of-words
 
 Naive Bayes thường không được dùng standalone mà kết hợp với các techniques khác như ensemble methods, hoặc làm preprocessing step cho deep learning models. Trong thời đại AI hiện tại, nó vẫn giữ vai trò quan trọng nhờ tính đơn giản và hiệu quả!
+
+Tuyệt vời! Đánh giá chất lượng model là **SIÊU QUAN TRỌNG**, đặc biệt với Naive Bayes vì nó có những đặc điểm riêng cần chú ý. Tôi sẽ hướng dẫn comprehensive evaluation:
+
+## 🎯 **Tại sao cần đánh giá Model?**
+
+```python
+why_evaluate = {
+    "business_critical": "Sai lầm = mất tiền/uy tín (spam filter sai = mất email quan trọng)",
+    "model_selection": "So sánh Naive Bayes vs SVM vs Neural Networks",
+    "hyperparameter_tuning": "Chọn smoothing parameter α tối ưu",
+    "deployment_decision": "Model có đủ tốt để production không?",
+    "monitoring": "Performance có deteriorate theo thời gian không?",
+    "debugging": "Tìm ra model yếu ở đâu để improve"
+}
+```
+
+## 📊 **Evaluation Framework cho Naive Bayes**
+
+### 1. **Data Splitting Strategy**
+
+```python
+from sklearn.model_selection import train_test_split, StratifiedKFold
+import numpy as np
+
+class NBEvaluator:
+    def __init__(self, data, labels):
+        self.data = data
+        self.labels = labels
+        
+    def create_splits(self):
+        """Tạo train/validation/test splits"""
+        
+        # Strategy 1: Simple train/test split
+        X_train, X_temp, y_train, y_temp = train_test_split(
+            self.data, self.labels, 
+            test_size=0.4,           # 60% train, 40% temp
+            random_state=42,
+            stratify=self.labels     # Giữ tỷ lệ classes
+        )
+        
+        # Split temp thành validation và test
+        X_val, X_test, y_val, y_test = train_test_split(
+            X_temp, y_temp,
+            test_size=0.5,           # 20% val, 20% test  
+            random_state=42,
+            stratify=y_temp
+        )
+        
+        return {
+            'train': (X_train, y_train),    # 60% - Training
+            'val': (X_val, y_val),          # 20% - Hyperparameter tuning  
+            'test': (X_test, y_test)        # 20% - Final evaluation
+        }
+    
+    def time_based_split(self, time_column):
+        """Time-based split cho real-world scenarios"""
+        # Sắp xếp theo thời gian
+        sorted_indices = np.argsort(time_column)
+        
+        n = len(sorted_indices)
+        train_size = int(0.7 * n)
+        val_size = int(0.15 * n)
+        
+        train_idx = sorted_indices[:train_size]
+        val_idx = sorted_indices[train_size:train_size + val_size]  
+        test_idx = sorted_indices[train_size + val_size:]
+        
+        return train_idx, val_idx, test_idx
+```
+
+### 2. **Core Metrics cho Classification**
+
+```python
+from sklearn.metrics import (
+    accuracy_score, precision_score, recall_score, f1_score,
+    confusion_matrix, classification_report, roc_auc_score, 
+    precision_recall_curve, roc_curve
+)
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+class ClassificationMetrics:
+    def __init__(self, y_true, y_pred, y_proba=None, class_names=None):
+        self.y_true = y_true
+        self.y_pred = y_pred  
+        self.y_proba = y_proba
+        self.class_names = class_names or list(set(y_true))
+        
+    def basic_metrics(self):
+        """Metrics cơ bản"""
+        return {
+            'accuracy': accuracy_score(self.y_true, self.y_pred),
+            'precision_macro': precision_score(self.y_true, self.y_pred, average='macro'),
+            'precision_micro': precision_score(self.y_true, self.y_pred, average='micro'),
+            'recall_macro': recall_score(self.y_true, self.y_pred, average='macro'),
+            'recall_micro': recall_score(self.y_true, self.y_pred, average='micro'),
+            'f1_macro': f1_score(self.y_true, self.y_pred, average='macro'),
+            'f1_micro': f1_score(self.y_true, self.y_pred, average='micro'),
+        }
+    
+    def per_class_metrics(self):
+        """Metrics cho từng class riêng biệt"""
+        precision_per_class = precision_score(self.y_true, self.y_pred, average=None)
+        recall_per_class = recall_score(self.y_true, self.y_pred, average=None)
+        f1_per_class = f1_score(self.y_true, self.y_pred, average=None)
+        
+        results = {}
+        for i, class_name in enumerate(self.class_names):
+            results[class_name] = {
+                'precision': precision_per_class[i],
+                'recall': recall_per_class[i], 
+                'f1': f1_per_class[i],
+                'support': np.sum(self.y_true == i)
+            }
+        return results
+    
+    def confusion_matrix_analysis(self):
+        """Phân tích confusion matrix chi tiết"""
+        cm = confusion_matrix(self.y_true, self.y_pred)
+        
+        # Visualization
+        plt.figure(figsize=(10, 8))
+        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                   xticklabels=self.class_names,
+                   yticklabels=self.class_names)
+        plt.title('Confusion Matrix')
+        plt.ylabel('True Label')
+        plt.xlabel('Predicted Label')
+        
+        # Analysis
+        analysis = {}
+        for i, true_class in enumerate(self.class_names):
+            for j, pred_class in enumerate(self.class_names):
+                if i != j and cm[i, j] > 0:  # Misclassifications
+                    analysis[f'{true_class}_misclassified_as_{pred_class}'] = {
+                        'count': cm[i, j],
+                        'percentage': cm[i, j] / np.sum(cm[i, :]) * 100
+                    }
+        
+        return cm, analysis
+```
+
+### 3. **Business-Specific Metrics**
+
+```python
+class BusinessMetrics:
+    """Metrics quan trọng cho business use cases"""
+    
+    def spam_filter_metrics(self, y_true, y_pred, y_proba):
+        """Metrics đặc biệt cho spam filtering"""
+        
+        # False Positive Rate (legitimate emails marked as spam) - CRITICAL!
+        tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+        
+        fpr = fp / (fp + tn)  # False Positive Rate
+        fnr = fn / (fn + tp)  # False Negative Rate
+        
+        # Cost-sensitive analysis
+        cost_fp = 100  # Cost of blocking legitimate email
+        cost_fn = 1    # Cost of letting spam through
+        
+        total_cost = (fp * cost_fp) + (fn * cost_fn)
+        
+        # Precision at different thresholds
+        precisions = []
+        recalls = []
+        thresholds = np.arange(0.1, 1.0, 0.1)
+        
+        for threshold in thresholds:
+            y_pred_thresh = (y_proba[:, 1] >= threshold).astype(int)
+            precisions.append(precision_score(y_true, y_pred_thresh))
+            recalls.append(recall_score(y_true, y_pred_thresh))
+        
+        return {
+            'false_positive_rate': fpr,
+            'false_negative_rate': fnr,  
+            'total_business_cost': total_cost,
+            'precision_at_thresholds': list(zip(thresholds, precisions)),
+            'recall_at_thresholds': list(zip(thresholds, recalls)),
+            # Spam-specific metrics
+            'spam_catch_rate': recall_score(y_true, y_pred),  # % spam bị bắt
+            'ham_preservation_rate': 1 - fpr  # % legitimate emails được giữ
+        }
+    
+    def medical_diagnosis_metrics(self, y_true, y_pred, y_proba):
+        """Metrics cho medical diagnosis"""
+        
+        # Sensitivity (True Positive Rate) - quan trọng cho bệnh nghiêm trọng
+        sensitivity = recall_score(y_true, y_pred, pos_label=1)
+        
+        # Specificity (True Negative Rate)
+        tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+        specificity = tn / (tn + fp)
+        
+        # Positive Predictive Value & Negative Predictive Value
+        ppv = precision_score(y_true, y_pred, pos_label=1)
+        npv = tn / (tn + fn) if (tn + fn) > 0 else 0
+        
+        return {
+            'sensitivity': sensitivity,      # Khả năng phát hiện bệnh
+            'specificity': specificity,      # Khả năng loại trừ không bệnh
+            'ppv': ppv,                     # Nếu test positive, % thực sự bệnh
+            'npv': npv,                     # Nếu test negative, % thực sự không bệnh
+            'diagnostic_accuracy': accuracy_score(y_true, y_pred)
+        }
+```
+
+### 4. **Cross-Validation & Robustness Testing**
+
+```python
+from sklearn.model_selection import cross_val_score, StratifiedKFold
+from sklearn.naive_bayes import MultinomialNB
+
+class RobustnessEvaluator:
+    def __init__(self, model, X, y):
+        self.model = model
+        self.X = X  
+        self.y = y
+    
+    def cross_validation_analysis(self, cv_folds=5):
+        """K-Fold Cross Validation với phân tích chi tiết"""
+        
+        skf = StratifiedKFold(n_splits=cv_folds, shuffle=True, random_state=42)
+        
+        # Metrics to track across folds
+        fold_scores = {
+            'accuracy': [],
+            'precision': [],
+            'recall': [],
+            'f1': []
+        }
+        
+        detailed_results = []
+        
+        for fold_idx, (train_idx, val_idx) in enumerate(skf.split(self.X, self.y)):
+            X_train_fold = self.X[train_idx]
+            X_val_fold = self.X[val_idx]
+            y_train_fold = self.y[train_idx]
+            y_val_fold = self.y[val_idx]
+            
+            # Train on fold
+            self.model.fit(X_train_fold, y_train_fold)
+            y_pred_fold = self.model.predict(X_val_fold)
+            
+            # Calculate metrics
+            fold_metrics = {
+                'fold': fold_idx,
+                'accuracy': accuracy_score(y_val_fold, y_pred_fold),
+                'precision': precision_score(y_val_fold, y_pred_fold, average='macro'),
+                'recall': recall_score(y_val_fold, y_pred_fold, average='macro'),
+                'f1': f1_score(y_val_fold, y_pred_fold, average='macro')
+            }
+            
+            detailed_results.append(fold_metrics)
+            for metric in fold_scores:
+                fold_scores[metric].append(fold_metrics[metric])
+        
+        # Summary statistics
+        summary = {}
+        for metric, scores in fold_scores.items():
+            summary[metric] = {
+                'mean': np.mean(scores),
+                'std': np.std(scores),
+                'min': np.min(scores),
+                'max': np.max(scores),
+                'cv_score': np.std(scores) / np.mean(scores)  # Coefficient of variation
+            }
+        
+        return summary, detailed_results
+    
+    def stability_test(self, n_runs=10):
+        """Test model stability across multiple random seeds"""
+        
+        stability_scores = []
+        
+        for run in range(n_runs):
+            # Random train/test split
+            X_train, X_test, y_train, y_test = train_test_split(
+                self.X, self.y, test_size=0.2, random_state=run, stratify=self.y
+            )
+            
+            # Train and evaluate
+            self.model.fit(X_train, y_train)
+            y_pred = self.model.predict(X_test)
+            
+            stability_scores.append({
+                'run': run,
+                'accuracy': accuracy_score(y_test, y_pred),
+                'f1': f1_score(y_test, y_pred, average='macro')
+            })
+        
+        # Analyze stability
+        accuracies = [s['accuracy'] for s in stability_scores]
+        f1_scores = [s['f1'] for s in stability_scores]
+        
+        return {
+            'accuracy_stability': {
+                'mean': np.mean(accuracies),
+                'std': np.std(accuracies),
+                'coefficient_of_variation': np.std(accuracies) / np.mean(accuracies)
+            },
+            'f1_stability': {
+                'mean': np.mean(f1_scores),  
+                'std': np.std(f1_scores),
+                'coefficient_of_variation': np.std(f1_scores) / np.mean(f1_scores)
+            },
+            'detailed_runs': stability_scores
+        }
+```
+
+### 5. **Naive Bayes Specific Analysis**
+
+```python
+class NaiveBayesAnalysis:
+    """Phân tích đặc biệt cho Naive Bayes"""
+    
+    def __init__(self, nb_model, feature_names=None):
+        self.model = nb_model
+        self.feature_names = feature_names
+        
+    def feature_importance_analysis(self):
+        """Phân tích tầm quan trọng của features"""
+        
+        # Feature log probabilities cho mỗi class
+        feature_importance = {}
+        
+        for class_idx, class_name in enumerate(self.model.classes_):
+            # Log probability của features cho class này
+            log_probs = self.model.feature_log_prob_[class_idx]
+            
+            # Convert về importance scores
+            importance_scores = np.exp(log_probs)
+            
+            if self.feature_names:
+                feature_importance[class_name] = dict(zip(self.feature_names, importance_scores))
+            else:
+                feature_importance[class_name] = importance_scores
+        
+        return feature_importance
+    
+    def most_discriminative_features(self, top_k=10):
+        """Tìm features phân biệt nhất giữa các classes"""
+        
+        # Calculate feature importance difference between classes
+        log_prob_diff = {}
+        
+        if len(self.model.classes_) == 2:  # Binary classification
+            diff = self.model.feature_log_prob_[1] - self.model.feature_log_prob_[0]
+            
+            # Features với diff cao = quan trọng cho class 1
+            # Features với diff thấp = quan trọng cho class 0
+            
+            top_class1_indices = np.argsort(diff)[-top_k:][::-1]
+            top_class0_indices = np.argsort(diff)[:top_k]
+            
+            result = {
+                self.model.classes_[1]: {
+                    'indices': top_class1_indices,
+                    'scores': diff[top_class1_indices]
+                },
+                self.model.classes_[0]: {
+                    'indices': top_class0_indices, 
+                    'scores': diff[top_class0_indices]
+                }
+            }
+            
+            if self.feature_names:
+                for class_name in result:
+                    result[class_name]['features'] = [
+                        self.feature_names[i] for i in result[class_name]['indices']
+                    ]
+        
+        return result
+    
+    def probability_calibration_analysis(self, X_test, y_test):
+        """Phân tích độ chính xác của probability estimates"""
+        
+        y_proba = self.model.predict_proba(X_test)
+        
+        # Reliability diagram (calibration plot)
+        from sklearn.calibration import calibration_curve
+        
+        calibration_results = {}
+        
+        for class_idx, class_name in enumerate(self.model.classes_):
+            # Binary case for each class vs rest
+            y_binary = (y_test == class_name).astype(int)
+            prob_true, prob_pred = calibration_curve(
+                y_binary, y_proba[:, class_idx], n_bins=10
+            )
+            
+            calibration_results[class_name] = {
+                'prob_true': prob_true,
+                'prob_pred': prob_pred,
+                'calibration_error': np.mean(np.abs(prob_true - prob_pred))
+            }
+        
+        return calibration_results
+    
+    def independence_assumption_check(self, X):
+        """Kiểm tra giả định independence của features"""
+        
+        # Calculate correlation matrix
+        if hasattr(X, 'toarray'):  # Sparse matrix
+            X_dense = X.toarray()
+        else:
+            X_dense = X
+        
+        correlation_matrix = np.corrcoef(X_dense.T)
+        
+        # Find highly correlated feature pairs
+        high_corr_pairs = []
+        n_features = correlation_matrix.shape[0]
+        
+        for i in range(n_features):
+            for j in range(i+1, n_features):
+                corr = abs(correlation_matrix[i, j])
+                if corr > 0.7:  # Threshold for "high" correlation
+                    pair_info = {
+                        'feature_1': i,
+                        'feature_2': j,
+                        'correlation': corr
+                    }
+                    if self.feature_names:
+                        pair_info['feature_1_name'] = self.feature_names[i]
+                        pair_info['feature_2_name'] = self.feature_names[j]
+                    
+                    high_corr_pairs.append(pair_info)
+        
+        return {
+            'correlation_matrix': correlation_matrix,
+            'high_correlation_pairs': high_corr_pairs,
+            'independence_violation_score': len(high_corr_pairs) / (n_features * (n_features-1) / 2)
+        }
+```
+
+### 6. **Comprehensive Evaluation Pipeline**
+
+```python
+class ComprehensiveEvaluator:
+    """Pipeline đánh giá toàn diện cho Naive Bayes"""
+    
+    def __init__(self, model, X, y, feature_names=None, class_names=None):
+        self.model = model
+        self.X = X
+        self.y = y
+        self.feature_names = feature_names
+        self.class_names = class_names
+        
+    def full_evaluation(self, test_size=0.2):
+        """Đánh giá toàn diện"""
+        
+        print("🚀 Starting Comprehensive Evaluation...")
+        
+        # 1. Data Split
+        X_train, X_test, y_train, y_test = train_test_split(
+            self.X, self.y, test_size=test_size, 
+            stratify=self.y, random_state=42
+        )
+        
+        # 2. Train Model
+        print("🔧 Training model...")
+        self.model.fit(X_train, y_train)
+        
+        # 3. Predictions
+        y_pred = self.model.predict(X_test)
+        y_proba = self.model.predict_proba(X_test)
+        
+        # 4. Initialize evaluators
+        metrics_eval = ClassificationMetrics(y_test, y_pred, y_proba, self.class_names)
+        robustness_eval = RobustnessEvaluator(self.model, X_train, y_train)
+        nb_analysis = NaiveBayesAnalysis(self.model, self.feature_names)
+        
+        # 5. Run all evaluations
+        results = {}
+        
+        print("📊 Computing basic metrics...")
+        results['basic_metrics'] = metrics_eval.basic_metrics()
+        results['per_class_metrics'] = metrics_eval.per_class_metrics()
+        
+        print("🎯 Analyzing confusion matrix...")
+        cm, cm_analysis = metrics_eval.confusion_matrix_analysis()
+        results['confusion_matrix'] = cm.tolist()
+        results['confusion_analysis'] = cm_analysis
+        
+        print("🔄 Running cross-validation...")
+        cv_summary, cv_details = robustness_eval.cross_validation_analysis()
+        results['cross_validation'] = {
+            'summary': cv_summary,
+            'details': cv_details
+        }
+        
+        print("🧠 Analyzing Naive Bayes specifics...")
+        results['feature_importance'] = nb_analysis.feature_importance_analysis()
+        results['discriminative_features'] = nb_analysis.most_discriminative_features()
+        
+        print("📏 Checking probability calibration...")
+        results['calibration'] = nb_analysis.probability_calibration_analysis(X_test, y_test)
+        
+        print("🔗 Testing independence assumption...")
+        results['independence_check'] = nb_analysis.independence_assumption_check(X_train)
+        
+        # 6. Generate recommendations
+        results['recommendations'] = self._generate_recommendations(results)
+        
+        print("✅ Evaluation completed!")
+        return results
+    
+    def _generate_recommendations(self, results):
+        """Tạo recommendations dựa trên kết quả đánh giá"""
+        
+        recommendations = []
+        
+        # Check accuracy
+        accuracy = results['basic_metrics']['accuracy']
+        if accuracy < 0.7:
+            recommendations.append({
+                'type': 'performance',
+                'severity': 'high',
+                'message': f'Low accuracy ({accuracy:.3f}). Consider more training data or feature engineering.'
+            })
+        
+        # Check class imbalance issues
+        per_class = results['per_class_metrics']
+        f1_scores = [metrics['f1'] for metrics in per_class.values()]
+        f1_std = np.std(f1_scores)
+        
+        if f1_std > 0.2:
+            recommendations.append({
+                'type': 'class_imbalance',
+                'severity': 'medium',
+                'message': 'High variance in per-class F1 scores. Consider class balancing techniques.'
+            })
+        
+        # Check cross-validation stability
+        cv_accuracy_std = results['cross_validation']['summary']['accuracy']['std']
+        if cv_accuracy_std > 0.05:
+            recommendations.append({
+                'type': 'stability',
+                'severity': 'medium', 
+                'message': f'Model shows instability (CV std: {cv_accuracy_std:.3f}). Consider more data or regularization.'
+            })
+        
+        # Check independence assumption
+        independence_violation = results['independence_check']['independence_violation_score']
+        if independence_violation > 0.1:
+            recommendations.append({
+                'type': 'assumption_violation',
+                'severity': 'low',
+                'message': 'Many correlated features detected. Consider feature selection or using different algorithms.'
+            })
+        
+        return recommendations
+    
+    def generate_report(self, results, save_path='evaluation_report.txt'):
+        """Tạo báo cáo đánh giá chi tiết"""
+        
+        report = []
+        report.append("="*80)
+        report.append("NAIVE BAYES MODEL EVALUATION REPORT")
+        report.append("="*80)
+        report.append("")
+        
+        # Basic metrics
+        report.append("📊 BASIC METRICS")
+        report.append("-" * 40)
+        for metric, value in results['basic_metrics'].items():
+            report.append(f"{metric.upper()}: {value:.4f}")
+        report.append("")
+        
+        # Per-class metrics
+        report.append("🎯 PER-CLASS METRICS")  
+        report.append("-" * 40)
+        for class_name, metrics in results['per_class_metrics'].items():
+            report.append(f"\nClass: {class_name}")
+            for metric, value in metrics.items():
+                if metric != 'support':
+                    report.append(f"  {metric}: {value:.4f}")
+                else:
+                    report.append(f"  {metric}: {value}")
+        report.append("")
+        
+        # Cross-validation
+        report.append("🔄 CROSS-VALIDATION RESULTS")
+        report.append("-" * 40)
+        cv_summary = results['cross_validation']['summary']
+        for metric, stats in cv_summary.items():
+            report.append(f"{metric.upper()}:")
+            report.append(f"  Mean: {stats['mean']:.4f}")
+            report.append(f"  Std:  {stats['std']:.4f}")
+            report.append(f"  CV:   {stats['cv_score']:.4f}")
+            report.append("")
+        
+        # Recommendations
+        if results['recommendations']:
+            report.append("💡 RECOMMENDATIONS")
+            report.append("-" * 40)
+            for i, rec in enumerate(results['recommendations'], 1):
+                report.append(f"{i}. [{rec['severity'].upper()}] {rec['message']}")
+            report.append("")
+        
+        report.append("="*80)
+        
+        report_text = "\n".join(report)
+        
+        if save_path:
+            with open(save_path, 'w') as f:
+                f.write(report_text)
+            print(f"📄 Report saved to: {save_path}")
+        
+        return report_text
+```
+
+## 🎯 **Ví dụ sử dụng thực tế**
+
+```python
+# Example usage
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import Pipeline
+
+# Sample data
+texts = [
+    "Great product, love it!",
+    "Terrible quality, waste of money", 
+    "Average product, nothing special",
+    "Excellent service, recommend!",
+    "Poor customer support",
+    # ... more data
+]
+
+labels = ["positive", "negative", "neutral", "positive", "negative"]
+
+# Create pipeline
+pipeline = Pipeline([
+    ('tfidf', TfidfVectorizer(max_features=1000)),
+    ('nb', MultinomialNB())
+])
+
+# Comprehensive evaluation
+evaluator = ComprehensiveEvaluator(
+    model=pipeline,
+    X=texts,
+    y=labels,
+    class_names=["positive", "negative", "neutral"]
+)
+
+# Run evaluation
+results = evaluator.full_evaluation()
+
+# Generate report
+report = evaluator.generate_report(results)
+print(report)
+
+# Specific business metrics (if spam filtering)
+business_eval = BusinessMetrics()
+spam_metrics = business_eval.spam_filter_metrics(y_test, y_pred, y_proba)
+```
+
+**Tóm lại**: Đánh giá model không chỉ là accuracy! Cần phân tích toàn diện về stability, business impact, assumptions, và đưa ra recommendations cụ thể để improve. Với Naive Bayes, đặc biệt chú ý đến independence assumption và probability calibration!
