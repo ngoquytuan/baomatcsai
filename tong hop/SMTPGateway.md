@@ -1029,6 +1029,65 @@ def get_inbox():
 
 Bạn muốn tôi viết luôn **bản nâng cấp** để thay rule tĩnh thành gọi **LLM (AI model)** thực sự không? Ví dụ gửi nội dung message lên model và phân tích rồi quyết định chặn/deliver?
 
+Rõ rồi 👍. Tôi sẽ vẽ kiến trúc demo của bạn dưới dạng **Mermaid chart** (block diagram + data flow).
+Trong demo này, chúng ta thay email bằng “chat message”, nhưng vẫn mô phỏng được pipeline:
+
+```mermaid
+flowchart TD
+    subgraph Client["Client (Browser / Chat App)"]
+        A1["User gửi Message"]
+    end
+
+    subgraph Gateway["Python Gateway (Flask/FastAPI)"]
+        A2["API / WebSocket Endpoint"]
+        A3["Inbox Queue (SQLite/In-Memory)"]
+    end
+
+    subgraph Filter["AI Filter"]
+        B1["Naive Bayes Classifier"]
+        B2["LLM Analyzer (API Call)"]
+    end
+
+    subgraph Action["Decision Layer"]
+        C1["Hợp lệ → chuyển đến Inbox"]
+        C2["Nghi ngờ → Flag cảnh báo"]
+        C3["Xác nhận Lừa đảo → Drop/Log"]
+    end
+
+    subgraph UserInbox["Inbox / UI Viewer"]
+        D1["Người dùng đọc Message"]
+        D2["Thông báo / Cảnh báo"]
+    end
+
+    %% Flow
+    A1 --> A2 --> A3
+    A3 --> B1
+    B1 -->|OK| C1
+    B1 -->|Nghi ngờ| B2
+    B2 -->|LLM xác nhận OK| C1
+    B2 -->|LLM xác nhận Scam| C3
+
+    C1 --> D1
+    C2 --> D2
+    C3 --> D2
+```
+
+🔑 **Ý nghĩa kiến trúc:**
+
+1. **Client**: gửi tin nhắn (giả lập email).
+2. **Gateway**: nhận message qua API/WebSocket, lưu tạm vào queue hoặc DB.
+3. **AI Filter**:
+
+   * Naive Bayes lọc nhanh theo training dataset.
+   * Nếu nghi ngờ → gửi lên LLM API (OpenAI, Groq, OpenRouter…) để phân tích ngữ cảnh sâu.
+4. **Decision Layer**: quyết định pass/block/flag message.
+5. **User Inbox**: người dùng xem message hoặc cảnh báo.
+
+👉 Cái hay của demo này: **không cần dựng cả mail server**, chỉ cần Flask/FastAPI, SQLite, và model Naive Bayes.
+
+---
+
+Bạn muốn tôi tiếp theo xây dựng **skeleton code Python cho toàn bộ kiến trúc này** (Flask API + queue + filter stub + LLM call stub), để chạy demo end-to-end luôn không?
 
 
 
