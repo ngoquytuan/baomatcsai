@@ -652,3 +652,328 @@ flowchart LR
 ---
 
 👉 Bạn có muốn tôi mở rộng thêm một **timeline chi tiết theo mốc năm** (ví dụ: 2004 Gmail filter NB, 2010 Microsoft SVM, 2017 Google DL, 2023 Microsoft 365 LLM AI) không?
+
+Tuyệt vời! Bạn đặt những câu hỏi rất quan trọng về thực tế huấn luyện Naive Bayes. Tôi sẽ giải thích chi tiết:
+
+## 📊 **Dataset cho Naive Bayes**
+
+### Không chỉ text! Naive Bayes hoạt động với nhiều loại data:
+
+```python
+# 1. TEXT DATA (phổ biến nhất)
+text_data = [
+    ("Sản phẩm tuyệt vời, tôi rất hài lòng", "positive"),
+    ("Dịch vụ tệ, không khuyến khích", "negative")
+]
+
+# 2. CATEGORICAL DATA  
+categorical_data = [
+    (["sunny", "hot", "high", "false"], "no"),    # weather features
+    (["overcast", "hot", "high", "false"], "yes")
+]
+
+# 3. NUMERICAL DATA (discretized)
+medical_data = [
+    ([37.5, 140, 90, 1], "sick"),     # temp, heart_rate, blood_pressure, cough
+    ([36.2, 72, 80, 0], "healthy")
+]
+
+# 4. MIXED DATA
+mixed_data = [
+    ({"age": 25, "income": "high", "education": "college"}, "approved"),
+    ({"age": 65, "income": "low", "education": "high_school"}, "rejected")
+]
+```
+
+## 📏 **Kích thước Dataset "đẹp"**
+
+### Nguyên tắc chung:
+```python
+# Công thức thô sơ cho text classification
+min_samples_per_class = max(50, vocabulary_size / 100)
+total_samples = n_classes * min_samples_per_class
+
+# Ví dụ:
+# - Vocabulary: 1000 từ
+# - Classes: 3 (spam, ham, suspicious)
+# - Min per class: max(50, 1000/100) = 50
+# - Total: 3 * 50 = 150 samples tối thiểu
+```
+
+### Theo loại bài toán:
+
+**Text Classification:**
+```python
+dataset_sizes = {
+    "proof_of_concept": {
+        "samples_per_class": 20-50,
+        "total": 60-200,
+        "note": "Chỉ để test concept, accuracy thấp"
+    },
+    
+    "small_production": {
+        "samples_per_class": 100-500,
+        "total": 300-2000,
+        "note": "Có thể deploy, cần monitor performance"
+    },
+    
+    "good_production": {
+        "samples_per_class": 1000-5000,
+        "total": 3000-20000,
+        "note": "Performance ổn định, tin cậy được"
+    },
+    
+    "enterprise": {
+        "samples_per_class": "10000+",
+        "total": "50000+",
+        "note": "High accuracy, robust"
+    }
+}
+```
+
+**Factors ảnh hưởng đến kích thước cần thiết:**
+
+```python
+# 1. Số lượng classes
+classes_factor = {
+    2: 1.0,      # Binary: spam/ham
+    3: 1.5,      # Multi: spam/ham/suspicious  
+    5: 2.5,      # Many: news categories
+    10: 5.0      # Complex: product categories
+}
+
+# 2. Độ phức tạp vocabulary
+vocab_complexity = {
+    "simple": 500,        # Domain-specific
+    "medium": 2000,       # General purpose
+    "complex": 10000,     # Rich language
+    "very_complex": 50000 # Multi-domain
+}
+
+# 3. Class balance
+balance_factor = {
+    "balanced": 1.0,      # 50-50, 33-33-33
+    "imbalanced": 2.0,    # 80-20
+    "very_imbalanced": 5.0 # 95-5
+}
+```
+
+## ⚖️ **Xử lý mâu thuẫn trong Dataset**
+
+### 1. **Phát hiện mâu thuẫn:**
+
+```python
+def detect_conflicts(data):
+    """Phát hiện samples giống nhau nhưng khác label"""
+    text_to_labels = {}
+    conflicts = []
+    
+    for text, label in data:
+        if text in text_to_labels:
+            if text_to_labels[text] != label:
+                conflicts.append({
+                    'text': text,
+                    'labels': [text_to_labels[text], label]
+                })
+        else:
+            text_to_labels[text] = label
+    
+    return conflicts
+
+# Ví dụ conflicts
+conflicts_example = [
+    ("Sản phẩm này ok", "positive"),  # Cùng text
+    ("Sản phẩm này ok", "neutral"),   # Khác label
+]
+```
+
+### 2. **Strategies xử lý mâu thuẫn:**
+
+```python
+class ConflictResolver:
+    def __init__(self):
+        self.strategies = {
+            'remove_all': self._remove_all_conflicts,
+            'majority_vote': self._majority_vote,
+            'expert_review': self._expert_review,
+            'separate_labels': self._create_separate_labels,
+            'confidence_weighted': self._confidence_weighted
+        }
+    
+    def _remove_all_conflicts(self, data):
+        """Strategy 1: Xóa tất cả samples mâu thuẫn"""
+        text_counts = {}
+        
+        # Đếm số labels cho mỗi text
+        for text, label in data:
+            if text not in text_counts:
+                text_counts[text] = {}
+            text_counts[text][label] = text_counts[text].get(label, 0) + 1
+        
+        # Chỉ giữ texts có duy nhất 1 label
+        clean_data = []
+        for text, label in data:
+            if len(text_counts[text]) == 1:  # Không mâu thuẫn
+                clean_data.append((text, label))
+        
+        return clean_data
+    
+    def _majority_vote(self, data):
+        """Strategy 2: Chọn label có nhiều votes nhất"""
+        from collections import Counter
+        
+        text_labels = {}
+        for text, label in data:
+            if text not in text_labels:
+                text_labels[text] = []
+            text_labels[text].append(label)
+        
+        resolved_data = []
+        for text, labels in text_labels.items():
+            # Chọn label xuất hiện nhiều nhất
+            majority_label = Counter(labels).most_common(1)[0][0]
+            resolved_data.append((text, majority_label))
+        
+        return resolved_data
+    
+    def _create_separate_labels(self, data):
+        """Strategy 3: Tạo label mới cho trường hợp ambiguous"""
+        text_labels = {}
+        for text, label in data:
+            if text not in text_labels:
+                text_labels[text] = set()
+            text_labels[text].add(label)
+        
+        resolved_data = []
+        for text, labels in text_labels.items():
+            if len(labels) > 1:
+                # Tạo combined label
+                combined_label = "ambiguous_" + "_".join(sorted(labels))
+                resolved_data.append((text, combined_label))
+            else:
+                resolved_data.append((text, list(labels)[0]))
+        
+        return resolved_data
+```
+
+### 3. **Thực tế xử lý mâu thuẫn trong production:**
+
+```python
+# Ví dụ thực tế: Spam detection
+real_world_conflicts = {
+    "legitimate_conflicts": [
+        # Cùng một tin nhắn có thể spam với người này, legitimate với người khác
+        ("Khuyến mãi 50% hôm nay", ["spam", "legitimate"]),
+        # Context khác nhau
+        ("Bạn có rảnh không?", ["legitimate", "suspicious"])  # từ người lạ vs bạn bè
+    ],
+    
+    "labeling_errors": [
+        # Người gán nhãn nhầm
+        ("Cảm ơn bạn đã giúp đỡ", ["spam", "legitimate"]),  # Clearly legitimate
+    ],
+    
+    "ambiguous_cases": [
+        # Thực sự khó phân loại
+        ("Sale cuối năm", ["marketing", "spam"]),  # Ranh giới mỏng
+    ]
+}
+
+# Best practices xử lý
+def handle_real_conflicts(conflicts):
+    strategies = {
+        'high_confidence_cases': 'majority_vote',    # Rõ ràng một bên
+        'genuine_ambiguous': 'separate_labels',      # Tạo class "ambiguous"
+        'labeling_errors': 'expert_review',          # Con người quyết định
+        'context_dependent': 'feature_engineering'   # Thêm context features
+    }
+    
+    return strategies
+```
+
+### 4. **Impact của conflicts lên model:**
+
+```python
+def analyze_conflict_impact():
+    """
+    Conflicts ảnh hưởng thế nào đến Naive Bayes?
+    """
+    
+    impacts = {
+        "probability_estimation": """
+        P(class|feature) bị nhiễu do conflicting evidence
+        Ví dụ: từ 'ok' xuất hiện trong cả positive và negative
+        → Probability estimates không chính xác
+        """,
+        
+        "feature_importance": """
+        Features xuất hiện trong conflicts sẽ có discriminative power thấp
+        → Model học được rằng những features này không đáng tin
+        """,
+        
+        "overfitting": """
+        Ít conflicts: Model có thể overfit to noise
+        Nhiều conflicts: Model trở nên conservative, accuracy giảm
+        """,
+        
+        "class_boundaries": """
+        Conflicts làm mờ ranh giới giữa các classes
+        → Dự đoán kém chính xác ở boundary cases
+        """
+    }
+    
+    return impacts
+
+# Đo lường mức độ conflicts
+def conflict_metrics(data):
+    conflicts = detect_conflicts(data)
+    
+    metrics = {
+        'conflict_rate': len(conflicts) / len(data),
+        'affected_samples': len([c for c in conflicts]) * 2,  # Mỗi conflict ảnh hưởng ≥2 samples
+        'classes_involved': len(set([label for c in conflicts for label in c['labels']])),
+        'severity': 'high' if len(conflicts)/len(data) > 0.05 else 'low'  # >5% là nghiêm trọng
+    }
+    
+    return metrics
+```
+
+## 💡 **Best Practices cho Dataset**
+
+### 1. **Quality over Quantity:**
+```python
+quality_checklist = {
+    'representative': "Cover tất cả use cases thực tế",
+    'balanced': "Không quá imbalanced (tối đa 80-20)",
+    'clean': "Ít noise, conflicts < 5%",
+    'diverse': "Đa dạng về style, từ vựng, context",
+    'recent': "Cập nhật theo thời gian (language evolves)",
+    'domain_specific': "Phù hợp với domain sẽ deploy"
+}
+```
+
+### 2. **Iterative Improvement:**
+```python
+improvement_cycle = [
+    "1. Start with small, high-quality dataset",
+    "2. Train baseline model", 
+    "3. Test on real data",
+    "4. Collect failure cases",
+    "5. Add more training data for failure cases",
+    "6. Retrain and repeat"
+]
+```
+
+### 3. **Monitoring in Production:**
+```python
+def production_monitoring():
+    """Monitor data quality in production"""
+    return {
+        'data_drift': "Vocabulary thay đổi theo thời gian",
+        'new_patterns': "Spammers invent new techniques", 
+        'performance_degradation': "Accuracy giảm → cần retrain",
+        'conflict_detection': "New conflicts từ user feedback"
+    }
+```
+
+**Tóm lại**: Dataset "đẹp" không chỉ về số lượng mà còn về chất lượng, representative, và cách xử lý conflicts thông minh. Trong thực tế, bạn sẽ phải balance giữa perfection và pragmatism!
