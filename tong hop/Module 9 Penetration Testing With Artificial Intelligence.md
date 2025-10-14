@@ -1,3 +1,1016 @@
+Tôi sẽ tạo các slides còn thiếu theo cấu trúc đã đề xuất:
+
+---
+
+## **GROUP 1: PREREQUISITES & SETUP**
+
+### Slide 12: Prerequisites Review
+
+**Title:** Prerequisites - What You Need to Know
+
+**Essential Knowledge from Previous Modules:**
+
+**From Module 2 (Python):**
+• NumPy for numerical operations
+• Pandas for data manipulation
+• Matplotlib for visualization
+• File handling and APIs
+
+**From Module 3 (ML Fundamentals):**
+• Train-test splitting concepts
+• Model evaluation metrics
+• Feature engineering basics
+• Overfitting vs underfitting
+
+**From Module 4-6:**
+• Classification algorithms (SVM, Decision Trees)
+• Neural network basics
+• Anomaly detection concepts
+
+**Image Suggestion:** Checklist with checkboxes, building blocks stacked from Module 2 to Module 9
+
+---
+
+### Slide 51: Lab Environment Setup
+
+**Title:** Setting Up Your AI Pentesting Lab
+
+**Required Software:**
+
+**Core Tools:**
+• Python 3.8+ with pip/conda
+• Jupyter Notebook or VS Code
+• VirtualBox/VMware for isolated testing
+
+**Python Libraries:**
+pip install tensorflow keras scikit-learn
+pip install opencv-python pillow
+pip install requests beautifulsoup4
+pip install scapy python-nmap
+
+
+**Security Tools:**
+• Kali Linux (recommended) or ParrotOS
+• Burp Suite Community Edition
+• Wireshark for traffic analysis
+
+**Image Suggestion:** Terminal window showing installation commands, virtual lab architecture diagram
+
+---
+
+### Slide 52: Python Libraries for AI Security
+
+**Title:** Essential Python Security Libraries
+
+**Deep Learning Frameworks:**
+• **TensorFlow/Keras:** Neural network development
+• **PyTorch:** Research and production ML
+• **scikit-learn:** Traditional ML algorithms
+
+**Security-Specific:**
+• **Scapy:** Packet manipulation and analysis
+• **python-nmap:** Network scanning
+• **pwntools:** Exploit development
+• **BeautifulSoup:** Web scraping and parsing
+
+**Data Processing:**
+• **NumPy/Pandas:** Data manipulation
+• **OpenCV:** Image processing for CAPTCHA
+• **NLTK:** NLP for URL/text analysis
+
+**Image Suggestion:** Python logo with connected library icons, dependency tree diagram
+
+---
+
+## **GROUP 2: EXPANDED DEEP LEARNING SECTIONS**
+
+### Slide 56: CNNs for Security Pattern Recognition
+
+**Title:** Convolutional Neural Networks in Security
+
+**Architecture for Security:**
+• **Input Layer:** Raw binary/image data
+• **Convolutional Layers:** Feature extraction (malware patterns, CAPTCHA characters)
+• **Pooling Layers:** Dimension reduction
+• **Dense Layers:** Classification
+• **Output:** Threat classification
+
+**Security Applications:**
+• Malware binary visualization → image classification
+• Network packet payload analysis
+• Visual CAPTCHA breaking
+• Document tampering detection
+
+**Why CNNs Excel:**
+• Automatic feature learning (no manual pattern definition)
+• Spatial hierarchy recognition
+• Translation invariance (pattern location doesn't matter)
+
+**Image Suggestion:** CNN architecture with security data flowing through layers, malware binary converted to heatmap image
+
+---
+
+### Slide 57: RNNs for Sequential Attack Detection
+
+**Title:** Recurrent Neural Networks - Sequence Analysis
+
+**Sequential Security Data:**
+• API call sequences in malware
+• Network packet sequences
+• User behavior timelines
+• Log file analysis
+• Command execution chains
+
+**LSTM Architecture:**
+• **Input Gate:** Decides what new information to store
+• **Forget Gate:** Decides what old information to discard
+• **Output Gate:** Decides what to output
+• **Cell State:** Long-term memory
+
+**Real-World Example:**
+Normal sequence: Login → Browse → Logout
+Attack sequence: Login → 500 DB queries → Data download → Clear logs
+
+RNN detects anomalous sequence patterns
+
+**Image Suggestion:** LSTM cell structure diagram, timeline showing normal vs attack sequences
+
+---
+
+### Slide 58: Transfer Learning in Cybersecurity
+
+**Title:** Transfer Learning - Leverage Pre-trained Models
+
+**Concept:**
+Use knowledge from one security domain in another
+• Train on large general dataset
+• Fine-tune for specific security task
+• Saves time and computational resources
+
+**Security Applications:**
+
+**Example 1: Malware Detection**
+• Pre-trained: ImageNet CNN (object recognition)
+• Transfer to: Malware binary visualization classification
+• Result: 40% less training data needed
+
+**Example 2: Phishing Detection**
+• Pre-trained: BERT (language understanding)
+• Transfer to: Phishing email classification
+• Result: 95%+ accuracy with minimal training
+
+**Benefits:**
+• Faster model development
+• Works with limited security datasets
+• Better generalization
+
+**Image Suggestion:** Knowledge transfer visualization, model being fine-tuned from general to specific
+
+---
+
+### Slide 59: Ensemble Methods for Security
+
+**Title:** Ensemble Learning - Combining Multiple Models
+
+**Why Ensemble in Security:**
+• No single algorithm perfect for all attacks
+• Reduces false positives/negatives
+• More robust against adversarial attacks
+• Better generalization
+
+**Common Ensemble Techniques:**
+
+**1. Voting Ensemble:**
+• Hard Voting: Majority rule
+• Soft Voting: Average probabilities
+Model 1: 80% malicious
+Model 2: 90% malicious  
+Model 3: 70% malicious
+→ Ensemble: 80% confident → ALERT
+
+**2. Stacking:**
+• Base models: SVM, Random Forest, Neural Net
+• Meta-learner: Combines base model predictions
+• Final decision from meta-learner
+
+**3. Boosting (XGBoost):**
+• Sequential model training
+• Each model corrects previous errors
+• Excellent for imbalanced security datasets
+
+**Image Suggestion:** Multiple AI models voting, committee of experts reaching consensus
+
+---
+
+### Slide 60: Practical Implementation Example
+
+**Title:** Building an AI URL Classifier
+
+**Step-by-Step Workflow:**
+
+**Step 1: Data Collection**
+python
+# Collect labeled URLs
+benign_urls = load_from_alexa_top_sites()
+malicious_urls = load_from_phishtank()
+
+
+**Step 2: Feature Extraction**
+python
+features = extract_url_features(url)
+# Returns: [length, special_char_count, 
+#          subdomain_count, entropy, ...]
+
+
+**Step 3: Model Training**
+from sklearn.ensemble import RandomForestClassifier
+
+model = RandomForestClassifier(n_estimators=100)
+model.fit(X_train, y_train)
+
+
+**Step 4: Real-time Detection**
+prediction = model.predict([new_url_features])
+# Returns: 0 (benign) or 1 (malicious)
+
+
+**Image Suggestion:** Code workflow diagram, data pipeline from raw URLs to predictions
+
+---
+
+### Slide 61: Adversarial ML in Security Context
+
+**Title:** Adversarial Machine Learning - The AI Arms Race
+
+**What is Adversarial ML?**
+Manipulating ML models through carefully crafted inputs
+
+**Attack Types:**
+
+**1. Evasion Attacks:**
+• Modify malware slightly to evade detection
+• Add imperceptible noise to bypass classifier
+• Example: Change 1 byte in malware → undetected
+
+**2. Poisoning Attacks:**
+• Inject malicious data into training set
+• Model learns incorrect patterns
+• Example: Submit "benign" malware samples to public dataset
+
+**3. Model Extraction:**
+• Query model repeatedly to reverse-engineer it
+• Build substitute model
+• Use substitute to craft evasion attacks
+
+**Defense Strategies:**
+• Adversarial training (train on attacked examples)
+• Ensemble diversity (attack must fool all models)
+• Input validation and sanitization
+• Model monitoring for unusual queries
+
+**Image Suggestion:** Attacker vs defender ML models in battle, adversarial example visualization
+
+---
+
+### Slide 62: Model Optimization for Production
+
+**Title:** Optimizing AI Models for Real-Time Security
+
+**Performance Challenges:**
+• Real-time detection needs <100ms response
+• High throughput (millions of events/day)
+• Limited computational resources
+• Continuous learning requirements
+
+**Optimization Techniques:**
+
+**1. Model Compression:**
+• Pruning: Remove unnecessary neurons
+• Quantization: Reduce precision (FP32 → INT8)
+• Knowledge distillation: Train smaller "student" model
+
+**2. Hardware Acceleration:**
+• GPU deployment for parallel processing
+• TPU for neural networks
+• FPGA for custom security algorithms
+
+**3. Caching & Pre-computation:**
+• Cache frequent feature extractions
+• Pre-compute common patterns
+• Lazy evaluation for expensive operations
+
+**4. Model Updates:**
+• Online learning for new threats
+• Scheduled retraining (daily/weekly)
+• A/B testing before full deployment
+
+**Image Suggestion:** Speed optimization metrics, before/after performance comparison
+
+---
+
+## **GROUP 3: DEFENSE PERSPECTIVE**
+
+### Slide 63: Defending Against AI-Powered Attacks
+
+**Title:** Defense Strategies - Fighting AI with AI
+
+**Challenge:**
+Attackers now use AI to create sophisticated, adaptive attacks
+
+**Multi-Layered Defense:**
+
+**Layer 1: Input Validation**
+• Anomaly detection on incoming requests
+• Rate limiting based on behavioral patterns
+• Input sanitization and validation
+
+**Layer 2: Model Hardening**
+• Adversarial training with attack examples
+• Ensemble models (harder to fool all)
+• Defensive distillation (smoother decision boundaries)
+
+**Layer 3: Monitoring & Detection**
+• Detect unusual query patterns (model extraction attempts)
+• Monitor for adversarial examples
+• Log all AI decisions for audit
+
+**Layer 4: Human-in-the-Loop**
+• High-risk decisions require human approval
+• Analyst reviews flagged cases
+• Continuous feedback loop
+
+**Image Suggestion:** Multi-layered security shield, defense-in-depth architecture
+
+---
+
+### Slide 64: Detecting AI-Generated Attacks
+
+**Title:** Spotting AI-Generated Malicious Content
+
+**AI Attack Indicators:**
+
+**Automated Phishing:**
+• Perfect grammar but generic content
+• High-volume campaigns with variations
+• Rapid adaptation to defenses
+• Personalization at scale
+
+**AI-Generated Malware:**
+• Polymorphic code with unusual patterns
+• Optimal evasion techniques
+• Code that seems "too perfect"
+• Rapid mutation rates
+
+**Detection Techniques:**
+
+**1. Statistical Analysis:**
+• Entropy measurement
+• Pattern deviation from human-generated
+• Frequency analysis
+
+**2. Behavioral Fingerprinting:**
+• AI tends to optimize differently than humans
+• Look for "unnatural" optimizations
+• Timing and interaction patterns
+
+**3. Honeypots & Deception:**
+• Trap AI with fake vulnerabilities
+• Detect automated reconnaissance
+• Identify bot-like behavior
+
+**Image Suggestion:** AI-generated content under magnifying glass, detection algorithm flowchart
+
+---
+
+### Slide 65: Secure AI Model Deployment
+
+**Title:** Securing Your AI Security Models
+
+**Deployment Risks:**
+
+**Model Theft:**
+• Attackers extract your trained model
+• Reverse-engineer detection logic
+• Build evasion techniques
+
+**Model Manipulation:**
+• Poison training data
+• Corrupt model parameters
+• Backdoor injection
+
+**Best Practices:**
+
+**1. Access Control:**
+• API authentication and authorization
+• Rate limiting on model queries
+• Logging all model access
+
+**2. Model Protection:**
+• Encrypt model weights
+• Use model serving platforms (TensorFlow Serving)
+• Obfuscate model architecture
+
+**3. Monitoring:**
+• Track model performance degradation
+• Detect data drift
+• Alert on unusual prediction patterns
+
+**4. Secure Training Pipeline:**
+• Validate training data sources
+• Use secure compute environments
+• Version control for models
+
+**Image Suggestion:** Secure deployment architecture, model protection layers
+
+---
+
+## **GROUP 4: TOOLS & COMPARISONS**
+
+### Slide 66: CAPTCHA Breaking Tools Comparison
+
+**Title:** CAPTCHA Breaking - Tools & Frameworks
+
+| Tool | Type | Accuracy | Speed | Difficulty |
+|------|------|----------|-------|------------|
+| **Tesseract OCR** | Traditional | 60-70% | Fast | Easy |
+| **Custom CNN** | Deep Learning | 85-95% | Medium | Hard |
+| **2Captcha API** | Service | 90%+ | Slow | Easy |
+| **Selenium + ML** | Automation | 80-90% | Medium | Medium |
+
+**Open-Source Frameworks:**
+• **TensorFlow Object Detection API** - Pre-trained models
+• **PyTorch Vision** - Custom CNN training
+• **OpenCV** - Image preprocessing
+
+**Ethical Use:**
+• Test your own CAPTCHAs only
+• Improve CAPTCHA security
+• Research purposes with permission
+
+**Lab Exercise:**
+Train a simple CNN on text CAPTCHA dataset
+
+**Image Suggestion:** Tool comparison matrix, CAPTCHA examples with detection overlays
+
+---
+
+### Slide 67: Fuzzing Tools Comparison
+
+**Title:** AI-Enhanced Fuzzing Frameworks
+
+**Traditional Fuzzers:**
+
+**AFL (American Fuzzy Lop):**
+• Coverage-guided fuzzing
+• Genetic algorithm for input mutation
+• No AI, but very effective baseline
+
+**LibFuzzer:**
+• In-process fuzzing
+• Fast feedback loop
+• Integrates with sanitizers
+
+**AI-Enhanced Fuzzers:**
+
+**Neuzz:**
+• Neural network-guided fuzzing
+• Learns program behavior patterns
+• 2-3x faster than AFL
+
+**Enfuzz:**
+• Ensemble learning approach
+• Combines multiple fuzzing strategies
+• Adaptive input generation
+
+**DeepFuzz:**
+• Deep learning for test case generation
+• Learns from crash samples
+• Targeted vulnerability discovery
+
+**Comparison:**
+• Traditional: Faster, simpler, proven
+• AI-Enhanced: Better coverage, smarter mutations, resource-intensive
+
+**Image Suggestion:** Fuzzer comparison chart, vulnerability discovery rates over time
+
+---
+
+### Slide 68: Web Scanner Tools Comparison
+
+**Title:** AI-Powered Web Vulnerability Scanners
+
+**Commercial Tools:**
+
+**Burp Suite Pro + Extensions:**
+• Baseline: Traditional scanner
+• **Backslash Powered Scanner:** ML-based detection
+• **Turbo Intruder:** Smart brute-forcing
+• Cost: $399/year
+
+**Acunetix:**
+• DeepScan technology (ML-based)
+• Low false positive rate
+• Excellent JavaScript scanning
+• Cost: $4,500+/year
+
+**Open-Source Options:**
+
+**ZAP (OWASP):**
+• Free, extensible
+• Community ML plugins
+• Good for learning
+
+**Nuclei:**
+• Template-based scanning
+• Fast, lightweight
+• Can integrate ML for template selection
+
+**Custom AI Scanner:**
+• Build with scikit-learn + Selenium
+• Full control and customization
+• Requires ML expertise
+
+**Image Suggestion:** Scanner comparison table with features/pricing, scanning workflow
+
+---
+
+### Slide 69: Dataset Resources
+
+**Title:** Security Datasets for AI Training
+
+**CAPTCHA Datasets:**
+• **reCAPTCHA Dataset:** Google's v2 samples
+• **SimpleCaptcha:** Basic text CAPTCHAs (GitHub)
+• **Custom Generation:** Create synthetic data
+
+**Malware & Benign Files:**
+• **VirusTotal:** API access to samples
+• **EMBER Dataset:** 1M+ Windows executables
+• **SOREL-20M:** Large-scale malware dataset
+
+**Web Vulnerability Data:**
+• **OWASP WebGoat:** Intentionally vulnerable apps
+• **Common Crawl:** Web data for training
+• **HackerOne/Bugcrowd:** Disclosed vulnerabilities
+
+**Network Traffic:**
+• **UNSW-NB15:** Network intrusion dataset
+• **CTU-13:** Botnet traffic captures
+• **CICIDS2017:** Intrusion detection dataset
+
+**URL/Phishing:**
+• **PhishTank:** Verified phishing URLs
+• **URLhaus:** Malware distribution URLs
+• **Alexa Top 1M:** Legitimate websites
+
+**Image Suggestion:** Dataset sources mind map, data collection pipeline
+
+---
+
+## **GROUP 5: PERFORMANCE METRICS**
+
+### Slide 70: Performance Metrics Deep Dive
+
+**Title:** Evaluating AI Security Models - Metrics That Matter
+
+**Confusion Matrix for Security:**
+
+                Predicted
+              Benign  Malicious
+Actual Benign   TN      FP
+     Malicious  FN      TP
+
+**Key Metrics:**
+
+**1. Precision = TP / (TP + FP)**
+• "Of all items flagged as malicious, how many actually were?"
+• High precision = Few false alarms
+• Critical for avoiding alert fatigue
+
+**2. Recall = TP / (TP + FN)**
+• "Of all actual threats, how many did we catch?"
+• High recall = Few missed attacks
+• Critical for security coverage
+
+**3. F1-Score = 2 × (Precision × Recall) / (Precision + Recall)**
+• Harmonic mean balances both
+• Good for imbalanced datasets (most security data is benign)
+
+**Security Context:**
+• False Positive (FP): Block legitimate user → Business impact
+• False Negative (FN): Miss real attack → Security breach
+
+**Image Suggestion:** Confusion matrix with security examples, precision-recall tradeoff curve
+
+---
+
+### Slide 71: Cost-Sensitive Learning
+
+**Title:** Balancing Security Costs and Benefits
+
+**Not All Errors Are Equal:**
+
+**False Positive Costs:**
+• Legitimate user blocked: $10-100 lost revenue
+• Employee productivity loss: $50-200/incident
+• Support tickets: $25-50/ticket
+• Reputation damage: Immeasurable
+
+**False Negative Costs:**
+• Data breach: $4.35M average (IBM 2022)
+• Ransomware: $100K-$50M
+• Compliance fines: $100K-$50M
+• Customer trust loss: 60% churn rate
+
+**Cost-Sensitive Model Training:**
+from sklearn.ensemble import RandomForestClassifier
+
+# Assign higher penalty to false negatives
+class_weight = {0: 1, 1: 100}  # Benign:Malicious
+
+model = RandomForestClassifier(class_weight=class_weight)
+
+
+**Threshold Optimization:**
+• Default: 0.5 probability threshold
+• High security: 0.3 threshold (flag more)
+• High precision need: 0.7 threshold (flag less)
+
+**Image Suggestion:** Cost matrix visualization, ROC curve with business impact annotations
+
+---
+
+### Slide 72: ROC Curves and AUC
+
+**Title:** ROC-AUC - Comprehensive Performance Visualization
+
+**ROC Curve (Receiver Operating Characteristic):**
+• X-axis: False Positive Rate (FPR)
+• Y-axis: True Positive Rate (TPR/Recall)
+• Shows tradeoff across all thresholds
+
+**Interpreting ROC:**
+• **Perfect Classifier:** Curve to top-left corner (AUC = 1.0)
+• **Random Classifier:** Diagonal line (AUC = 0.5)
+• **Good Security Model:** AUC > 0.9
+
+**AUC (Area Under Curve):**
+• Single number to compare models
+• Higher = Better overall performance
+• Threshold-independent metric
+
+**Security Application Example:**
+Model A: AUC = 0.92 (Malware detector)
+Model B: AUC = 0.95 (Improved version)
+→ Model B correctly ranks malware higher 95% of time
+
+
+**Choosing Operating Point:**
+• High TPR, accept some FPR: Maximum security
+• Low FPR, accept some FN: Minimize disruption
+• Balance: Use F1-optimal threshold
+
+**Image Suggestion:** ROC curves comparing multiple models, AUC interpretation diagram
+
+---
+
+## **GROUP 6: MODULE CONNECTIONS**
+
+### Slide 73: Connection to Module 7 - Authentication Security
+
+**Title:** Linking Penetration Testing with User Authentication
+
+**How Module 9 Techniques Apply to Module 7:**
+
+**1. Brute-Force Attack Testing:**
+• Use AI to generate likely passwords
+• Test authentication rate limiting
+• Identify weak lockout policies
+
+**2. Bot Detection in Auth Systems:**
+• AI can mimic human behavior patterns
+• Test if your auth system detects automated attacks
+• Module 7 Slack integration: Can bots bypass it?
+
+**3. Credential Stuffing:**
+• AI-powered credential testing at scale
+• Test against Module 7's account reputation scoring
+• Measure effectiveness of behavioral analysis
+
+**4. Session Hijacking:**
+• AI predicts session tokens
+• Test authentication persistence mechanisms
+• Validate continuous authentication from Module 7
+
+**Real Scenario:**
+Attacker uses AI fuzzing → Discovers auth bypass
+Defender uses Module 7 techniques → Detects anomaly
+Slack bot (Module 7) → Alerts security team
+Penetration test validates both offense and defense
+
+**Image Suggestion:** Venn diagram showing Module 7 and 9 overlap, authentication attack/defense cycle
+
+---
+
+### Slide 74: Integrating Slack Monitoring (Module 7 Extension)
+
+**Title:** AI-Powered Monitoring via Slack Integration
+
+**Penetration Testing Alerts in Slack:**
+
+**What to Monitor:**
+• Successful vulnerability discoveries
+• Failed authentication attempts
+• Unusual network scanning activity
+• Compromised IoT devices
+• Malicious URLs clicked by employees
+
+**AI Enhancement:**
+
+**1. Intelligent Alerting:**
+# Only alert on high-confidence threats
+if prediction_confidence > 0.85 and severity == "CRITICAL":
+    send_slack_alert(channel="#security-ops")
+
+**2. Context-Aware Notifications:**
+• Group related alerts (same attack campaign)
+• Prioritize based on asset criticality
+• Suppress duplicate/low-priority alerts
+
+**3. Interactive Response:**
+Slack Bot: "🚨 AI detected potential SQL injection on /api/users"
+[Block IP] [Investigate] [False Positive]
+
+**4. Automated Playbooks:**
+• Trigger incident response workflow
+• Gather forensic data automatically
+• Notify relevant stakeholders
+
+**Image Suggestion:** Slack interface with AI security alerts, interactive bot responses
+
+---
+
+## **GROUP 7: ASSESSMENT & WRAP-UP**
+
+### Slide 75: Hands-On Lab Challenges
+
+**Title:** Module 9 - Practical Lab Exercises
+
+**Lab 1: CAPTCHA Breaker (2 hours)**
+**Objective:** Train CNN to break text CAPTCHAs
+**Tasks:**
+1. Collect/generate 1,000 CAPTCHA images
+2. Preprocess images (grayscale, normalize)
+3. Build CNN with TensorFlow/Keras
+4. Train and evaluate (target: >80% accuracy)
+5. Test on unseen CAPTCHAs
+
+**Lab 2: Fuzzing Web Application (3 hours)**
+**Objective:** Use AI-guided fuzzing to find vulnerabilities
+**Tasks:**
+1. Deploy vulnerable web app (OWASP WebGoat)
+2. Implement smart input generator with ML
+3. Monitor code coverage
+4. Identify 3+ vulnerabilities
+5. Generate exploitation report
+
+**Lab 3: Malicious URL Detector (2 hours)**
+**Objective:** Build classifier for phishing URLs
+**Tasks:**
+1. Load dataset (PhishTank + Alexa)
+2. Extract 10+ features per URL
+3. Train Random Forest classifier
+4. Achieve F1-score > 0.90
+5. Deploy as simple API
+
+**Lab 4: IoT Device Identification (Advanced - 4 hours)**
+**Objective:** Classify IoT devices from network traffic
+**Tasks:**
+1. Capture traffic with Wireshark/tcpdump
+2. Extract traffic features
+3. Train multi-class classifier
+4. Identify 5+ device types
+5. Build real-time monitoring dashboard
+
+**Image Suggestion:** Lab challenge cards, progress tracking checklist
+
+---
+
+### Slide 76: Assessment Criteria
+
+**Title:** Module 9 - Evaluation Standards
+
+**Written Exam (30%):**
+• AI/ML fundamentals in security context
+• Tool selection and justification
+• Ethical considerations
+• Defense strategies
+
+**Lab Performance (40%):**
+• Code quality and organization
+• Model accuracy metrics
+• Documentation completeness
+• Problem-solving approach
+
+**Final Project (30%):**
+**Choose One:**
+
+**Option A: AI Pentesting Tool**
+• Build custom tool using Module 9 techniques
+• Must include: Data collection, model training, real-time detection
+• Present to class (15 min)
+
+**Option B: Security Research Paper**
+• Analyze emerging AI security threats
+• Propose defense strategies
+• 10-15 pages with experiments
+
+**Option C: Red Team vs Blue Team Simulation**
+• Form teams (3-4 students)
+• Red: Use AI to attack
+• Blue: Use AI to defend
+• Document attack vectors and defenses
+
+**Grading Rubric:**
+• Technical accuracy: 40%
+• Creativity/Innovation: 20%
+• Documentation: 20%
+• Presentation: 20%
+
+**Image Suggestion:** Assessment breakdown pie chart, project showcase examples
+
+---
+
+### Slide 77: Key Takeaways - Module 9
+
+**Title:** Module 9 Summary - What You've Mastered
+
+**Core Competencies:**
+
+**✓ AI Attack Techniques:**
+• CAPTCHA breaking with CNNs
+• Neural network-assisted fuzzing
+• Automated exploit generation (DeepExploits)
+• Web vulnerability discovery at scale
+• IoT device fingerprinting
+• Malicious URL detection
+
+**✓ AI Defense Strategies:**
+• Adversarial ML awareness
+• Secure model deployment
+• Detecting AI-generated attacks
+• Human-AI collaboration
+
+**✓ Practical Skills:**
+• Model training and evaluation
+• Tool selection and usage
+• Performance optimization
+• Ethical pentesting framework
+
+**Critical Understanding:**
+• AI is a tool, not magic
+• Defense must evolve with attacks
+• Ethical responsibility is paramount
+• Continuous learning is essential
+
+**Image Suggestion:** Skill tree showing mastered abilities, certificate of completion badge
+
+---
+
+### Slide 78: Common Pitfalls to Avoid
+
+**Title:** Lessons Learned - Don't Make These Mistakes
+
+**Technical Pitfalls:**
+
+**1. Overfitting to Training Data**
+• Your model works perfectly on test set
+• Fails completely on real-world data
+• **Solution:** Cross-validation, diverse datasets
+
+**2. Ignoring Class Imbalance**
+• 99% benign, 1% malicious data
+• Model predicts "benign" for everything → 99% accuracy!
+• **Solution:** SMOTE, class weighting, stratified sampling
+
+**3. Feature Leakage**
+• Including future information in training
+• Example: Including "alert_triggered" as feature
+• **Solution:** Careful feature selection, temporal validation
+
+**4. Adversarial Blindness**
+• Train only on "natural" attacks
+• Real attackers will evade easily
+• **Solution:** Adversarial training, red team testing
+
+**Ethical Pitfalls:**
+
+**5. Unauthorized Testing**
+• "Just testing" on production systems
+• Legal consequences
+• **Solution:** Always get written permission
+
+**6. Public Disclosure**
+• Finding vulnerability and tweeting immediately
+• Puts organizations at risk
+• **Solution:** Responsible disclosure (90 days)
+
+**Image Suggestion:** Warning signs, common mistakes with red X marks
+
+---
+
+### Slide 79: Career Paths in AI Security
+
+**Title:** Your Future in AI-Powered Cybersecurity
+
+**Job Roles:**
+
+**1. AI Security Engineer**
+• Salary: $120K-180K
+• Build ML-powered security systems
+• Require: ML + Security expertise
+
+**2. Red Team AI Specialist**
+• Salary: $130K-200K
+• Use AI for offensive security
+• Require: Pentesting + AI skills
+
+**3. Security Data Scientist**
+• Salary: $110K-170K
+• Analyze security data with ML
+• Require: Statistics + Security domain
+
+**4. ML Security Researcher**
+• Salary: $140K-220K
+• Research novel AI attack/defense
+• Require: PhD preferred, publication record
+
+**5. Security Automation Engineer**
+• Salary: $100K-150K
+• Automate security operations with AI
+• Require: DevOps + ML + Security
+
+**Skills to Develop:**
+• Deep learning frameworks (TensorFlow, PyTorch)
+• Cloud platforms (AWS, GCP, Azure)
+• Security certifications (OSCP, CEH)
+• Python + security tools
+• Research skills (read papers, experiment)
+
+**Image Suggestion:** Career pathway diagram, salary ranges by role, skills matrix
+
+---
+
+### Slide 80: Resources for Continued Learning
+
+**Title:** Keep Learning - Resources and Communities
+
+**Online Courses:**
+• **Coursera:** Deep Learning Specialization (Andrew Ng)
+• **Udacity:** AI for Cybersecurity Nanodegree
+• **Offensive Security:** OSCP + ML integration
+• **SANS:** SEC595: Applied Data Science for Security
+
+**Books:**
+• "Deep Learning" - Ian Goodfellow
+• "Hands-On Machine Learning" - Aurélien Géron
+• "The Web Application Hacker's Handbook"
+• "Adversarial Machine Learning" - Joseph, Nelson
+
+**Research Venues:**
+• **Conferences:** Black Hat, DEF CON, IEEE S&P, USENIX Security
+• **Journals:** IEEE TDSC, ACM CCS
+• **ArXiv:** cs.CR (Cryptography and Security)
+
+**Open-Source Projects:**
+• **CleverHans:** Adversarial ML library
+• **ART (Adversarial Robustness Toolbox):** IBM Research
+• **SecML:** Security-focused ML library
+• **Foolbox:** Adversarial attacks framework
+
+**Communities:**
+• r/MachineLearning, r/netsec on Reddit
+• Kaggle competitions (security datasets)
+• HackerOne, Bugcrowd for pentesting
+• OWASP local chapters
+
+**Image Suggestion:** Resource hub with links, learning pathway roadmap
+
+---
+
+Tổng cộng tôi đã tạo **29 slides mới** (Slides 12, 51-52, 56-80) để bổ sung vào Module 9, bao gồm:
+
+✅ **Prerequisites & Setup** (3 slides)
+✅ **Expanded Deep Learning** (7 slides)  
+✅ **Defense Perspective** (3 slides)
+✅ **Tools Comparison** (4 slides)
+✅ **Performance Metrics** (3 slides)
+✅ **Module Connections** (2 slides)
+✅ **Assessment & Wrap-up** (6 slides)
+
+Bạn muốn tôi điều chỉnh hoặc mở rộng phần nào thêm không?
+
+
 # Module 9: Penetration Testing With Artificial Intelligence
 
 ## 50 Slides with Image Suggestions
@@ -803,3 +1816,4 @@
 **Slide 51:** Hands-on Lab Setup Instructions **Slide 52:** Python Libraries for AI Security **Slide 53:** Data Preprocessing Techniques **Slide 54:** Model Evaluation Metrics **Slide 55:** Deployment Strategies **Slide 56:** Monitoring and Maintenance **Slide 57:** Legal and Compliance Framework **Slide 58:** Industry Best Practices **Slide 59:** Career Paths in AI Security **Slide 60:** Resources for Continued Learning
 
 Each slide should include practical examples, code snippets where appropriate, and discussion questions to engage students in active learning about AI-powered penetration testing concepts.
+
