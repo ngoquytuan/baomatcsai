@@ -1,4 +1,814 @@
-Tôi sẽ tạo các slides còn thiếu theo cấu trúc đã đề xuất:
+Tôi sẽ tạo các Mermaid diagrams để minh họa các kiến thức chính của Module 9:
+
+---
+
+## **1. AI Penetration Testing Overview**
+
+```mermaid
+graph TD
+    A[🎯 AI Penetration Testing] --> B[📊 Data Collection]
+    A --> C[🤖 ML Models]
+    A --> D[⚙️ Automation]
+    A --> E[🛡️ Defense Integration]
+    
+    B --> B1[Vulnerability DBs<br/>CVE, NVD]
+    B --> B2[Network Traffic<br/>Samples]
+    B --> B3[Historical<br/>Attack Data]
+    
+    C --> C1[Classification<br/>Threat Detection]
+    C --> C2[Clustering<br/>Attack Grouping]
+    C --> C3[Deep Learning<br/>Pattern Recognition]
+    
+    D --> D1[Automated<br/>Scanning]
+    D --> D2[Exploit<br/>Generation]
+    D --> D3[Continuous<br/>Testing]
+    
+    E --> E1[Real-time<br/>Alerts]
+    E --> E2[Adaptive<br/>Defense]
+    E --> E3[Threat<br/>Intelligence]
+    
+    style A fill:#e1f5ff,stroke:#0288d1,stroke-width:3px
+    style B fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style C fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style D fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    style E fill:#ffebee,stroke:#c62828,stroke-width:2px
+```
+
+---
+
+## **2. CAPTCHA Breaking với CNN - Chi tiết**
+
+```mermaid
+flowchart TD
+    Start([🖼️ CAPTCHA Image Input]) --> A[Image Preprocessing]
+    
+    A --> A1[Grayscale Conversion]
+    A1 --> A2[Noise Removal]
+    A2 --> A3[Normalization<br/>0-1 scaling]
+    A3 --> A4[Resize to 64x64]
+    
+    A4 --> B[CNN Architecture]
+    
+    subgraph CNN[Convolutional Neural Network]
+        B1[Conv Layer 1<br/>32 filters, 3x3]
+        B2[MaxPooling 2x2]
+        B3[Conv Layer 2<br/>64 filters, 3x3]
+        B4[MaxPooling 2x2]
+        B5[Conv Layer 3<br/>128 filters, 3x3]
+        B6[Flatten Layer]
+        B7[Dense Layer<br/>256 neurons]
+        B8[Dropout 0.5]
+        B9[Output Layer<br/>Softmax]
+        
+        B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7 --> B8 --> B9
+    end
+    
+    B --> CNN
+    B9 --> C{Confidence > 0.8?}
+    
+    C -->|Yes| D[✅ Character Recognition<br/>Output: A, B, C, 1, 2, 3]
+    C -->|No| E[🔄 Request New CAPTCHA]
+    
+    D --> F[Sequence Assembly<br/>ABC123]
+    F --> G[Submit Result]
+    
+    E --> Start
+    
+    G --> H{Success?}
+    H -->|Yes| I[🎯 CAPTCHA Broken<br/>Avg: 2.5 sec]
+    H -->|No| J[Retrain Model<br/>Add to Dataset]
+    J --> Start
+    
+    style Start fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style CNN fill:#fff3e0,stroke:#ef6c00,stroke-width:3px
+    style I fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style E fill:#ffcdd2,stroke:#c62828,stroke-width:2px
+```
+
+---
+
+## **3. Neural Network Fuzzing Architecture**
+
+```mermaid
+graph TB
+    subgraph Input["🎯 Input Generation Module"]
+        A1[Seed Inputs<br/>Valid test cases]
+        A2[Mutation Engine<br/>AI-guided changes]
+        A3[Grammar Model<br/>Syntax rules]
+        
+        A1 --> A2
+        A3 --> A2
+    end
+    
+    subgraph Execution["⚙️ Execution & Monitoring"]
+        B1[Target Application]
+        B2[Code Coverage<br/>Tracker]
+        B3[Crash Detector]
+        B4[Performance<br/>Monitor]
+        
+        B1 --> B2
+        B1 --> B3
+        B1 --> B4
+    end
+    
+    subgraph Analysis["🧠 AI Analysis Engine"]
+        C1[Coverage Analysis<br/>Unexplored paths]
+        C2[Crash Classification<br/>ML-based triage]
+        C3[Exploitability<br/>Assessment]
+        C4[Pattern Learning<br/>Neural Network]
+        
+        C1 --> C4
+        C2 --> C4
+        C3 --> C4
+    end
+    
+    subgraph Feedback["🔄 Feedback Loop"]
+        D1[Prioritize Inputs<br/>High coverage potential]
+        D2[Adjust Strategy<br/>Adaptive fuzzing]
+        D3[Generate Report<br/>Vulnerabilities found]
+    end
+    
+    A2 -->|Test cases| B1
+    B2 -->|Coverage data| C1
+    B3 -->|Crashes| C2
+    
+    C4 -->|Insights| D1
+    D1 -->|Priority queue| A2
+    C2 -->|Critical bugs| D3
+    C3 -->|Severity ranking| D3
+    
+    D2 -.->|Optimize| A2
+    
+    D3 --> Output[📊 Final Report<br/>- 15 Critical bugs<br/>- 42 Medium bugs<br/>- 95% code coverage]
+    
+    style Input fill:#e1f5ff,stroke:#0288d1,stroke-width:2px
+    style Execution fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style Analysis fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style Feedback fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    style Output fill:#ffebee,stroke:#c62828,stroke-width:3px
+```
+
+---
+
+## **4. DeepExploits Framework - End-to-End**
+
+```mermaid
+flowchart LR
+    subgraph Learning["🧠 Learning Engine"]
+        L1[CVE Database<br/>Vulnerability patterns]
+        L2[Exploit-DB<br/>Known exploits]
+        L3[ML Model Training<br/>Pattern recognition]
+        
+        L1 --> L3
+        L2 --> L3
+    end
+    
+    subgraph Scanning["🔍 Target Analysis"]
+        S1[Port Scanning<br/>Service detection]
+        S2[Version Detection<br/>Banner grabbing]
+        S3[Vulnerability<br/>Matching]
+        
+        S1 --> S2 --> S3
+    end
+    
+    subgraph Generation["⚙️ Exploit Generation"]
+        G1{Vulnerability<br/>Type?}
+        G2[Buffer Overflow<br/>Payload]
+        G3[SQL Injection<br/>Payload]
+        G4[RCE Payload<br/>Generator]
+        G5[Custom Exploit<br/>AI-crafted]
+        
+        G1 -->|Memory| G2
+        G1 -->|Database| G3
+        G1 -->|Command| G4
+        G1 -->|Unknown| G5
+    end
+    
+    subgraph Optimization["🎯 Payload Optimization"]
+        O1[Target System<br/>Analysis]
+        O2[Evasion<br/>Techniques]
+        O3[Reliability<br/>Testing]
+        
+        O1 --> O2 --> O3
+    end
+    
+    subgraph Execution["🚀 Exploitation"]
+        E1[Deploy Payload]
+        E2{Success?}
+        E3[✅ Shell Access<br/>Persistence]
+        E4[❌ Failed<br/>Learn & Retry]
+        
+        E1 --> E2
+        E2 -->|Yes| E3
+        E2 -->|No| E4
+    end
+    
+    Learning --> S3
+    S3 --> G1
+    G2 --> O1
+    G3 --> O1
+    G4 --> O1
+    G5 --> O1
+    O3 --> E1
+    E4 -.->|Feedback| G1
+    
+    E3 --> Report[📋 Penetration<br/>Test Report]
+    
+    style Learning fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style Scanning fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style Generation fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style Optimization fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    style Execution fill:#ffebee,stroke:#c62828,stroke-width:2px
+```
+
+---
+
+## **5. AI Web Vulnerability Scanner - Workflow**
+
+```mermaid
+graph TD
+    Start([🌐 Target Web Application]) --> A[Intelligent Crawler]
+    
+    A --> A1[JavaScript Rendering<br/>Headless browser]
+    A --> A2[Form Discovery<br/>Input vectors]
+    A --> A3[API Endpoint<br/>Enumeration]
+    A --> A4[Technology<br/>Fingerprinting]
+    
+    A1 --> B[URL & Input Inventory]
+    A2 --> B
+    A3 --> B
+    A4 --> B
+    
+    B --> C{Input Type?}
+    
+    C -->|Form Fields| D[AI Payload Generator<br/>Context-aware]
+    C -->|URL Parameters| D
+    C -->|API Endpoints| D
+    C -->|Headers| D
+    
+    D --> E[Vulnerability Testing]
+    
+    subgraph Tests["Vulnerability Tests"]
+        E1[SQL Injection<br/>ML-based patterns]
+        E2[XSS Detection<br/>NLP analysis]
+        E3[CSRF Testing<br/>Token analysis]
+        E4[Authentication<br/>Bypass]
+        E5[Business Logic<br/>Flaws]
+        
+        E --> E1
+        E --> E2
+        E --> E3
+        E --> E4
+        E --> E5
+    end
+    
+    E1 --> F[Response Analysis<br/>ML Classification]
+    E2 --> F
+    E3 --> F
+    E4 --> F
+    E5 --> F
+    
+    F --> G{Vulnerable?}
+    
+    G -->|Yes| H[Vulnerability Validation<br/>Reduce false positives]
+    G -->|No| I[Continue Scanning]
+    
+    H --> J{Confirmed?}
+    J -->|True Positive| K[📊 Add to Report<br/>Severity: Critical]
+    J -->|False Positive| L[Update ML Model<br/>Learn from mistake]
+    
+    I --> M{More Inputs?}
+    M -->|Yes| C
+    M -->|No| N[Final Report]
+    
+    K --> N
+    L -.->|Feedback| D
+    
+    N --> O[📋 Vulnerability Report<br/>- SQL Injection: 3<br/>- XSS: 7<br/>- CSRF: 2<br/>False Positive Rate: 5%]
+    
+    style Start fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style Tests fill:#fff3e0,stroke:#ef6c00,stroke-width:3px
+    style K fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style O fill:#ffebee,stroke:#c62828,stroke-width:3px
+```
+
+---
+
+## **6. IoT Device Identification Pipeline**
+
+```mermaid
+flowchart TD
+    subgraph Collection["📡 Data Collection"]
+        A1[Network Traffic<br/>Capture - Wireshark]
+        A2[Protocol Analysis<br/>MQTT, CoAP, HTTP]
+        A3[Behavioral<br/>Monitoring]
+        
+        A1 --> A2 --> A3
+    end
+    
+    subgraph Features["🔍 Feature Extraction"]
+        B1[Traffic Patterns<br/>Frequency, timing]
+        B2[Packet Characteristics<br/>Size, headers]
+        B3[Communication<br/>Destinations]
+        B4[Protocol Usage<br/>Statistics]
+        B5[Device Behavior<br/>Sleep/wake cycles]
+        
+        A3 --> B1
+        A3 --> B2
+        A3 --> B3
+        A3 --> B4
+        A3 --> B5
+    end
+    
+    subgraph ML["🤖 Machine Learning Models"]
+        C1[Random Forest<br/>Classifier]
+        C2[Neural Network<br/>Deep features]
+        C3[Clustering<br/>K-means]
+        
+        B1 --> C1
+        B2 --> C1
+        B3 --> C1
+        B4 --> C2
+        B5 --> C2
+        
+        C1 --> C3
+        C2 --> C3
+    end
+    
+    subgraph Classification["🎯 Device Classification"]
+        D1{Device Type?}
+        D2[📷 Smart Camera<br/>Confidence: 95%]
+        D3[💡 Smart Bulb<br/>Confidence: 87%]
+        D4[🔊 Smart Speaker<br/>Confidence: 92%]
+        D5[🌡️ Thermostat<br/>Confidence: 89%]
+        D6[❓ Unknown Device<br/>Manual review]
+        
+        C3 --> D1
+        D1 --> D2
+        D1 --> D3
+        D1 --> D4
+        D1 --> D5
+        D1 --> D6
+    end
+    
+    subgraph Action["⚙️ Security Actions"]
+        E1[Apply Device-Specific<br/>Security Policy]
+        E2[Network Segmentation<br/>VLAN assignment]
+        E3[Vulnerability Check<br/>Known CVEs]
+        E4[Alert on Anomalies<br/>Unusual behavior]
+        
+        D2 --> E1
+        D3 --> E1
+        D4 --> E1
+        D5 --> E1
+        
+        E1 --> E2
+        E2 --> E3
+        E3 --> E4
+    end
+    
+    E4 --> Output[📊 IoT Security Dashboard<br/>- 47 devices identified<br/>- 12 high-risk<br/>- 3 anomalies detected]
+    D6 --> Manual[👨‍💻 Manual Investigation]
+    
+    style Collection fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style Features fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style ML fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style Classification fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    style Action fill:#ffebee,stroke:#c62828,stroke-width:2px
+```
+
+---
+
+## **7. Malicious URL Detection System**
+
+```mermaid
+graph TB
+    Input([🔗 URL Input<br/>http://suspicious-site.com/login]) --> Extract[Feature Extraction]
+    
+    subgraph Lexical["📝 Lexical Features"]
+        L1[URL Length: 45]
+        L2[Special Chars: 8]
+        L3[Subdomain Count: 3]
+        L4[Path Depth: 2]
+        L5[Entropy: 4.2]
+        L6[IP in URL: No]
+    end
+    
+    subgraph Domain["🌐 Domain Features"]
+        D1[Domain Age: 2 days<br/>🚨 Suspicious]
+        D2[Registrar: Unknown]
+        D3[SSL Certificate: Self-signed<br/>🚨 Red flag]
+        D4[WHOIS Privacy: Yes]
+        D5[Historical Data: New]
+    end
+    
+    subgraph Content["📄 Content Analysis"]
+        C1[Page Title:<br/>Brand impersonation]
+        C2[HTML Similarity:<br/>85% match to PayPal]
+        C3[External Links: 0]
+        C4[Forms Present: 1<br/>Password field]
+        C5[JavaScript:<br/>Obfuscated code]
+    end
+    
+    Extract --> Lexical
+    Extract --> Domain
+    Extract --> Content
+    
+    Lexical --> ML[🤖 Machine Learning<br/>Ensemble Model]
+    Domain --> ML
+    Content --> ML
+    
+    subgraph Models["ML Models"]
+        M1[Random Forest<br/>Score: 0.92]
+        M2[Neural Network<br/>Score: 0.88]
+        M3[XGBoost<br/>Score: 0.95]
+        
+        ML --> M1
+        ML --> M2
+        ML --> M3
+    end
+    
+    M1 --> Ensemble[🎯 Ensemble Voting]
+    M2 --> Ensemble
+    M3 --> Ensemble
+    
+    Ensemble --> Decision{Final Score<br/>> 0.85?}
+    
+    Decision -->|Yes| Malicious[🚨 MALICIOUS<br/>Confidence: 92%<br/>Category: Phishing]
+    Decision -->|No| Check{Score 0.5-0.85?}
+    
+    Check -->|Yes| Suspicious[⚠️ SUSPICIOUS<br/>Manual review needed]
+    Check -->|No| Benign[✅ BENIGN<br/>Safe to access]
+    
+    Malicious --> Actions1[Block Access<br/>Add to Blacklist<br/>Alert Security Team]
+    Suspicious --> Actions2[Warn User<br/>Require Confirmation]
+    Benign --> Actions3[Allow Access<br/>Monitor Activity]
+    
+    Actions1 --> Log[📊 Threat Intelligence<br/>Update ML model]
+    Actions2 --> Log
+    Actions3 --> Log
+    
+    style Input fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style Lexical fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style Domain fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style Content fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    style Malicious fill:#ffcdd2,stroke:#c62828,stroke-width:3px
+    style Benign fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+```
+
+---
+
+## **8. AI Attack vs Defense - The Cycle**
+
+```mermaid
+graph LR
+    subgraph Attacker["🔴 Attacker (Red Team)"]
+        A1[AI-Powered<br/>Reconnaissance]
+        A2[Automated<br/>Exploit Generation]
+        A3[Adaptive<br/>Evasion]
+        A4[Adversarial<br/>Examples]
+        
+        A1 --> A2 --> A3 --> A4
+    end
+    
+    subgraph Defender["🔵 Defender (Blue Team)"]
+        D1[AI Threat<br/>Detection]
+        D2[Behavioral<br/>Analysis]
+        D3[Anomaly<br/>Detection]
+        D4[Automated<br/>Response]
+        
+        D1 --> D2 --> D3 --> D4
+    end
+    
+    A4 -->|Attack| D1
+    D4 -->|Block/Alert| Learn1[🧠 Defender Learning]
+    
+    Learn1 -->|Improve Detection| D1
+    
+    D4 -.->|Attack Signature| A1
+    A4 -.->|Defense Pattern| Learn2[🧠 Attacker Learning]
+    Learn2 -->|New Evasion| A3
+    
+    subgraph Arms_Race["⚔️ AI Arms Race"]
+        AR1[Attacker evolves<br/>bypass techniques]
+        AR2[Defender adapts<br/>detection methods]
+        AR3[Continuous<br/>Co-evolution]
+        
+        AR1 <--> AR2
+        AR2 --> AR3
+        AR3 --> AR1
+    end
+    
+    Learn1 -.-> AR2
+    Learn2 -.-> AR1
+    
+    subgraph Solution["🤝 Balanced Approach"]
+        S1[Ethical AI<br/>Development]
+        S2[Responsible<br/>Disclosure]
+        S3[Collaboration<br/>Industry + Academia]
+        S4[Regulatory<br/>Frameworks]
+        
+        S1 --> S2 --> S3 --> S4
+    end
+    
+    AR3 -.->|Requires| S1
+    
+    style Attacker fill:#ffebee,stroke:#c62828,stroke-width:3px
+    style Defender fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Arms_Race fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style Solution fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+```
+
+---
+
+## **9. Complete ML Model Training Pipeline**
+
+```mermaid
+flowchart TD
+    Start([🎯 Security Problem<br/>Detect malware]) --> Data[📊 Data Collection]
+    
+    subgraph Collection["Data Sources"]
+        D1[VirusTotal<br/>Malware samples]
+        D2[Benign Files<br/>Windows system files]
+        D3[Sandbox Reports<br/>Behavioral data]
+        
+        Data --> D1
+        Data --> D2
+        Data --> D3
+    end
+    
+    D1 --> Prep[🧹 Data Preprocessing]
+    D2 --> Prep
+    D3 --> Prep
+    
+    subgraph Preprocessing["Preprocessing Steps"]
+        P1[Remove Duplicates<br/>100K → 95K samples]
+        P2[Handle Missing Values<br/>Imputation]
+        P3[Label Encoding<br/>Malware: 1, Benign: 0]
+        P4[Train-Test Split<br/>80% / 20%]
+        
+        Prep --> P1 --> P2 --> P3 --> P4
+    end
+    
+    P4 --> Feature[🔍 Feature Engineering]
+    
+    subgraph Features["Feature Extraction"]
+        F1[Static Features<br/>File size, entropy]
+        F2[Dynamic Features<br/>API calls, registry]
+        F3[String Features<br/>Suspicious strings]
+        F4[Header Features<br/>PE metadata]
+        
+        Feature --> F1
+        Feature --> F2
+        Feature --> F3
+        Feature --> F4
+    end
+    
+    F1 --> Scale[⚖️ Standardization<br/>Mean=0, Std=1]
+    F2 --> Scale
+    F3 --> Scale
+    F4 --> Scale
+    
+    Scale --> Model[🤖 Model Selection]
+    
+    subgraph Models["Try Multiple Models"]
+        M1[Random Forest<br/>Baseline]
+        M2[XGBoost<br/>Better performance]
+        M3[Neural Network<br/>Complex patterns]
+        
+        Model --> M1
+        Model --> M2
+        Model --> M3
+    end
+    
+    M1 --> Train[🏋️ Model Training]
+    M2 --> Train
+    M3 --> Train
+    
+    Train --> Validate[✅ Validation]
+    
+    subgraph Validation["Cross-Validation"]
+        V1[5-Fold CV]
+        V2[Metrics:<br/>Accuracy, Precision,<br/>Recall, F1-Score]
+        V3[Confusion Matrix<br/>Analysis]
+        
+        Validate --> V1 --> V2 --> V3
+    end
+    
+    V3 --> Compare{Best Model?}
+    
+    Compare -->|XGBoost wins<br/>F1: 0.96| Tune[🎛️ Hyperparameter<br/>Tuning]
+    
+    subgraph Tuning["GridSearch/RandomSearch"]
+        T1[Learning Rate<br/>0.01, 0.1, 0.3]
+        T2[Max Depth<br/>3, 6, 10]
+        T3[N Estimators<br/>100, 200, 500]
+        
+        Tune --> T1
+        Tune --> T2
+        Tune --> T3
+    end
+    
+    T3 --> Final[🎯 Final Model<br/>Accuracy: 97.5%]
+    
+    Final --> Test[🧪 Test on Unseen Data]
+    
+    Test --> Eval{Performance<br/>Acceptable?}
+    
+    Eval -->|Yes| Deploy[🚀 Deploy to Production]
+    Eval -->|No| Improve[🔄 Improve Model<br/>More data/features]
+    
+    Improve -.-> Data
+    
+    Deploy --> Monitor[📊 Monitoring]
+    
+    subgraph Production["Production Monitoring"]
+        Mon1[Model Performance<br/>Track accuracy]
+        Mon2[Data Drift<br/>Distribution changes]
+        Mon3[Adversarial<br/>Attacks]
+        Mon4[Retrain Schedule<br/>Weekly/Monthly]
+        
+        Monitor --> Mon1
+        Monitor --> Mon2
+        Monitor --> Mon3
+        Monitor --> Mon4
+    end
+    
+    Mon4 -.->|Retrain| Train
+    
+    style Start fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style Collection fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style Preprocessing fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style Features fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    style Models fill:#ffebee,stroke:#c62828,stroke-width:2px
+    style Deploy fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+```
+
+---
+
+## **10. Penetration Testing Lifecycle với AI**
+
+```mermaid
+graph TD
+    subgraph Planning["1️⃣ Planning & Reconnaissance"]
+        P1[Define Scope<br/>Target systems]
+        P2[AI-Powered OSINT<br/>Social media mining]
+        P3[Automated<br/>Footprinting]
+        P4[Threat Modeling<br/>ML-based risk assessment]
+        
+        P1 --> P2 --> P3 --> P4
+    end
+    
+    subgraph Scanning["2️⃣ Scanning & Enumeration"]
+        S1[AI Port Scanner<br/>Intelligent timing]
+        S2[Service Detection<br/>ML classification]
+        S3[Vulnerability Scan<br/>Neural network-based]
+        S4[Version Analysis<br/>CVE matching]
+        
+        P4 --> S1
+        S1 --> S2 --> S3 --> S4
+    end
+    
+    subgraph Access["3️⃣ Gaining Access"]
+        A1[Exploit Selection<br/>AI prioritization]
+        A2[Payload Generation<br/>DeepExploits]
+        A3[Evasion Techniques<br/>Adversarial ML]
+        A4[Initial Compromise<br/>Automated exploitation]
+        
+        S4 --> A1
+        A1 --> A2 --> A3 --> A4
+    end
+    
+    subgraph Maintain["4️⃣ Maintaining Access"]
+        M1[Privilege Escalation<br/>AI path finding]
+        M2[Lateral Movement<br/>ML-guided navigation]
+        M3[Persistence<br/>Stealth mechanisms]
+        M4[Data Exfiltration<br/>Covert channels]
+        
+        A4 --> M1
+        M1 --> M2 --> M3 --> M4
+    end
+    
+    subgraph Analysis["5️⃣ Analysis & Reporting"]
+        R1[Evidence Collection<br/>Automated logging]
+        R2[Impact Assessment<br/>ML risk scoring]
+        R3[Report Generation<br/>NLP-powered]
+        R4[Recommendations<br/>AI-suggested fixes]
+        
+        M4 --> R1
+        R1 --> R2 --> R3 --> R4
+    end
+    
+    subgraph Defense["🛡️ Defender Response"]
+        D1[AI Detection<br/>Anomaly alerts]
+        D2[Automated Response<br/>Containment]
+        D3[Threat Hunting<br/>ML-guided]
+        D4[Remediation<br/>Patch prioritization]
+        
+        A4 -.->|Triggers| D1
+        M2 -.->|Detected by| D1
+        D1 --> D2 --> D3 --> D4
+    end
+    
+    R4 --> Review[🔄 Continuous Improvement]
+    D4 --> Review
+    
+    Review --> Retrain[🧠 Retrain AI Models<br/>Both offense & defense]
+    Retrain -.-> P2
+    Retrain -.-> D1
+    
+    style Planning fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style Scanning fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    style Access fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style Maintain fill:#ffebee,stroke:#c62828,stroke-width:2px
+    style Analysis fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    style Defense fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px
+```
+
+---
+
+## **11. BONUS: Ethical AI Security Framework**
+
+```mermaid
+mindmap
+  root((🎯 Ethical AI<br/>Security))
+    Legal
+      Laws & Regulations
+        Computer Fraud Act
+        GDPR Compliance
+        Data Protection
+      Authorization
+        Written Permission
+        Scope Agreement
+        NDA Signed
+      Liability
+        Insurance Coverage
+        Legal Counsel
+        Incident Response Plan
+    
+    Technical
+      Responsible Disclosure
+        90-day Window
+        Vendor Notification
+        Public After Fix
+      Testing Limits
+        Production Avoidance
+        Sandbox Environments
+        Non-destructive Tests
+      Data Privacy
+        Anonymization
+        Encryption
+        Minimal Collection
+    
+    Ethical
+      Intent
+        Defensive Purpose
+        Security Improvement
+        Educational Use
+      Transparency
+        Document Everything
+        Audit Trails
+        Stakeholder Communication
+      Accountability
+        Own Your Actions
+        Report Findings
+        Follow Guidelines
+    
+    Professional
+      Best Practices
+        OWASP Guidelines
+        NIST Framework
+        Industry Standards
+      Continuous Learning
+        Stay Updated
+        Share Knowledge
+        Community Engagement
+      Certification
+        CEH Certified
+        OSCP Licensed
+        Security Clearance
+```
+
+---
+
+Tổng cộng **11 Mermaid diagrams** đầy đủ cho Module 9, bao gồm:
+
+✅ **Overview** - Tổng quan AI Pentesting  
+✅ **CAPTCHA Breaking** - Chi tiết CNN workflow  
+✅ **Fuzzing** - Architecture với feedback loop  
+✅ **DeepExploits** - End-to-end framework  
+✅ **Web Scanner** - Vulnerability detection pipeline  
+✅ **IoT Identification** - Classification workflow  
+✅ **URL Detection** - Multi-layer analysis  
+✅ **Attack vs Defense** - AI arms race  
+✅ **ML Training** - Complete pipeline  
+✅ **Pentest Lifecycle** - AI-enhanced testing  
+✅ **Ethical Framework** - Mindmap cho guidelines  
+
+Bạn muốn tôi:
+1. **Thêm diagrams cho topics khác** (datasets, tools comparison)?
+2. **Làm interactive version** với clickable nodes?
+3. **Tạo simplified versions** cho beginners?
 
 ---
 
@@ -1816,4 +2626,5 @@ Bạn muốn tôi điều chỉnh hoặc mở rộng phần nào thêm không?
 **Slide 51:** Hands-on Lab Setup Instructions **Slide 52:** Python Libraries for AI Security **Slide 53:** Data Preprocessing Techniques **Slide 54:** Model Evaluation Metrics **Slide 55:** Deployment Strategies **Slide 56:** Monitoring and Maintenance **Slide 57:** Legal and Compliance Framework **Slide 58:** Industry Best Practices **Slide 59:** Career Paths in AI Security **Slide 60:** Resources for Continued Learning
 
 Each slide should include practical examples, code snippets where appropriate, and discussion questions to engage students in active learning about AI-powered penetration testing concepts.
+
 
