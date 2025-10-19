@@ -1,3 +1,464 @@
+# Mermaid Diagrams cho Module 1 - Kiến Thức Chính
+
+---
+
+## 1️⃣ **AI Family Tree - Hierarchy**
+
+```mermaid
+graph TD
+    AI["🤖 Artificial Intelligence<br/><b>Machines that mimic human intelligence</b><br/>Examples: Chess AI, Siri, Chatbots"]
+    
+    AI --> ML["📊 Machine Learning<br/><b>Systems that learn from data</b><br/>Examples: Spam filters, Recommendations"]
+    AI --> Other["Other AI:<br/>Expert Systems<br/>Rule-based Systems"]
+    
+    ML --> SL["Supervised Learning<br/>Learns with labels"]
+    ML --> UL["Unsupervised Learning<br/>Finds patterns"]
+    ML --> RL["Reinforcement Learning<br/>Learns from rewards"]
+    
+    ML --> DL["🧠 Deep Learning<br/><b>Neural networks with many layers</b><br/>Examples: Image recognition, Voice AI"]
+    
+    DL --> CNN["Convolutional NN<br/>For images"]
+    DL --> RNN["Recurrent NN<br/>For sequences"]
+    DL --> GAN["GANs<br/>For generation"]
+    
+    SL --> Cyber1["🛡️ Malware Detection<br/>Phishing Detection"]
+    UL --> Cyber2["🛡️ Anomaly Detection<br/>Insider Threats"]
+    RL --> Cyber3["🛡️ Auto Response<br/>Adaptive Defense"]
+    
+    style AI fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#0d47a1
+    style ML fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px,color:#1b5e20
+    style DL fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#4a148c
+    style SL fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    style UL fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    style RL fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    style CNN fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    style RNN fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    style GAN fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    style Cyber1 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style Cyber2 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style Cyber3 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style Other fill:#eceff1,stroke:#546e7a,stroke-width:1px
+```
+
+---
+
+## 2️⃣ **Three Types of Machine Learning**
+
+```mermaid
+graph LR
+    subgraph SL["🎓 SUPERVISED LEARNING"]
+        SL1["Training Data<br/>with Labels"]
+        SL2["Algorithm<br/>Learns Patterns"]
+        SL3["Predicts<br/>New Data"]
+        SL1 --> SL2 --> SL3
+        
+        SL_Ex["<b>Examples:</b><br/>✓ Malware Detection<br/>✓ Spam Filtering<br/>✓ Phishing Detection"]
+    end
+    
+    subgraph UL["🔍 UNSUPERVISED LEARNING"]
+        UL1["Raw Data<br/>No Labels"]
+        UL2["Algorithm<br/>Finds Patterns"]
+        UL3["Discovers<br/>Groups/Anomalies"]
+        UL1 --> UL2 --> UL3
+        
+        UL_Ex["<b>Examples:</b><br/>✓ Anomaly Detection<br/>✓ User Clustering<br/>✓ Insider Threats"]
+    end
+    
+    subgraph RL["🎮 REINFORCEMENT LEARNING"]
+        RL1["Agent Takes<br/>Actions"]
+        RL2["Environment<br/>Gives Feedback"]
+        RL3["Learns Optimal<br/>Strategy"]
+        RL1 --> RL2 --> RL3
+        RL3 --> RL1
+        
+        RL_Ex["<b>Examples:</b><br/>✓ Auto Response<br/>✓ Adaptive Defense<br/>✓ Penetration Testing"]
+    end
+    
+    style SL fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style UL fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style RL fill:#fff3e0,stroke:#ef6c00,stroke-width:3px
+    style SL_Ex fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style UL_Ex fill:#bbdefb,stroke:#1976d2,stroke-width:2px
+    style RL_Ex fill:#ffe0b2,stroke:#f57c00,stroke-width:2px
+```
+
+---
+
+## 3️⃣ **AI Threat Detection Pipeline**
+
+```mermaid
+graph TB
+    Start["🌐 SECURITY EVENTS<br/>Network • Endpoints • Users<br/>Logs • Alerts • Packets"]
+    
+    Start --> Collect["📥 STAGE 1: DATA COLLECTION<br/>━━━━━━━━━━━━━━━━<br/>Firewalls, IDS, SIEM<br/>Endpoint agents<br/>User activity logs<br/><i>Volume: TB per day</i>"]
+    
+    Collect --> Preprocess["🧹 STAGE 2: PREPROCESSING<br/>━━━━━━━━━━━━━━━━<br/>Clean & normalize<br/>Remove duplicates<br/>Handle missing data<br/><i>Clean data = Better AI</i>"]
+    
+    Preprocess --> Extract["🔬 STAGE 3: FEATURE EXTRACTION<br/>━━━━━━━━━━━━━━━━<br/>Extract patterns<br/>Statistical features<br/>Behavioral signatures<br/><i>Convert to ML-ready format</i>"]
+    
+    Extract --> Train["🎓 STAGE 4: MODEL TRAINING<br/>━━━━━━━━━━━━━━━━<br/>Train ML algorithms<br/>Learn attack patterns<br/>Optimize parameters<br/><i>One-time or periodic</i>"]
+    
+    Train --> Analyze["⚡ STAGE 5: REAL-TIME ANALYSIS<br/>━━━━━━━━━━━━━━━━<br/>Classify threats<br/>Detect anomalies<br/>Calculate risk scores<br/><i>Milliseconds response</i>"]
+    
+    Analyze --> Respond["🛡️ STAGE 6: RESPONSE<br/>━━━━━━━━━━━━━━━━<br/>Block threats<br/>Quarantine files<br/>Alert analysts<br/>Update defenses<br/><i>Automated + Human</i>"]
+    
+    Respond -->|Continuous Learning| Train
+    Respond -->|New Threats| Collect
+    
+    style Start fill:#ffebee,stroke:#c62828,stroke-width:3px,color:#b71c1c
+    style Collect fill:#e3f2fd,stroke:#1565c0,stroke-width:2px,color:#0d47a1
+    style Preprocess fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#4a148c
+    style Extract fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#e65100
+    style Train fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    style Analyze fill:#e1f5fe,stroke:#0277bd,stroke-width:2px,color:#01579b
+    style Respond fill:#c8e6c9,stroke:#388e3c,stroke-width:3px,color:#2e7d32
+```
+
+---
+
+## 4️⃣ **Traditional vs AI Security - Detailed Comparison**
+
+```mermaid
+graph TB
+    subgraph Traditional["🔒 TRADITIONAL SECURITY"]
+        T1["⚡ REACTIVE<br/>━━━━━━━━<br/>Responds after attack<br/>Manual analysis<br/>Hours to days delay"]
+        T2["📋 RULE-BASED<br/>━━━━━━━━<br/>IF-THEN rules<br/>Static signatures<br/>Manual updates"]
+        T3["👁️ KNOWN THREATS<br/>━━━━━━━━<br/>Signature matching<br/>Blacklists only<br/>Misses new variants"]
+        T4["📉 LIMITED SCALE<br/>━━━━━━━━<br/>100s alerts/day<br/>Human bottleneck<br/>Cannot process all data"]
+        
+        T1 -.-> T2 -.-> T3 -.-> T4
+    end
+    
+    subgraph AI["🤖 AI-POWERED SECURITY"]
+        A1["🔮 PROACTIVE<br/>━━━━━━━━<br/>Predicts attacks<br/>Real-time response<br/>Milliseconds detection"]
+        A2["🧠 BEHAVIOR-BASED<br/>━━━━━━━━<br/>Learns patterns<br/>Adapts automatically<br/>Self-updating"]
+        A3["❓ UNKNOWN THREATS<br/>━━━━━━━━<br/>Anomaly detection<br/>Zero-day capable<br/>Catches variants"]
+        A4["📈 UNLIMITED SCALE<br/>━━━━━━━━<br/>Millions events/sec<br/>No alert fatigue<br/>Processes everything"]
+        
+        A1 -.-> A2 -.-> A3 -.-> A4
+    end
+    
+    Problem["⚠️ THE CHALLENGE<br/>━━━━━━━━━━━<br/>560,000 new malware/day<br/>Attack every 39 seconds<br/>207 days to detect breach<br/>95% breaches from human error"]
+    
+    Problem --> Traditional
+    Problem --> AI
+    
+    Traditional --> Result1["📊 RESULTS<br/>━━━━━━━━<br/>52% false positives<br/>Misses 60% new threats<br/>Alert fatigue<br/>Slow response"]
+    
+    AI --> Result2["✅ RESULTS<br/>━━━━━━━━<br/><5% false positives<br/>95%+ detection rate<br/>Focused alerts<br/>Instant response"]
+    
+    style Traditional fill:#ffebee,stroke:#c62828,stroke-width:3px
+    style AI fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Problem fill:#fff3e0,stroke:#ef6c00,stroke-width:3px,color:#e65100
+    style Result1 fill:#ffcdd2,stroke:#d32f2f,stroke-width:2px
+    style Result2 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style T1 fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#b71c1c
+    style T2 fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#b71c1c
+    style T3 fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#b71c1c
+    style T4 fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#b71c1c
+    style A1 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    style A2 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    style A3 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    style A4 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+```
+
+---
+
+## 5️⃣ **Supervised Learning Process - Step by Step**
+
+```mermaid
+graph LR
+    subgraph Training["🎓 TRAINING PHASE"]
+        Data["📚 LABELED DATA<br/>━━━━━━━━━━<br/>10,000 malware samples ✓<br/>10,000 safe files ✓<br/>Each labeled clearly"]
+        
+        Learn["🧠 LEARNING<br/>━━━━━━━━━━<br/>Algorithm analyzes:<br/>• File size patterns<br/>• Code structures<br/>• Behavioral signatures<br/>• API calls"]
+        
+        Model["🎯 TRAINED MODEL<br/>━━━━━━━━━━<br/>Learned patterns:<br/>IF entropy high +<br/>suspicious API +<br/>no signature<br/>THEN malware"]
+        
+        Data --> Learn --> Model
+    end
+    
+    subgraph Testing["✅ TESTING PHASE"]
+        NewData["📄 NEW FILE<br/>━━━━━━━━━━<br/>Unknown file<br/>Never seen before<br/>Need classification"]
+        
+        Predict["⚡ PREDICTION<br/>━━━━━━━━━━<br/>Model analyzes:<br/>Matches learned<br/>patterns against<br/>new file"]
+        
+        Result["🎯 RESULT<br/>━━━━━━━━━━<br/>Malware: 94% ✓<br/>or<br/>Safe: 6% ✗<br/>Action: BLOCK"]
+        
+        NewData --> Predict --> Result
+    end
+    
+    Model -.->|Apply| Predict
+    
+    Eval["📊 EVALUATION<br/>━━━━━━━━━━<br/>Accuracy: 95%<br/>False Positive: 2%<br/>False Negative: 3%<br/>F1-Score: 96%"]
+    
+    Result --> Eval
+    Eval -.->|Improve| Learn
+    
+    style Training fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Testing fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Data fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style Learn fill:#a5d6a7,stroke:#388e3c,stroke-width:2px
+    style Model fill:#66bb6a,stroke:#2e7d32,stroke-width:3px,color:#fff
+    style NewData fill:#bbdefb,stroke:#1976d2,stroke-width:2px
+    style Predict fill:#90caf9,stroke:#1976d2,stroke-width:2px
+    style Result fill:#42a5f5,stroke:#1565c0,stroke-width:3px,color:#fff
+    style Eval fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+```
+
+---
+
+## 6️⃣ **Decision Tree in Action**
+
+```mermaid
+graph TD
+    Start["🔐 NEW LOGIN ATTEMPT<br/>Analyze Security Risk"]
+    
+    Start --> Q1["❓ Login attempts > 5<br/>in last hour?"]
+    
+    Q1 -->|YES| Q2["❓ From different<br/>countries?"]
+    Q1 -->|NO| Q3["❓ Login time<br/>unusual?"]
+    
+    Q2 -->|YES| Alert1["🚨 HIGH RISK<br/>━━━━━━━━━<br/>BLOCK LOGIN<br/>Lock account<br/>Alert security team<br/>Require 2FA reset"]
+    Q2 -->|NO| Q4["❓ New device<br/>detected?"]
+    
+    Q3 -->|YES| Q5["❓ Location<br/>unusual?"]
+    Q3 -->|NO| Allow["✅ LOW RISK<br/>━━━━━━━━━<br/>ALLOW LOGIN<br/>Normal activity<br/>Continue monitoring"]
+    
+    Q4 -->|YES| Alert2["⚠️ MEDIUM RISK<br/>━━━━━━━━━<br/>REQUIRE 2FA<br/>Send verification<br/>Log for review"]
+    Q4 -->|NO| Monitor["👁️ MONITOR<br/>━━━━━━━━━<br/>Allow but watch<br/>Enhanced logging<br/>Track behavior"]
+    
+    Q5 -->|YES| Alert2
+    Q5 -->|NO| Allow
+    
+    style Start fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#0d47a1
+    style Q1 fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#e65100
+    style Q2 fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#e65100
+    style Q3 fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#e65100
+    style Q4 fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#e65100
+    style Q5 fill:#fff3e0,stroke:#ef6c00,stroke-width:2px,color:#e65100
+    style Alert1 fill:#ffcdd2,stroke:#d32f2f,stroke-width:3px,color:#b71c1c
+    style Alert2 fill:#ffe0b2,stroke:#f57c00,stroke-width:2px,color:#e65100
+    style Monitor fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#f57f17
+    style Allow fill:#c8e6c9,stroke:#388e3c,stroke-width:2px,color:#2e7d32
+```
+
+---
+
+## 7️⃣ **Unsupervised Learning - Clustering Example**
+
+```mermaid
+graph TB
+    Data["📊 RAW DATA: Employee Login Behaviors<br/>━━━━━━━━━━━━━━━━━━━━━━━━<br/>500 employees, 30 days activity<br/>No labels, no categories, just data"]
+    
+    Data --> Algorithm["🔍 CLUSTERING ALGORITHM<br/>━━━━━━━━━━━━━━━━━━<br/>K-Means finds natural groups<br/>Based on similarity patterns"]
+    
+    Algorithm --> Clusters["📍 DISCOVERED 5 CLUSTERS"]
+    
+    Clusters --> C1["👥 Cluster 1: Sales Team<br/>━━━━━━━━━━━━━━━<br/>• Login: 8AM-6PM<br/>• External access frequent<br/>• Travel patterns<br/>• CRM usage high<br/><i>85 employees</i>"]
+    
+    Clusters --> C2["💻 Cluster 2: Developers<br/>━━━━━━━━━━━━━━━<br/>• Login: Flexible hours<br/>• Late night common<br/>• Code repos access<br/>• SSH/Git activity<br/><i>120 employees</i>"]
+    
+    Clusters --> C3["📋 Cluster 3: HR/Admin<br/>━━━━━━━━━━━━━━━<br/>• Login: 9AM-5PM strict<br/>• Predictable patterns<br/>• Document access<br/>• Sensitive data<br/><i>45 employees</i>"]
+    
+    Clusters --> C4["📱 Cluster 4: Executives<br/>━━━━━━━━━━━━━━━<br/>• Login: Irregular times<br/>• Mobile access heavy<br/>• Multiple locations<br/>• High privileges<br/><i>30 employees</i>"]
+    
+    Clusters --> C5["🎧 Cluster 5: Support<br/>━━━━━━━━━━━━━━━<br/>• Login: Shift-based<br/>• 24/7 coverage<br/>• Ticket systems<br/>• Customer data<br/><i>220 employees</i>"]
+    
+    Anomaly["🚨 ANOMALY DETECTED!<br/>━━━━━━━━━━━━━━━━━<br/>User 'Sarah_Chen' from HR cluster<br/>suddenly behaving like Developer<br/>+ accessing Finance data<br/>+ at 3 AM<br/>━━━━━━━━━━━━━━━━━<br/>⚠️ Potential Compromise!"]
+    
+    C3 -.->|Deviation| Anomaly
+    
+    style Data fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#0d47a1
+    style Algorithm fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px,color:#4a148c
+    style Clusters fill:#fff3e0,stroke:#ef6c00,stroke-width:3px,color:#e65100
+    style C1 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+    style C2 fill:#e1f5fe,stroke:#0277bd,stroke-width:2px,color:#01579b
+    style C3 fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#880e4f
+    style C4 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#4a148c
+    style C5 fill:#fff9c4,stroke:#f9a825,stroke-width:2px,color:#f57f17
+    style Anomaly fill:#ffcdd2,stroke:#d32f2f,stroke-width:3px,color:#b71c1c
+```
+
+---
+
+## 8️⃣ **Neural Network Architecture**
+
+```mermaid
+graph LR
+    subgraph Input["📥 INPUT LAYER"]
+        I1["File Size"]
+        I2["Entropy"]
+        I3["API Calls"]
+        I4["Strings"]
+        I5["Headers"]
+        I6["..."]
+    end
+    
+    subgraph Hidden1["🧠 HIDDEN LAYER 1<br/>Feature Detection"]
+        H1_1["Neuron"]
+        H1_2["Neuron"]
+        H1_3["Neuron"]
+        H1_4["Neuron"]
+        H1_5["Neuron"]
+        H1_6["..."]
+    end
+    
+    subgraph Hidden2["🧠 HIDDEN LAYER 2<br/>Pattern Recognition"]
+        H2_1["Neuron"]
+        H2_2["Neuron"]
+        H2_3["Neuron"]
+        H2_4["Neuron"]
+        H2_5["..."]
+    end
+    
+    subgraph Hidden3["🧠 HIDDEN LAYER 3<br/>Abstract Features"]
+        H3_1["Neuron"]
+        H3_2["Neuron"]
+        H3_3["Neuron"]
+        H3_4["..."]
+    end
+    
+    subgraph Output["📤 OUTPUT LAYER"]
+        O1["Malware<br/>94%"]
+        O2["Safe<br/>6%"]
+    end
+    
+    I1 & I2 & I3 & I4 & I5 & I6 --> H1_1 & H1_2 & H1_3 & H1_4 & H1_5 & H1_6
+    H1_1 & H1_2 & H1_3 & H1_4 & H1_5 & H1_6 --> H2_1 & H2_2 & H2_3 & H2_4 & H2_5
+    H2_1 & H2_2 & H2_3 & H2_4 & H2_5 --> H3_1 & H3_2 & H3_3 & H3_4
+    H3_1 & H3_2 & H3_3 & H3_4 --> O1 & O2
+    
+    Decision["🎯 DECISION<br/>━━━━━━━━<br/>Malware probability > 50%<br/>BLOCK FILE"]
+    
+    O1 -.-> Decision
+    
+    style Input fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style Hidden1 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    style Hidden2 fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    style Hidden3 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style Output fill:#ffebee,stroke:#c62828,stroke-width:2px
+    style Decision fill:#c8e6c9,stroke:#388e3c,stroke-width:3px
+    style O1 fill:#ffcdd2,stroke:#d32f2f,stroke-width:2px,color:#b71c1c
+    style O2 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px,color:#2e7d32
+```
+
+---
+
+## 9️⃣ **Ensemble Methods - Stronger Together**
+
+```mermaid
+graph TB
+    File["📄 SUSPICIOUS FILE<br/>Need Classification"]
+    
+    File --> E1["🌳 Model 1: Decision Tree<br/>━━━━━━━━━━━━━<br/>Analysis: File structure<br/>Prediction: MALWARE<br/>Confidence: 78%"]
+    
+    File --> E2["🌲 Model 2: Random Forest<br/>━━━━━━━━━━━━━<br/>Analysis: Behavioral patterns<br/>Prediction: MALWARE<br/>Confidence: 89%"]
+    
+    File --> E3["🎯 Model 3: SVM<br/>━━━━━━━━━━━━━<br/>Analysis: Binary classification<br/>Prediction: MALWARE<br/>Confidence: 85%"]
+    
+    File --> E4["🧠 Model 4: Neural Network<br/>━━━━━━━━━━━━━<br/>Analysis: Deep patterns<br/>Prediction: MALWARE<br/>Confidence: 92%"]
+    
+    File --> E5["📊 Model 5: Naive Bayes<br/>━━━━━━━━━━━━━<br/>Analysis: Probabilistic<br/>Prediction: SAFE<br/>Confidence: 65%"]
+    
+    E1 & E2 & E3 & E4 & E5 --> Vote["🗳️ ENSEMBLE VOTING<br/>━━━━━━━━━━━━━━━<br/>4 models say: MALWARE<br/>1 model says: SAFE<br/>━━━━━━━━━━━━━━━<br/>Weighted average: 85.8%"]
+    
+    Vote --> Final["✅ FINAL DECISION<br/>━━━━━━━━━━━━━━━<br/>Classification: MALWARE<br/>Confidence: 86%<br/>Action: BLOCK + QUARANTINE<br/>━━━━━━━━━━━━━━━<br/>Why Ensemble Better:<br/>• More robust<br/>• Reduces false positives<br/>• Harder to fool<br/>• Multiple perspectives"]
+    
+    style File fill:#e3f2fd,stroke:#1565c0,stroke-width:3px,color:#0d47a1
+    style E1 fill:#fff9c4,stroke:#f9a825,stroke-width:2px
+    style E2 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style E3 fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
+    style E4 fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style E5 fill:#ffccbc,stroke:#d84315,stroke-width:2px
+    style Vote fill:#fff3e0,stroke:#ef6c00,stroke-width:3px,color:#e65100
+    style Final fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#1b5e20
+```
+
+---
+
+## 🔟 **AI in Cybersecurity - Complete Use Case Map**
+
+```mermaid
+graph TB
+    AI["🤖 AI IN CYBERSECURITY<br/>Complete Applications"]
+    
+    AI --> Email["📧 EMAIL SECURITY"]
+    AI --> Network["🌐 NETWORK SECURITY"]
+    AI --> Endpoint["💻 ENDPOINT SECURITY"]
+    AI --> User["👤 USER SECURITY"]
+    AI --> Cloud["☁️ CLOUD SECURITY"]
+    
+    Email --> E1["Spam Detection<br/>99.9% accuracy"]
+    Email --> E2["Phishing Detection<br/>Real-time analysis"]
+    Email --> E3["Malware Attachment<br/>Behavioral scanning"]
+    
+    Network --> N1["DDoS Detection<br/>Traffic analysis"]
+    Network --> N2["Intrusion Detection<br/>Anomaly-based"]
+    Network --> N3["Botnet Detection<br/>Communication patterns"]
+    Network --> N4["Data Exfiltration<br/>Usage anomalies"]
+    
+    Endpoint --> EP1["Malware Detection<br/>Zero-day capable"]
+    Endpoint --> EP2["Ransomware Prevention<br/>Behavioral blocking"]
+    Endpoint --> EP3["Application Control<br/>Risk scoring"]
+    
+    User --> U1["Insider Threat<br/>Behavior analytics"]
+    User --> U2["Account Compromise<br/>Login pattern analysis"]
+    User --> U3["Privilege Escalation<br/>Access anomalies"]
+    
+    Cloud --> C1["Configuration Errors<br/>Policy violations"]
+    Cloud --> C2["API Security<br/>Usage monitoring"]
+    Cloud --> C3["Data Loss Prevention<br/>Content inspection"]
+    
+    style AI fill:#e3f2fd,stroke:#1565c0,stroke-width:4px,color:#0d47a1
+    style Email fill:#fff3e0,stroke:#ef6c00,stroke-width:3px
+    style Network fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Endpoint fill:#f3e5f5,stroke:#7b1fa2,stroke-width:3px
+    style User fill:#fce4ec,stroke:#c2185b,stroke-width:3px
+    style Cloud fill:#e1f5fe,stroke:#0277bd,stroke-width:3px
+    style E1 fill:#ffe0b2,stroke:#f57c00,stroke-width:2px
+    style E2 fill:#ffe0b2,stroke:#f57c00,stroke-width:2px
+    style E3 fill:#ffe0b2,stroke:#f57c00,stroke-width:2px
+    style N1 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style N2 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style N3 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style N4 fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    style EP1 fill:#e1bee7,stroke:#8e24aa,stroke-width:2px
+    style EP2 fill:#e1bee7,stroke:#8e24aa,stroke-width:2px
+    style EP3 fill:#e1bee7,stroke:#8e24aa,stroke-width:2px
+    style U1 fill:#f8bbd0,stroke:#c2185b,stroke-width:2px
+    style U2 fill:#f8bbd0,stroke:#c2185b,stroke-width:2px
+    style U3 fill:#f8bbd0,stroke:#c2185b,stroke-width:2px
+    style C1 fill:#b3e5fc,stroke:#0277bd,stroke-width:2px
+    style C2 fill:#b3e5fc,stroke:#0277bd,stroke-width:2px
+    style C3 fill:#b3e5fc,stroke:#0277bd,stroke-width:2px
+```
+
+---
+
+## 📊 **Cách Sử Dụng Các Diagrams:**
+
+**Trong Slides:**
+- Mỗi diagram = 1 slide riêng
+- Giải thích từng phần khi present
+- Point vào các nodes quan trọng
+
+**Trong Handouts:**
+- Print cho students làm tài liệu
+- Reference trong labs
+- Study guide cho exam
+
+**Trong Labs:**
+- Students refer back khi code
+- Visual reminder của concepts
+- Connect theory với practice
+
+**Bạn muốn tôi:**
+1. Tạo thêm diagrams cho concepts khác?
+2. Simplify hoặc elaborate bất kỳ diagram nào?
+3. Tạo animated versions (step-by-step reveal)?
+4. Export sang format khác (PNG, SVG)?
+
 # Module 1: Introduction to Cyber Security Artificial Intelligence
 
 ## 50 Slides with Image Suggestions
@@ -884,3 +1345,4 @@ Bạn có muốn mình mở rộng thêm **1-2 nhánh phụ khác** (ví dụ ki
 - Artificial intelligence and machine learning icons
 - Cyber threat landscape infographics
 - Real-time monitoring displays
+
