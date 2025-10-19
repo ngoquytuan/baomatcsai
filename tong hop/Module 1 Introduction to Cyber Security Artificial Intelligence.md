@@ -1,3 +1,419 @@
+# 2 Bài Thực Hành Module 1
+
+---
+
+## 🔬 **Lab 1: AI Security Detective - Multi-Algorithm Comparison**
+**Duration:** 90 minutes  
+**Difficulty:** Beginner-friendly  
+**Platform:** Google Colab (no installation needed)
+
+### **Mục Tiêu:**
+Students sẽ thực hành **toàn bộ AI threat detection pipeline** và so sánh nhiều algorithms
+
+### **Nội Dung Phủ:**
+✅ Data preprocessing  
+✅ Supervised Learning (Decision Tree, Random Forest, SVM, Neural Network)  
+✅ Model training and testing  
+✅ Performance evaluation  
+✅ Algorithm comparison
+
+### **Scenario:**
+Bạn là Security Analyst tại một công ty. Hệ thống nhận được 10,000 emails mỗi ngày. Nhiệm vụ: xây dựng AI system để phát hiện phishing emails.
+
+---
+
+### **Lab Structure:**
+
+#### **Part 1: Understanding the Data (15 mins)**
+- Load email dataset (pre-provided)
+- Explore features: sender, subject, links, keywords
+- Visualize spam vs legitimate emails
+- **Students do:** Run cells, observe outputs, answer questions
+
+**Questions:**
+- How many emails in dataset?
+- What percentage is phishing?
+- Which features seem most important?
+
+---
+
+#### **Part 2: Data Preprocessing (15 mins)**
+- Clean the data
+- Convert text to numbers (feature extraction)
+- Split train/test sets (70/30)
+- **Students observe:** How raw text becomes ML-ready data
+
+**Key Learning:** "AI can't read text directly - must convert to numbers"
+
+---
+
+#### **Part 3: Algorithm Battle (40 mins)**
+
+**Students train 4 different models:**
+
+**Model 1: Decision Tree**
+```python
+# Pre-written code - students just click "Run"
+# Shows decision tree visualization
+```
+- **Accuracy:** ~85%
+- **Speed:** Very fast
+- **Pros:** Easy to understand
+- **Cons:** Can overfit
+
+**Model 2: Random Forest**
+```python
+# Students run and compare
+```
+- **Accuracy:** ~92%
+- **Speed:** Fast
+- **Pros:** More accurate than single tree
+- **Cons:** Less interpretable
+
+**Model 3: SVM**
+```python
+# Students run and compare
+```
+- **Accuracy:** ~88%
+- **Speed:** Medium
+- **Pros:** Good with high-dimensional data
+- **Cons:** Hard to tune
+
+**Model 4: Neural Network**
+```python
+# Students run and compare
+```
+- **Accuracy:** ~94%
+- **Speed:** Slower to train
+- **Pros:** Best accuracy
+- **Cons:** Needs more data, harder to explain
+
+---
+
+#### **Part 4: Comparison & Analysis (20 mins)**
+
+**Automatic comparison table generated:**
+
+| Algorithm | Accuracy | Precision | Recall | F1-Score | Training Time | False Positives |
+|-----------|----------|-----------|--------|----------|---------------|-----------------|
+| Decision Tree | 85% | 83% | 87% | 85% | 0.5s | 150 |
+| Random Forest | 92% | 91% | 93% | 92% | 2.3s | 80 |
+| SVM | 88% | 86% | 90% | 88% | 3.1s | 120 |
+| Neural Network | 94% | 95% | 93% | 94% | 8.5s | 60 |
+
+**Discussion Questions:**
+1. Which algorithm would you choose for production? Why?
+2. What if training time is critical? Your choice?
+3. What if you need to explain decisions to regulators?
+4. How would you reduce false positives further?
+
+---
+
+#### **Part 5: Test on New Emails (Bonus - 10 mins)**
+
+Students paste real email text (provided examples) and see predictions:
+
+**Example 1:**
+```
+Subject: URGENT: Verify your account NOW
+From: security@paypa1.com (notice the "1")
+Body: Click here immediately or account suspended!
+```
+**All models predict:** 🚨 **PHISHING - 98% confidence**
+
+**Example 2:**
+```
+Subject: Meeting notes from today
+From: colleague@yourcompany.com
+Body: Attached are the notes from our team meeting...
+```
+**All models predict:** ✅ **LEGITIMATE - 95% confidence**
+
+---
+
+### **Deliverables:**
+1. Completed notebook with all cells executed
+2. Screenshot of comparison table
+3. Short reflection (5 questions):
+   - Which algorithm surprised you most? Why?
+   - What did you learn about trade-offs?
+   - How would you improve the system?
+   - Which real-world scenario would benefit from each algorithm?
+   - One thing you found confusing?
+
+---
+
+### **Technical Setup:**
+- **Pre-built Google Colab notebook** (students just click "Run All")
+- Dataset: Phishing email dataset (~5MB, cleaned)
+- All libraries pre-installed
+- Clear comments explaining each step
+- Visual outputs at every stage
+
+**Image Suggestion:** Colab interface, algorithm comparison charts, confusion matrices, ROC curves
+
+---
+
+---
+
+## 🕵️ **Lab 2: Anomaly Hunter - Detecting the Invisible Threat**
+**Duration:** 60 minutes  
+**Difficulty:** Beginner-friendly  
+**Platform:** Interactive web tool OR Google Colab
+
+### **Mục Tiêu:**
+Students thực hành **Unsupervised Learning** và **Anomaly Detection** - phát hiện threats chưa từng thấy
+
+### **Nội Dung Phủ:**
+✅ Unsupervised Learning concepts  
+✅ Clustering and anomaly detection  
+✅ User Behavior Analytics (UBA)  
+✅ Visualization of normal vs. abnormal  
+✅ False positive management
+
+### **Scenario:**
+Bạn là SOC Analyst. Công ty có 500 employees. Một tài khoản bị compromise nhưng bạn không biết tài khoản nào. Traditional signature-based tools không phát hiện được vì attacker đang hành động như legitimate user. Nhiệm vụ: dùng AI tìm tài khoản bất thường.
+
+---
+
+### **Lab Structure:**
+
+#### **Part 1: Visualizing Normal Behavior (15 mins)**
+
+**Dataset provided:** 30 days of employee login activity
+- Login times
+- Login locations
+- Files accessed
+- Applications used
+- Data downloaded
+
+**Interactive Visualization:**
+Students see scatter plots showing:
+- Most employees login 8AM-6PM
+- Most access 10-50 files/day
+- Most download <100MB/day
+
+**Students identify patterns:**
+- "Cluster A" - Early birds (7AM-9AM)
+- "Cluster B" - Normal hours (9AM-5PM)
+- "Cluster C" - Night owls (work late)
+
+**Key Learning:** "Normal" is different for different people
+
+**Image Suggestion:** Scatter plots with colored clusters, heatmaps of activity patterns, time-series graphs
+
+---
+
+#### **Part 2: AI Learns Normal (15 mins)**
+
+**Students run clustering algorithm:**
+```python
+# K-means clustering - pre-written
+# AI automatically groups similar users
+```
+
+**Output:** 
+- 5 user behavior groups identified
+- Each employee assigned to a group
+- Group characteristics described
+
+**Example Groups:**
+- Group 1: Sales team (frequent external access, travel)
+- Group 2: Developers (late hours, code repos)
+- Group 3: HR team (predictable 9-5, sensitive data)
+- Group 4: Executives (mobile access, varied locations)
+- Group 5: Support team (shift work, ticket systems)
+
+**Students answer:**
+- Does grouping make sense?
+- Can you identify your own work pattern?
+
+---
+
+#### **Part 3: The Hunt Begins (20 mins)**
+
+**AI Anomaly Detection activates:**
+
+System flags 3 anomalies:
+
+**🔴 ALERT 1: User "Sarah_Chen"**
+- Normal pattern: HR team, 9AM-5PM, accesses 15-20 files/day
+- Today's behavior:
+  - Login at 3:47 AM (unusual time)
+  - Accessed 847 files (57x normal)
+  - Downloaded 2.3GB data (100x normal)
+  - Accessed finance and legal folders (never accessed before)
+- **Anomaly Score: 98/100**
+
+**Discussion Question:** Is this legitimate or attack? What would you do?
+
+---
+
+**🟡 ALERT 2: User "Mike_Johnson"**
+- Normal pattern: Developer, works late, accesses code repos
+- Today's behavior:
+  - Accessed HR database (first time)
+  - Downloaded salary spreadsheet
+  - Normal time and volume otherwise
+- **Anomaly Score: 65/100**
+
+**Discussion Question:** False positive or real threat? How to investigate?
+
+---
+
+**🟢 ALERT 3: User "Lisa_Wang"**
+- Normal pattern: Marketing, predictable hours
+- Today's behavior:
+  - Login from airport (traveling for conference)
+  - Unusual location but still within work hours
+  - Access patterns normal
+- **Anomaly Score: 45/100**
+
+**Discussion Question:** Likely false positive? How to reduce these?
+
+---
+
+#### **Part 4: Investigation & Decision (10 mins)**
+
+**Students get additional context (simulated):**
+
+**Sarah_Chen Investigation:**
+- IT logs show: Password reset at 3:30 AM (not initiated by Sarah)
+- Sarah's phone shows: She was asleep (phone inactive)
+- Security cameras: No entry to office
+- **Conclusion:** 🚨 **Compromised account - CONFIRMED THREAT**
+- **Action:** Immediate password reset, account lockdown, forensics
+
+**Mike_Johnson Investigation:**
+- Mike is HR manager (job changed last month, system not updated)
+- Legitimate access for performance review process
+- **Conclusion:** ✅ **False positive - Update user profile**
+- **Action:** Update role in system, adjust baseline
+
+**Lisa_Wang Investigation:**
+- Travel request on file
+- Email shows conference confirmation
+- **Conclusion:** ✅ **False positive - Known travel**
+- **Action:** Temporary exception, resume monitoring
+
+**Key Learning:** AI finds anomalies, humans provide context
+
+---
+
+#### **Part 5: Tune the System (Bonus)**
+
+**Students adjust settings:**
+- Sensitivity slider: High (more alerts) vs Low (fewer alerts)
+- Baseline period: 7 days vs 30 days vs 90 days
+- Threshold: What anomaly score triggers alert?
+
+**See impact on:**
+- True positives caught
+- False positives generated
+- Alert volume
+
+**Students find optimal balance**
+
+**Image Suggestion:** Alert dashboard, anomaly scores, investigation workflows, tuning interfaces
+
+---
+
+### **Deliverables:**
+1. Completed investigation report:
+   - Which anomalies were real threats?
+   - Which were false positives?
+   - Your reasoning for each
+2. Recommended system settings:
+   - Sensitivity level
+   - Alert threshold
+   - Why you chose these values
+3. Reflection questions:
+   - How is unsupervised learning different from supervised?
+   - Why can't we use supervised learning here?
+   - How would you improve anomaly detection?
+   - What role does human judgment play?
+
+---
+
+### **Technical Setup:**
+**Option A:** Interactive web tool (easier)
+- Custom-built simulation
+- No coding required
+- Visual interface
+- Gamified experience
+
+**Option B:** Google Colab (more technical)
+- Pre-built notebook
+- Students run cells
+- More data science feel
+- Better for those interested in technical details
+
+---
+
+---
+
+## 📊 **How These Labs Cover Module 1:**
+
+| Module 1 Topic | Covered in Lab 1 | Covered in Lab 2 |
+|----------------|------------------|------------------|
+| AI/ML/DL concepts | ✅ Hands-on ML | ✅ Unsupervised ML |
+| Supervised Learning | ✅ Main focus | ❌ |
+| Unsupervised Learning | ❌ | ✅ Main focus |
+| Multiple Algorithms | ✅ Compare 4 types | ✅ Clustering |
+| Threat Detection Pipeline | ✅ Full pipeline | ✅ Anomaly detection |
+| Real-world Application | ✅ Phishing detection | ✅ Insider threat |
+| Performance Evaluation | ✅ Metrics explained | ✅ False positive handling |
+| Decision Making | ✅ Algorithm selection | ✅ Human judgment |
+| Ethics & Challenges | Discussed in reflection | ✅ Privacy considerations |
+
+---
+
+## 🎯 **Suggested Approach:**
+
+**Option 1: Do Both Labs** (Comprehensive - recommended)
+- Lab 1 in one session (90 mins)
+- Lab 2 in another session (60 mins)
+- Covers supervised + unsupervised
+- Students see full picture
+
+**Option 2: Choose One** (If time limited)
+- Lab 1 if focusing on algorithm comparison
+- Lab 2 if focusing on real-world investigation
+
+**Option 3: Combined Mega-Lab** (120 mins total)
+- Part A: Lab 1 (phishing detection)
+- Part B: Lab 2 (anomaly detection)
+- Part C: Final discussion comparing both approaches
+
+---
+
+## 💡 **Teaching Tips:**
+
+**Before Labs:**
+- Quick 10-min recap of key concepts
+- Demo the interface first
+- Set expectations: "You don't need to understand every line of code"
+
+**During Labs:**
+- Circulate and help students
+- Pause for group discussions at key points
+- Encourage questions
+- Show common mistakes
+
+**After Labs:**
+- Group debrief: What surprised you?
+- Connect back to theory
+- Preview Module 2: "Now you'll learn to build this yourself"
+
+---
+
+**Bạn muốn tôi:**
+1. Tạo detailed code cho Lab 1 (Colab notebook)?
+2. Tạo detailed code cho Lab 2?
+3. Tạo grading rubric cho cả 2 labs?
+4. Thiết kế interactive web tool cho Lab 2?
+5. Hoặc điều chỉnh gì khác?
+
 # Module 1 - Part 3: Wrap-up (Slides 36-40)
 
 ---
@@ -2087,6 +2503,7 @@ Bạn có muốn mình mở rộng thêm **1-2 nhánh phụ khác** (ví dụ ki
 - Artificial intelligence and machine learning icons
 - Cyber threat landscape infographics
 - Real-time monitoring displays
+
 
 
 
