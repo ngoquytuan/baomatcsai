@@ -1,3 +1,464 @@
+# Module 1 - Part 2: AI Techniques Overview (Slides 21-35)
+
+---
+
+## Slide 21: Supervised Learning Deep Dive
+
+**Remember:** Learning with labeled examples (teacher-guided)
+
+**Key Cybersecurity Applications:**
+
+**1. Malware Classification**
+- Train on millions of known malware samples
+- AI learns to identify malware families
+- Classifies new files as malicious or benign
+
+**2. Spam/Phishing Detection**
+- Learn from labeled spam vs. legitimate emails
+- 99%+ accuracy in email filtering
+
+**3. Network Intrusion Detection**
+- Trained on normal vs. attack traffic
+- Identifies attacks in real-time
+
+**Success Rate:** 90-99% accuracy when properly trained
+
+**The Catch:** Needs large amounts of labeled data (expensive and time-consuming)
+
+**Image Suggestion:** Teacher showing examples to student AI, classification results dashboard, training data visualization
+
+---
+
+## Slide 22: Unsupervised Learning Deep Dive
+
+**Remember:** Learning without labels (self-discovery)
+
+**Key Cybersecurity Applications:**
+
+**1. Anomaly Detection**
+- No need to know what attacks look like
+- Just learn "normal" and flag deviations
+- Perfect for zero-day threats
+
+**2. User Behavior Analytics (UBA)**
+- Groups users by behavior patterns
+- Detects compromised accounts
+- Identifies insider threats
+
+**3. Network Traffic Analysis**
+- Discovers unusual communication patterns
+- Detects command & control servers
+- Identifies data exfiltration
+
+**The Power:** Can find threats nobody has seen before
+
+**The Challenge:** Higher false positive rates than supervised learning
+
+**Image Suggestion:** Clustering visualization, outlier detection scatter plot, normal vs. abnormal behavior patterns
+
+---
+
+## Slide 23: Reinforcement Learning Deep Dive
+
+**Remember:** Learning through trial and error (reward-based)
+
+**Key Cybersecurity Applications:**
+
+**1. Automated Incident Response**
+- AI agent learns best response strategies
+- Gets rewarded for successful threat mitigation
+- Improves over time
+
+**2. Adaptive Defense Systems**
+- System learns to adapt defenses based on attacker behavior
+- Like playing chess against hackers
+
+**3. Penetration Testing Automation**
+- AI learns to find vulnerabilities
+- Explores systems like human pentester
+
+**Real Example:** AI system learns to patch vulnerabilities 40% faster than human teams
+
+**The Future:** Self-healing systems that automatically respond to threats
+
+**Image Suggestion:** Game board with AI player learning moves, reward/penalty system, adaptive shield visualization
+
+---
+
+## Slide 24: Hybrid Approaches - Best of All Worlds
+
+**Combining Multiple ML Types:**
+
+**Real-World Security Systems Use All Three:**
+
+**Example: Advanced Email Security**
+1. **Supervised Learning:** Check against known phishing patterns
+2. **Unsupervised Learning:** Detect unusual sender behavior
+3. **Reinforcement Learning:** Optimize filtering rules over time
+
+**Result:** 99.99% detection rate with <0.1% false positives
+
+**Why Hybrid Works:**
+- Supervised catches known threats
+- Unsupervised catches unknown threats
+- Reinforcement optimizes overall system
+
+**Key Lesson:** No single technique is perfect; combination is key
+
+**Image Suggestion:** Three circles overlapping (Venn diagram), layered security approach, combined defense shield
+
+---
+
+## Slide 25: Decision Trees - The "If-Then" Algorithm
+
+**Simplest AI Algorithm to Understand:**
+
+**How It Works (Simple Analogy):**
+Like a flowchart with yes/no questions
+
+**Example: Is This Login Suspicious?**
+```
+├─ Login from new country? 
+   ├─ YES → Failed password attempts > 3?
+   │   ├─ YES → 🚨 HIGH RISK - Block
+   │   └─ NO → ⚠️ MEDIUM RISK - Require 2FA
+   └─ NO → Login time unusual?
+       ├─ YES → ⚠️ LOW RISK - Monitor
+       └─ NO → ✅ SAFE - Allow
+```
+
+**Advantages:**
+- Easy to understand and explain
+- Fast decisions
+- Works well with categorical data
+
+**Limitations:**
+- Can be fooled if attackers know the rules
+- May oversimplify complex patterns
+
+**Image Suggestion:** Decision tree flowchart, branching paths, yes/no decision nodes
+
+---
+
+## Slide 26: Random Forest - Democracy of Trees
+
+**Concept:** Many decision trees voting together
+
+**Simple Analogy:**
+Instead of asking one expert, ask 100 experts and go with majority vote
+
+**How It Works in Security:**
+1. Create 100+ different decision trees
+2. Each tree analyzes the same threat
+3. Trees vote on classification
+4. Majority wins
+
+**Example Result:**
+- Tree 1: "Malware" (80% confidence)
+- Tree 2: "Malware" (75% confidence)
+- Tree 3: "Safe" (60% confidence)
+- ...
+- **Final: 87 trees say "Malware" → BLOCKED**
+
+**Why Better Than Single Tree:**
+- More accurate
+- Less likely to be fooled
+- Handles complex patterns better
+
+**Real Performance:** 95%+ accuracy in malware detection
+
+**Image Suggestion:** Forest of trees each with different decisions, voting/democracy visualization, ensemble concept
+
+---
+
+## Slide 27: Support Vector Machines (SVM) - The Boundary Drawer
+
+**Core Idea:** Find the best line (boundary) separating good from bad
+
+**Simple Visual Concept:**
+Imagine plotting files on a graph:
+- Green dots = Safe files
+- Red dots = Malware files
+- SVM draws the best line separating them
+
+**Cybersecurity Use:**
+
+**Network Traffic Classification:**
+- Safe traffic on one side
+- Attack traffic on other side
+- New traffic? Check which side of line it falls
+
+**Advantages:**
+- Excellent for binary classification (malicious/benign)
+- Works well with high-dimensional data
+- Effective with limited training data
+
+**Real Application:** Used in many antivirus engines for quick file scanning
+
+**Image Suggestion:** 2D scatter plot with line separating two groups, boundary visualization, classification diagram
+
+---
+
+## Slide 28: Neural Networks - Artificial Brain
+
+**Inspired by Human Brain:**
+Network of artificial neurons connected together
+
+**Three Main Parts:**
+
+**1. Input Layer**
+- Receives data (file, network packet, log entry)
+
+**2. Hidden Layers**
+- Process and transform data
+- Each layer extracts different features
+- More layers = "deeper" learning
+
+**3. Output Layer**
+- Final decision (malware/safe, attack/normal)
+
+**Why Powerful:**
+- Can learn very complex patterns
+- Automatically discovers important features
+- Handles messy, real-world data
+
+**Cybersecurity Success:**
+- Malware detection: 98% accuracy
+- Phishing detection: 99.9% accuracy
+- Network intrusion: 95% accuracy
+
+**Trade-off:** Requires lots of data and computing power
+
+**Image Suggestion:** Neural network diagram with layers, brain-computer hybrid, neurons firing visualization
+
+---
+
+## Slide 29: Convolutional Neural Networks (CNN) - The Visual Expert
+
+**Special Type of Neural Network for Images:**
+
+**How It's Used in Cybersecurity:**
+
+**1. Malware Visualization**
+- Convert malware code into images
+- CNN analyzes visual patterns
+- Different malware families create different patterns
+- Can identify malware variants humans can't see
+
+**2. CAPTCHA Breaking (Security Testing)**
+- Analyzes distorted text images
+- Tests strength of CAPTCHA systems
+
+**3. Document Authentication**
+- Verifies if documents are genuine or forged
+
+**Real Breakthrough:**
+Traditional antivirus: 55% detection of new malware
+CNN-based: 92% detection of new malware
+
+**Simple Explanation:** Teaches AI to "see" patterns in data we can't visualize
+
+**Image Suggestion:** Malware code converted to colorful image patterns, CNN layers processing image, pattern recognition visualization
+
+---
+
+## Slide 30: Ensemble Methods - Team of AIs
+
+**Concept:** Multiple AI models working together as a team
+
+**Three Common Approaches:**
+
+**1. Bagging (Bootstrap Aggregating)**
+- Train multiple models on different data subsets
+- Average their predictions
+- Example: Random Forest
+
+**2. Boosting**
+- Train models sequentially
+- Each new model focuses on previous mistakes
+- Example: XGBoost (very popular in competitions)
+
+**3. Stacking**
+- Combine different types of models
+- One "master" model makes final decision
+
+**Real Security Application:**
+Modern antivirus uses 5-10 different AI models simultaneously:
+- Signature matching
+- Behavioral analysis
+- Reputation scoring
+- Heuristic analysis
+- Cloud-based threat intelligence
+
+**Result:** If one model misses, others catch it
+
+**Image Suggestion:** Multiple AI agents working together, team collaboration, orchestra of algorithms
+
+---
+
+## Slide 31: Case Study 1 - JPMorgan Chase Fraud Detection
+
+**The Challenge:**
+- Process 1 trillion dollars in transactions daily
+- Detect fraud in real-time
+- Minimize false positives (don't block legitimate transactions)
+
+**AI Solution Implemented:**
+
+**Multi-Layer AI System:**
+1. **Neural Network:** Analyzes transaction patterns
+2. **Anomaly Detection:** Flags unusual behavior
+3. **NLP:** Reads fraud reports to learn new tactics
+4. **Reinforcement Learning:** Optimizes fraud rules
+
+**Results:**
+- **Before AI:** 1% of fraud caught proactively
+- **After AI:** 40% of fraud caught before completion
+- False positives reduced by 50%
+- Saved estimated $1 billion annually
+
+**Key Takeaway:** AI doesn't just detect more fraud; it detects it FASTER
+
+**Image Suggestion:** Banking transaction flow, fraud detection dashboard, before/after comparison graphs
+
+---
+
+## Slide 32: Case Study 2 - Darktrace Immune System
+
+**The Innovation:**
+AI that works like human immune system
+
+**How Human Immune System Works:**
+1. Learns what's "normal" for your body
+2. Attacks anything unusual
+3. Adapts to new threats
+4. No need to know specific diseases beforehand
+
+**How Darktrace AI Works:**
+1. Learns normal network behavior for each organization
+2. Detects subtle deviations
+3. Responds autonomously to threats
+4. No signature updates needed
+
+**Real Success Story:**
+- UK company infected with novel ransomware
+- Darktrace detected unusual file encryption patterns in 3 seconds
+- Automatically isolated infected systems
+- Ransomware contained before spreading
+- Traditional antivirus missed it completely (zero-day)
+
+**Key Takeaway:** AI can defend against threats that don't exist yet
+
+**Image Suggestion:** Human immune system analogy, network immune system visualization, threat containment diagram
+
+---
+
+## Slide 33: Case Study 3 - Google's Fraud Detection (Gmail)
+
+**The Challenge:**
+- 319 billion emails sent daily globally
+- Need to filter spam and phishing in real-time
+- Can't let false positives block important emails
+
+**AI Solution:**
+
+**TensorFlow-Based System:**
+1. **NLP:** Understands email content and context
+2. **Image Recognition:** Detects fake logos and suspicious images
+3. **Sender Reputation:** Analyzes sender behavior patterns
+4. **Link Analysis:** Checks destination URLs
+
+**Impressive Results:**
+- Blocks 99.9% of spam and phishing
+- False positive rate: Less than 0.05%
+- Processes 100+ billion emails per day
+- Updates models every few hours with new threats
+
+**Innovation:**
+AI learns from user actions (marking spam) across billions of users globally
+
+**Impact:** Users now see <1 spam email per week vs. 50+ before AI
+
+**Image Suggestion:** Email filtering visualization, spam/legitimate classification, global email protection network
+
+---
+
+## Slide 34: Future Trends in AI Security
+
+**What's Coming in Next 3-5 Years:**
+
+**1. Autonomous Security Operations Centers (SOC)**
+- AI handles 90% of routine security tasks
+- Human analysts focus only on strategic decisions
+- Self-healing systems
+
+**2. Quantum-Resistant AI**
+- Preparing for quantum computing threats
+- AI designing new encryption algorithms
+- Post-quantum cryptography
+
+**3. Explainable AI (XAI)**
+- AI that can explain its decisions
+- "I blocked this because..."
+- Required for compliance and trust
+
+**4. AI vs. AI Warfare**
+- Attackers using AI to create smarter malware
+- Defenders using AI to counter AI-powered attacks
+- Arms race of intelligent systems
+
+**5. Zero Trust + AI Integration**
+- Continuous authentication
+- Micro-segmentation with AI
+- Real-time risk assessment
+
+**Image Suggestion:** Futuristic SOC, quantum computer, AI battle visualization, timeline of future technologies
+
+---
+
+## Slide 35: Part 2 Summary & Key Takeaways
+
+**What We've Covered:**
+
+**ML Types in Security:**
+✓ Supervised: For known threats with labeled data
+✓ Unsupervised: For unknown threats and anomalies
+✓ Reinforcement: For adaptive, self-improving defenses
+
+**Key Algorithms (High-Level):**
+✓ Decision Trees: Simple, explainable rules
+✓ Random Forest: Ensemble of trees voting
+✓ SVM: Boundary-based classification
+✓ Neural Networks: Complex pattern recognition
+✓ CNNs: Visual/pattern analysis
+✓ Ensemble Methods: Team-based approach
+
+**Real-World Impact:**
+✓ JPMorgan: $1B saved in fraud prevention
+✓ Darktrace: Zero-day threat detection
+✓ Google: 99.9% email protection
+
+**The Future:** AI-powered, autonomous, explainable security
+
+**Remember:** AI enhances human capability, doesn't replace human judgment
+
+**Next:** Part 3 - Practical considerations, ethics, and implementation
+
+**Image Suggestion:** Summary infographic with key concepts, roadmap showing progress, checkmark list of accomplishments
+
+---
+
+**End of Part 2**
+
+**Questions to Ponder:**
+- Which AI technique do you find most interesting for your security needs?
+- What concerns do you have about AI in security?
+- How can AI help your organization specifically?
+
+**Break Time:** 15 minutes before Part 3
+
+**Image Suggestion:** Coffee break icon, question marks, thinking person, discussion bubbles
+
 # Mermaid Diagrams cho Module 1 - Kiến Thức Chính
 
 ---
@@ -1345,4 +1806,5 @@ Bạn có muốn mình mở rộng thêm **1-2 nhánh phụ khác** (ví dụ ki
 - Artificial intelligence and machine learning icons
 - Cyber threat landscape infographics
 - Real-time monitoring displays
+
 
