@@ -152,7 +152,9 @@ mindmap
         Advanced models
       PyTorch
         Research
+```
 
+---
 **Slide 1: Title Slide**
 
 # Module 8: Generative Adversarial Networks (GANs) for Cyber Security
@@ -1115,4 +1117,5 @@ morphed_face = alpha * face1 + (1-alpha) * face2
 ---
 
 This comprehensive 50-slide presentation provides detailed coverage of Module 8, with specific image suggestions for each slide to help create an engaging visual presentation. Each slide builds upon the previous concepts while providing practical examples and real-world applications.
+
 
