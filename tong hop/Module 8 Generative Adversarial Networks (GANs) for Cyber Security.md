@@ -1170,6 +1170,324 @@ The discriminator learns to detect fakes better
 
 ---
 
+# Revised Slide 7: GAN Architecture (Split into 4 Slides)
+
+---
+
+## **Slide 7A: GAN Components - The Two Players**
+
+### The Basic Components of a GAN
+
+**A GAN has two neural networks that compete against each other:**
+
+**🎨 The Generator (G)**
+- **Role:** The "Artist" or "Counterfeiter"
+- **Input:** Random noise (like rolling dice)
+- **Output:** Fake data (images, text, network packets)
+- **Goal:** Create data so realistic that it fools the Discriminator
+- **Learns:** How to make better fakes from feedback
+
+**🔍 The Discriminator (D)**
+- **Role:** The "Critic" or "Detective"
+- **Input:** Both real data and fake data from Generator
+- **Output:** Probability score (0 = fake, 1 = real)
+- **Goal:** Correctly identify real vs fake data
+- **Learns:** Better detection techniques through practice
+
+**💡 Key Insight:** They improve each other through competition!
+
+---
+
+**Mermaid Diagram:**
+
+```mermaid
+flowchart TB
+    subgraph Generator["🎨 GENERATOR"]
+        G_IN["Input:<br/>Random Noise<br/>(100-dim vector)<br/>Example: [0.5, -0.3, 0.8, ...]"]
+        G_PROCESS["Neural Network<br/>Layers:<br/>• Dense layers<br/>• Convolution<br/>• Activation functions"]
+        G_OUT["Output:<br/>Fake Data<br/>(e.g., 28×28 image)"]
+        
+        G_IN --> G_PROCESS
+        G_PROCESS --> G_OUT
+    end
+    
+    subgraph Discriminator["🔍 DISCRIMINATOR"]
+        D_IN["Input:<br/>Any Data<br/>(Real or Fake)"]
+        D_PROCESS["Neural Network<br/>Layers:<br/>• Convolution<br/>• Pooling<br/>• Classification"]
+        D_OUT["Output:<br/>Probability<br/>0.0 = Fake<br/>1.0 = Real"]
+        
+        D_IN --> D_PROCESS
+        D_PROCESS --> D_OUT
+    end
+    
+    G_OUT -.->|"Generates"| D_IN
+    
+    FEEDBACK["📊 Feedback Loop"]
+    D_OUT --> FEEDBACK
+    FEEDBACK -.->|"Improves"| Generator
+    FEEDBACK -.->|"Improves"| Discriminator
+    
+    style Generator fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Discriminator fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style FEEDBACK fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+```
+
+---
+
+## **Slide 7B: GAN Data Flow - Step by Step**
+
+### How Data Flows Through a GAN
+
+**The Complete Process:**
+
+1. **Random Noise Generation** → Feed random numbers to Generator
+2. **Fake Data Creation** → Generator produces fake samples
+3. **Real Data Collection** → Gather authentic training data
+4. **Mixed Input** → Feed both real and fake to Discriminator
+5. **Classification** → Discriminator judges each sample
+6. **Feedback & Learning** → Both networks update based on results
+
+**Simple Example (Face Generation):**
+- Noise: `[0.2, -0.5, 0.9, ...]` 
+- Generator creates: Fake face image
+- Discriminator sees: Real faces + Fake face
+- Discriminator outputs: "70% sure this is real" → Needs improvement!
+- Both networks learn from this mistake
+
+---
+
+**Mermaid Diagram:**
+
+```mermaid
+flowchart LR
+    subgraph Input["🎲 INPUTS"]
+        NOISE["Random Noise<br/>z ~ N(0,1)<br/><br/>Example:<br/>[0.5, -0.3, 0.8]"]
+        REAL["Real Data<br/>from Dataset<br/><br/>Example:<br/>Actual face photos"]
+    end
+    
+    subgraph Gen["🎨 GENERATOR"]
+        G["Generator<br/>Network<br/>G(z)"]
+    end
+    
+    subgraph Output["📦 OUTPUTS"]
+        FAKE["Fake Data<br/>G(z)<br/><br/>Example:<br/>Generated face"]
+    end
+    
+    subgraph Disc["🔍 DISCRIMINATOR"]
+        D["Discriminator<br/>Network<br/>D(x)"]
+    end
+    
+    subgraph Result["📊 RESULTS"]
+        REAL_SCORE["Real Data:<br/>D(x_real) → 1<br/>'I'm 95% sure<br/>this is REAL'"]
+        FAKE_SCORE["Fake Data:<br/>D(G(z)) → 0<br/>'I'm 80% sure<br/>this is FAKE'"]
+    end
+    
+    NOISE -->|"Random vector"| G
+    G -->|"Generates"| FAKE
+    
+    REAL -->|"Label: 1"| D
+    FAKE -->|"Label: 0"| D
+    
+    D -->|"Classifies"| REAL_SCORE
+    D -->|"Classifies"| FAKE_SCORE
+    
+    REAL_SCORE -.->|"Update D:<br/>Maximize correct<br/>classification"| Disc
+    FAKE_SCORE -.->|"Update G:<br/>Fool D to<br/>output 1"| Gen
+    
+    style Input fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    style Gen fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Output fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    style Disc fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style Result fill:#e1f5fe,stroke:#0277bd,stroke-width:2px
+```
+
+---
+
+## **Slide 7C: The Adversarial Game - Competition**
+
+### How Generator and Discriminator Compete
+
+**Think of it as a Game:**
+
+**Round 1: Discriminator Advantage**
+- Generator is weak → Creates obvious fakes
+- Discriminator easily detects them → Gets confident
+- Score: Discriminator 10, Generator 0
+
+**Round 50: Getting Competitive**
+- Generator improves → Creates better fakes
+- Discriminator still catches most → But has to work harder
+- Score: Discriminator 7, Generator 3
+
+**Round 500: Equilibrium**
+- Generator is skilled → Creates realistic fakes
+- Discriminator struggles → Only 50/50 accuracy
+- Score: Discriminator 5, Generator 5 → **Success!**
+
+**🎯 Training Goal:** Reach equilibrium where Discriminator can't tell real from fake (50% accuracy = random guessing)
+
+---
+
+**Mermaid Diagram:**
+
+```mermaid
+flowchart TB
+    START["🎬 Training Begins"]
+    
+    subgraph Round1["Round 1-100: Early Training"]
+        R1_G["🎨 Generator:<br/>'My fakes are terrible'<br/>Loss: HIGH"]
+        R1_D["🔍 Discriminator:<br/>'These are easy to spot!'<br/>Accuracy: 95%"]
+        R1_G -.->|"Weak fakes"| R1_D
+        R1_D -.->|"Easy detection"| R1_G
+    end
+    
+    subgraph Round2["Round 100-500: Mid Training"]
+        R2_G["🎨 Generator:<br/>'Getting better...'<br/>Loss: MEDIUM"]
+        R2_D["🔍 Discriminator:<br/>'Hmm, trickier now'<br/>Accuracy: 75%"]
+        R2_G -.->|"Improved fakes"| R2_D
+        R2_D -.->|"Harder detection"| R2_G
+    end
+    
+    subgraph Round3["Round 500+: Late Training"]
+        R3_G["🎨 Generator:<br/>'Nearly perfect!'<br/>Loss: LOW"]
+        R3_D["🔍 Discriminator:<br/>'I can barely tell...'<br/>Accuracy: 55%"]
+        R3_G -.->|"Realistic fakes"| R3_D
+        R3_D -.->|"Difficult detection"| R3_G
+    end
+    
+    EQUILIBRIUM["⚖️ EQUILIBRIUM REACHED<br/>Discriminator accuracy ≈ 50%<br/>(Random guessing)<br/><br/>✅ Generator has learned to create<br/>realistic data!"]
+    
+    START --> Round1
+    Round1 --> Round2
+    Round2 --> Round3
+    Round3 --> EQUILIBRIUM
+    
+    style Round1 fill:#ffebee,stroke:#c62828,stroke-width:2px
+    style Round2 fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    style Round3 fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    style EQUILIBRIUM fill:#c8e6c9,stroke:#388e3c,stroke-width:3px
+```
+
+---
+
+## **Slide 7D: Training Dynamics - The Math Behind It**
+
+### Understanding GAN Training Mathematics (Simplified)
+
+**The Minimax Game:**
+
+Both networks play opposite roles:
+- **Discriminator (D)** tries to **MAXIMIZE** correct classification
+- **Generator (G)** tries to **MINIMIZE** Discriminator's success
+
+**In Simple Terms:**
+
+**Discriminator's Objective:**
+```
+"I want to be RIGHT as often as possible"
+• When I see REAL data → Output close to 1
+• When I see FAKE data → Output close to 0
+```
+
+**Generator's Objective:**
+```
+"I want to FOOL the Discriminator"
+• When Discriminator sees my fakes → I want it to output 1
+• If Discriminator outputs 0 → I failed, must improve
+```
+
+**Training Algorithm (Simplified):**
+1. Fix Generator → Train Discriminator (make it better at detecting)
+2. Fix Discriminator → Train Generator (make it better at fooling)
+3. Repeat steps 1-2 thousands of times
+4. Stop when they reach equilibrium
+
+---
+
+**Mermaid Diagram:**
+
+```mermaid
+flowchart TB
+    subgraph Train["🔄 TRAINING CYCLE"]
+        direction TB
+        
+        STEP1["📍 STEP 1:<br/>Train Discriminator<br/>(Generator FROZEN)"]
+        
+        S1A["Feed real data<br/>Target: D(x_real) = 1"]
+        S1B["Feed fake data<br/>Target: D(G(z)) = 0"]
+        S1C["Calculate D loss:<br/>How many mistakes?"]
+        S1D["Update D weights<br/>via backpropagation"]
+        
+        STEP1 --> S1A --> S1B --> S1C --> S1D
+        
+        STEP2["📍 STEP 2:<br/>Train Generator<br/>(Discriminator FROZEN)"]
+        
+        S2A["Generate fake data<br/>G(z)"]
+        S2B["Feed to Discriminator<br/>Want: D(G(z)) = 1"]
+        S2C["Calculate G loss:<br/>How well did I fool D?"]
+        S2D["Update G weights<br/>via backpropagation"]
+        
+        S1D --> STEP2
+        STEP2 --> S2A --> S2B --> S2C --> S2D
+        
+        CHECK{"Converged?<br/>D accuracy ≈ 50%?<br/>Quality good?"}
+        
+        S2D --> CHECK
+        CHECK -->|No| STEP1
+        CHECK -->|Yes| DONE["✅ TRAINING COMPLETE<br/>Generator can create<br/>realistic data"]
+    end
+    
+    subgraph Math["📐 MATHEMATICAL OBJECTIVE"]
+        FORMULA["min_G max_D V(D,G) =<br/>E[log D(x)] + E[log(1-D(G(z)))]<br/><br/>Translation:<br/>D wants to maximize V (be correct)<br/>G wants to minimize V (fool D)"]
+    end
+    
+    Train -.->|"Implements"| Math
+    
+    style STEP1 fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style STEP2 fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style CHECK fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    style DONE fill:#c8e6c9,stroke:#388e3c,stroke-width:3px
+    style Math fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+```
+
+**💡 Key Takeaway:** 
+The Generator and Discriminator are locked in an "arms race" where each improvement by one forces the other to improve. This competition drives both networks toward excellence!
+
+---
+
+## **Summary: What We Learned**
+
+### Four Key Concepts:
+
+1. **Components** (Slide 7A): Generator creates, Discriminator judges
+2. **Data Flow** (Slide 7B): How information moves through the GAN
+3. **Competition** (Slide 7C): The adversarial game that drives learning
+4. **Training** (Slide 7D): The alternating optimization process
+
+### Real-World Analogy Recap:
+- **Generator** = Art forger trying to create fake paintings
+- **Discriminator** = Art expert trying to spot fakes
+- **Training** = Their ongoing battle makes both experts in their field
+- **Success** = Forger creates art so good the expert can't tell the difference
+
+---
+
+**Benefits of This Revised Structure:**
+
+✅ **Clearer Understanding**: Each concept gets its own slide with focused explanation
+✅ **Visual Learning**: Mermaid diagrams show exact data flow and relationships
+✅ **Progressive Complexity**: Start simple, gradually add detail
+✅ **Relatable Examples**: Face generation example makes it concrete
+✅ **Mathematical Foundation**: Slide 7D includes the math for advanced students
+
+**Teaching Tips:**
+- Spend 3-4 minutes on each slide
+- Use animations to reveal Mermaid diagrams step-by-step
+- Ask students questions between slides to check understanding
+- Have students draw their own simplified GAN diagram as practice
+
+---
+
 **Slide 8: Mathematical Foundation**
 
 # The Math Behind GANs
@@ -2021,6 +2339,7 @@ morphed_face = alpha * face1 + (1-alpha) * face2
 ---
 
 This comprehensive 50-slide presentation provides detailed coverage of Module 8, with specific image suggestions for each slide to help create an engaging visual presentation. Each slide builds upon the previous concepts while providing practical examples and real-world applications.
+
 
 
 
