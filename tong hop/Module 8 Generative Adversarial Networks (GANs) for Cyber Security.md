@@ -4,6 +4,155 @@
 
 ---
 
+# Mermaid Diagrams cho CÁC MODULE CHÍNH của Khóa Học CSAI
+
+Tôi sẽ tạo diagrams minh họa cho **tất cả các modules** (không chỉ Module 8):
+
+---
+
+## **MODULE 1: Introduction to Cyber Security AI**
+
+### 1. AI, ML, DL Hierarchy & Applications
+
+```mermaid
+flowchart TB
+    subgraph AI["🤖 Artificial Intelligence (Broadest)"]
+        direction TB
+        AI_DESC["Machines performing<br/>intelligent tasks"]
+        
+        subgraph ML["📊 Machine Learning (Subset of AI)"]
+            ML_DESC["Learning from data<br/>without explicit programming"]
+            
+            subgraph DL["🧠 Deep Learning (Subset of ML)"]
+                DL_DESC["Neural networks with<br/>multiple layers"]
+                
+                CNN["🖼️ CNN<br/>Image recognition<br/>Malware visualization"]
+                RNN["🔄 RNN<br/>Sequence analysis<br/>Network traffic"]
+                GAN["🎭 GAN<br/>Data generation<br/>Attack simulation"]
+            end
+            
+            SVM["⚖️ SVM<br/>Binary classification<br/>Spam detection"]
+            DT["🌳 Decision Tree<br/>Rule extraction<br/>Threat categorization"]
+            RF["🌲 Random Forest<br/>Ensemble method<br/>Malware detection"]
+        end
+        
+        NLP["💬 Natural Language Processing"]
+        CV["👁️ Computer Vision"]
+        RL["🎮 Reinforcement Learning"]
+    end
+    
+    subgraph Apps["🔐 Cybersecurity Applications"]
+        APP1["🛡️ Threat Detection<br/>Real-time monitoring"]
+        APP2["🔍 Anomaly Detection<br/>Behavioral analysis"]
+        APP3["🎯 Malware Analysis<br/>Classification & prediction"]
+        APP4["📧 Email Security<br/>Spam & phishing"]
+        APP5["🌐 Network Security<br/>Intrusion detection"]
+    end
+    
+    CNN --> APP1
+    RNN --> APP2
+    SVM --> APP4
+    DT --> APP3
+    RF --> APP3
+    GAN --> APP5
+    
+    style AI fill:#e8eaf6,stroke:#3f51b5,stroke-width:3px
+    style ML fill:#e3f2fd,stroke:#1565c0,stroke-width:3px
+    style DL fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Apps fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+```
+
+---
+
+### 2. Traditional vs AI-Powered Security
+
+```mermaid
+flowchart LR
+    subgraph Trad["🔒 Traditional Security"]
+        T1["📝 Rule-based<br/>Static signatures"]
+        T2["👤 Manual analysis<br/>Human-dependent"]
+        T3["⏱️ Slow response<br/>Hours to days"]
+        T4["❌ Known threats only<br/>Miss zero-days"]
+        T5["📉 Limited scale<br/>100s alerts/day"]
+    end
+    
+    subgraph AI["🤖 AI-Powered Security"]
+        A1["🧠 Behavior-based<br/>Pattern learning"]
+        A2["⚡ Automated analysis<br/>Machine speed"]
+        A3["🚀 Real-time response<br/>Milliseconds"]
+        A4["✅ Unknown threats<br/>Anomaly detection"]
+        A5["📈 Massive scale<br/>Millions events/sec"]
+    end
+    
+    subgraph Challenge["⚠️ The Challenge"]
+        C1["450K new malware daily"]
+        C2["95% attacks via human error"]
+        C3["$4.35M avg breach cost"]
+        C4["3.5M unfilled security jobs"]
+    end
+    
+    Challenge --> Trad
+    Challenge --> AI
+    
+    Trad -->|"Can't handle"| FAIL["❌ Overwhelmed"]
+    AI -->|"Addresses"| SUCCESS["✅ Effective Defense"]
+    
+    style Trad fill:#ffebee,stroke:#c62828,stroke-width:2px
+    style AI fill:#e8f5e9,stroke:#2e7d32,stroke-width:3px
+    style Challenge fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+    style FAIL fill:#ffcdd2,stroke:#d32f2f,stroke-width:2px
+    style SUCCESS fill:#c8e6c9,stroke:#388e3c,stroke-width:3px
+```
+
+---
+
+## **MODULE 2: Python for Cybersecurity**
+
+### 3. Python Cybersecurity Ecosystem
+
+```mermaid
+mindmap
+  root((🐍 Python for<br/>Cybersecurity))
+    📊 Data Analysis
+      NumPy
+        Array operations
+        Statistical analysis
+        Attack pattern analysis
+      Pandas
+        Log processing
+        Data filtering
+        Time series analysis
+      Matplotlib
+        Visualization
+        Security dashboards
+        Trend analysis
+    
+    🔐 Security Libraries
+      Scapy
+        Packet manipulation
+        Network scanning
+        Protocol analysis
+      PyCrypto
+        Encryption/Decryption
+        Hash functions
+        Key management
+      Requests
+        Web scraping
+        API testing
+        Vulnerability scanning
+    
+    🤖 ML/AI Libraries
+      Scikit-learn
+        Classification
+        Clustering
+        Regression
+      TensorFlow
+        Deep learning
+        Neural networks
+        Advanced models
+      PyTorch
+        Research
+
 **Slide 1: Title Slide**
 
 # Module 8: Generative Adversarial Networks (GANs) for Cyber Security
@@ -966,3 +1115,4 @@ morphed_face = alpha * face1 + (1-alpha) * face2
 ---
 
 This comprehensive 50-slide presentation provides detailed coverage of Module 8, with specific image suggestions for each slide to help create an engaging visual presentation. Each slide builds upon the previous concepts while providing practical examples and real-world applications.
+
