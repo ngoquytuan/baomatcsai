@@ -4,6 +4,778 @@
 
 ---
 
+# Các Slides Bổ Sung cho Module 8: GANs for Cybersecurity
+
+---
+
+## **SLIDES MỚI - Chèn sau Slide 9**
+
+### Slide 9A: GAN Training Challenges
+
+**Title:** Common Challenges in GAN Training
+
+**The Difficulty of Training GANs:**
+
+**Mode Collapse**
+• Generator produces limited variety of outputs
+• All generated samples look similar
+• Example: Face generator only creates blonde females
+
+**Vanishing Gradients**
+• Discriminator becomes too good too fast
+• Generator receives no useful learning signal
+• Training stalls with no improvement
+
+**Non-Convergence**
+• Networks oscillate without reaching equilibrium
+• No stable solution found
+• Common in poorly designed architectures
+
+**Training Instability**
+• Loss values fluctuate wildly
+• Difficult to determine when to stop training
+• Requires careful hyperparameter tuning
+
+*Suggested Image: Graph showing unstable GAN training with oscillating loss curves, examples of mode collapse (similar faces)*
+
+---
+
+### Slide 9B: Solutions to GAN Training Problems
+
+**Title:** Overcoming GAN Training Challenges
+
+**Practical Solutions:**
+
+**For Mode Collapse:**
+• Use **Wasserstein GAN (WGAN)** with gradient penalty
+• Implement **mini-batch discrimination**
+• Add **diversity loss terms** to objective function
+
+**For Vanishing Gradients:**
+• Use **Least Squares GAN (LSGAN)** loss
+• Implement **progressive training** (start simple, add complexity)
+• Apply **spectral normalization** to discriminator
+
+**For Instability:**
+• Use **two time-scale update rule (TTUR)**
+• Implement **batch normalization** carefully
+• Try **self-attention mechanisms** for better feature learning
+
+**Best Practices:**
+• Monitor multiple metrics (not just loss)
+• Use learning rate scheduling
+• Save checkpoints frequently
+• Visualize outputs during training
+
+*Suggested Image: Before/after comparison showing improved results, training monitoring dashboard*
+
+---
+
+## **SLIDES MỚI - Chèn sau Slide 15**
+
+### Slide 15A: Computational Requirements
+
+**Title:** Hardware and Resource Requirements for GANs
+
+**Minimum Requirements:**
+• **GPU:** NVIDIA RTX 3060 (8GB VRAM) or better
+• **RAM:** 16GB system memory
+• **Storage:** 100GB+ SSD for datasets and models
+• **CPU:** Modern multi-core processor (8+ cores recommended)
+
+**Recommended for Serious Work:**
+• **GPU:** NVIDIA RTX 4090 (24GB VRAM) or A100
+• **RAM:** 32GB+ DDR4/DDR5
+• **Storage:** 500GB+ NVMe SSD
+• **CPU:** AMD Ryzen 9 or Intel i9
+
+**Training Time Estimates:**
+• Simple MNIST GAN: 30-60 minutes (small GPU)
+• Face generation (64x64): 6-12 hours (mid-range GPU)
+• High-res StyleGAN (1024x1024): 2-4 days (high-end GPU)
+• Network traffic GAN: 4-8 hours (depends on dataset size)
+
+**Cost Considerations:**
+• Cloud GPU rental: $0.50-$3.00 per hour
+• Full training run: $50-$500 depending on complexity
+• Dataset storage: $10-$100/month
+
+*Suggested Image: GPU comparison chart, time vs. quality trade-off graph, cost breakdown*
+
+---
+
+### Slide 15B: Dataset Considerations
+
+**Title:** Data Requirements for GAN Training
+
+**Dataset Size Guidelines:**
+
+**For Cybersecurity Applications:**
+• **Network Traffic GAN:** 100,000+ packet samples
+• **Malware Behavioral Patterns:** 50,000+ execution traces
+• **Phishing Detection:** 10,000+ legitimate + malicious emails
+• **Face Recognition Attacks:** 10,000+ face images per identity
+
+**Data Quality Matters More Than Quantity:**
+• Clean, well-labeled data
+• Balanced class distributions
+• Diverse representation of target domain
+• Proper preprocessing and normalization
+
+**Data Collection Methods:**
+• Public datasets: KDD Cup, NSL-KDD, CelebA
+• Synthetic data generation for rare cases
+• Ethical scraping from public sources
+• Collaboration with security vendors
+
+**Privacy and Legal Concerns:**
+• Anonymize personal information
+• Comply with GDPR/CCPA regulations
+• Obtain proper permissions for face data
+• Consider differential privacy techniques
+
+*Suggested Image: Dataset size pyramid, data quality checklist, privacy shield icon*
+
+---
+
+## **SLIDES MỚI - Chèn sau Slide 25**
+
+### Slide 25A: Evaluating GAN Performance
+
+**Title:** How to Measure GAN Quality
+
+**Visual Inspection (Qualitative):**
+• Human evaluation of generated samples
+• Compare with real data side-by-side
+• Check for artifacts, blurriness, unrealistic features
+
+**Quantitative Metrics:**
+
+**1. Inception Score (IS)**
+• Measures quality and diversity of generated images
+• Higher is better (typically 1-10 range)
+• Formula based on classifier confidence
+
+**2. Fréchet Inception Distance (FID)**
+• Compares distribution of generated vs. real data
+• Lower is better (0 = perfect match)
+• Current state-of-art GANs achieve FID < 5
+
+**3. Precision and Recall for GANs**
+• Precision: Quality of generated samples
+• Recall: Diversity/coverage of real data distribution
+• Balanced scores indicate good GAN performance
+
+**4. Perceptual Path Length (PPL)**
+• Measures smoothness of latent space
+• Lower values indicate better interpolation
+
+**For Cybersecurity GANs:**
+• **Detection Rate:** How well IDS/classifier is fooled
+• **Functional Preservation:** Does malicious payload still work?
+• **Statistical Similarity:** KL divergence from real traffic
+
+*Suggested Image: Metrics comparison table, FID score visualization, real vs. fake quality chart*
+
+---
+
+### Slide 25B: Common Training Errors and Debugging
+
+**Title:** Troubleshooting GAN Training
+
+**Error 1: GPU Out of Memory**
+```
+RuntimeError: CUDA out of memory
+```
+**Solutions:**
+• Reduce batch size (try 16, 8, or even 4)
+• Use mixed precision training (FP16)
+• Clear cache: `torch.cuda.empty_cache()`
+• Use gradient accumulation
+
+**Error 2: NaN or Inf Loss Values**
+```
+Loss: nan or inf
+```
+**Solutions:**
+• Check learning rate (try 0.0002 to 0.00001)
+• Add gradient clipping: `clip_grad_norm_()`
+• Check data normalization (-1 to 1 range)
+• Use stable activation functions (LeakyReLU)
+
+**Error 3: Mode Collapse**
+**Symptoms:** Generator produces same/similar outputs
+**Solutions:**
+• Switch to Wasserstein GAN loss
+• Add noise to discriminator inputs
+• Use mini-batch discrimination
+• Try different architectures
+
+**Error 4: Discriminator Too Strong**
+**Symptoms:** Generator loss doesn't decrease
+**Solutions:**
+• Train discriminator less frequently (1:5 ratio)
+• Add noise to real data
+• Use one-sided label smoothing (0.9 instead of 1.0)
+
+**Error 5: Poor Quality Outputs**
+**Solutions:**
+• Increase model capacity (more layers/filters)
+• Train longer (check if still improving)
+• Improve data quality and preprocessing
+• Try different loss functions
+
+*Suggested Image: Error message screenshots, debugging flowchart, before/after quality comparison*
+
+---
+
+## **SLIDES MỚI - Chèn sau Slide 40**
+
+### Slide 40A: Real-World GAN Tools and Frameworks
+
+**Title:** Popular Tools for GAN Development and Detection
+
+**Generation Tools:**
+
+**DeepFaceLab**
+• Professional deepfake creation software
+• Used in film industry and research
+• High-quality face swapping
+• Open-source but complex to use
+
+**FaceSwap**
+• User-friendly alternative to DeepFaceLab
+• Community-driven development
+• Good for beginners
+• Cross-platform support
+
+**StyleGAN2-ADA by NVIDIA**
+• State-of-the-art face generation
+• Requires significant GPU power
+• Excellent for research purposes
+• Pre-trained models available
+
+**First Order Motion Model**
+• Animates faces from single image
+• Real-time face reenactment
+• Lower quality but faster
+
+**Detection Tools:**
+
+**Sensity AI (formerly Deeptrace)**
+• Commercial deepfake detection platform
+• API integration available
+• Used by media organizations
+
+**Microsoft Video Authenticator**
+• Analyzes videos for manipulation
+• Provides confidence score
+• Free for qualified organizations
+
+**Fawkes (Privacy Protection)**
+• Protects photos from facial recognition
+• Adds imperceptible changes
+• Open-source tool from University of Chicago
+
+**DeeperForensics**
+• Research platform for detection
+• Large-scale benchmark datasets
+• Evaluation metrics
+
+*Suggested Image: Tool logos and screenshots, comparison table of features, workflow diagram*
+
+---
+
+### Slide 40B: Hands-On Lab Infrastructure Setup
+
+**Title:** Setting Up Your GAN Security Lab
+
+**Step 1: Development Environment**
+```bash
+# Install CUDA and cuDNN (NVIDIA GPUs)
+# Download from NVIDIA website
+
+# Create virtual environment
+python -m venv gan_security_env
+source gan_security_env/bin/activate  # Linux/Mac
+gan_security_env\Scripts\activate     # Windows
+
+# Install core libraries
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install tensorflow-gpu
+pip install numpy pandas matplotlib opencv-python
+pip install scikit-learn scikit-image
+pip install pillow tqdm tensorboard
+```
+
+**Step 2: Additional Security Tools**
+```bash
+# Network traffic analysis
+pip install scapy pyshark
+
+# Malware analysis
+pip install pefile python-magic
+
+# Face recognition
+pip install face-recognition dlib
+```
+
+**Step 3: Verify Installation**
+```python
+import torch
+print(f"PyTorch version: {torch.__version__}")
+print(f"CUDA available: {torch.cuda.is_available()}")
+print(f"CUDA device: {torch.cuda.get_device_name(0)}")
+```
+
+**Step 4: Download Datasets**
+• CelebA: 200K celebrity faces
+• MNIST: Handwritten digits (practice)
+• KDD Cup 99: Network intrusion data
+• Create your own synthetic datasets
+
+*Suggested Image: Installation checklist, terminal screenshots, environment setup diagram*
+
+---
+
+## **SLIDES MỚI - Chèn sau Slide 47**
+
+### Slide 47A: Hands-On Lab Exercises
+
+**Title:** Practical GAN Security Projects
+
+**Lab 1: Basic GAN Implementation (Week 1)**
+**Objective:** Understand GAN fundamentals
+**Tasks:**
+1. Implement simple GAN for MNIST digits
+2. Train for 50 epochs and visualize results
+3. Experiment with different architectures
+4. Document training challenges encountered
+
+**Deliverable:** Working code + training report
+
+---
+
+**Lab 2: Network Traffic Generation (Week 2)**
+**Objective:** Create realistic malicious traffic
+**Tasks:**
+1. Load NSL-KDD dataset
+2. Implement GAN for network packet generation
+3. Generate synthetic attack traffic
+4. Validate statistical similarity to real data
+
+**Deliverable:** Trained model + generated dataset
+
+---
+
+**Lab 3: IDS Evasion Testing (Week 3)**
+**Objective:** Test GAN-generated traffic against IDS
+**Tasks:**
+1. Set up Snort or Suricata IDS
+2. Feed real attack traffic (baseline detection)
+3. Feed GAN-generated attack traffic
+4. Compare detection rates
+5. Analyze why evasion works/fails
+
+**Deliverable:** Detection rate comparison report
+
+---
+
+**Lab 4: Face Recognition Attack (Week 4)**
+**Objective:** Understand facial recognition vulnerabilities
+**Tasks:**
+1. Download face recognition system (FaceNet/DeepFace)
+2. Create adversarial examples using FGSM
+3. Test morphed faces against recognition system
+4. Implement basic liveness detection defense
+
+**Deliverable:** Attack success rate analysis + defense proposal
+
+---
+
+**Lab 5: Defense Mechanisms (Week 5)**
+**Objective:** Build robust detection systems
+**Tasks:**
+1. Implement deepfake detector using CNN
+2. Train on real + synthetic data
+3. Test against multiple generation methods
+4. Propose improvements for false positive reduction
+
+**Deliverable:** Detection model + performance evaluation
+
+*Suggested Image: Lab workflow diagram, example outputs from each lab, student workspace photo*
+
+---
+
+### Slide 47B: Evaluation Criteria and Grading
+
+**Title:** Assessment and Grading Rubric
+
+**Lab Report Structure (20% each lab):**
+
+**1. Introduction (15%)**
+• Problem statement
+• Objectives and scope
+• Methodology overview
+
+**2. Implementation (35%)**
+• Code quality and organization
+• Proper use of frameworks
+• Comments and documentation
+• Error handling
+
+**3. Results (30%)**
+• Quantitative metrics (FID, accuracy, detection rate)
+• Visualizations (loss curves, generated samples)
+• Performance analysis
+• Comparison with baseline/state-of-art
+
+**4. Discussion (15%)**
+• Challenges encountered
+• Solutions attempted
+• Limitations of approach
+• Ethical considerations
+
+**5. Conclusion (5%)**
+• Key findings
+• Future work suggestions
+
+**Code Quality Checklist:**
+✓ Clean, readable code with comments
+✓ Proper Git version control
+✓ Requirements.txt included
+✓ README with setup instructions
+✓ Results reproducible
+
+**Bonus Points:**
+• Novel approach or improvement (+10%)
+• Exceptional visualization (+5%)
+• Published code on GitHub (+5%)
+
+*Suggested Image: Grading rubric table, code quality checklist, example of well-documented project*
+
+---
+
+## **SLIDES SỬA LẠI**
+
+### Slide 4 (Revised): The AI Revolution in Cybersecurity
+
+**Title:** The Changing Landscape
+
+• Traditional cybersecurity: Rule-based, signature detection
+• Modern threats: AI-powered, adaptive attacks
+• The emergence of GANs: Double-edged sword
+• **2024-2025 statistics:**
+  - 73% increase in AI-assisted cyberattacks (2024)
+  - 90% of enterprises report AI-based threats (2025)
+  - $10.5 trillion annual cybercrime costs projected
+• The need for AI-powered defenses
+
+*Suggested Image: Updated timeline showing evolution from traditional locks to AI-powered security systems, recent statistics dashboard*
+
+---
+
+### Slide 12 (Revised): TensorFlow for GANs - Complete Implementation
+
+**Title:** TensorFlow Implementation - Full Example
+
+```python
+import tensorflow as tf
+from tensorflow.keras import layers, models
+
+# Complete Generator model
+def make_generator_model():
+    model = tf.keras.Sequential([
+        # Foundation for 7x7 image
+        layers.Dense(7*7*256, use_bias=False, input_shape=(100,)),
+        layers.BatchNormalization(),
+        layers.LeakyReLU(),
+        layers.Reshape((7, 7, 256)),
+        
+        # Upsample to 14x14
+        layers.Conv2DTranspose(128, (5, 5), strides=(2, 2), 
+                              padding='same', use_bias=False),
+        layers.BatchNormalization(),
+        layers.LeakyReLU(),
+        
+        # Upsample to 28x28
+        layers.Conv2DTranspose(64, (5, 5), strides=(2, 2), 
+                              padding='same', use_bias=False),
+        layers.BatchNormalization(),
+        layers.LeakyReLU(),
+        
+        # Output layer
+        layers.Conv2DTranspose(1, (5, 5), padding='same', 
+                              use_bias=False, activation='tanh')
+    ])
+    return model
+
+# Complete Discriminator model
+def make_discriminator_model():
+    model = tf.keras.Sequential([
+        layers.Conv2D(64, (5, 5), strides=(2, 2), padding='same',
+                     input_shape=[28, 28, 1]),
+        layers.LeakyReLU(),
+        layers.Dropout(0.3),
+        
+        layers.Conv2D(128, (5, 5), strides=(2, 2), padding='same'),
+        layers.LeakyReLU(),
+        layers.Dropout(0.3),
+        
+        layers.Flatten(),
+        layers.Dense(1, activation='sigmoid')
+    ])
+    return model
+```
+
+*Suggested Image: Architecture visualization showing layer dimensions, complete network diagram*
+
+---
+
+### Slide 13 (Revised): PyTorch for GANs - Complete Implementation
+
+**Title:** PyTorch Implementation - Full Example
+
+```python
+import torch
+import torch.nn as nn
+
+# Complete Generator
+class Generator(nn.Module):
+    def __init__(self, nz=100, ngf=64, nc=3):
+        super(Generator, self).__init__()
+        self.main = nn.Sequential(
+            # Input: nz x 1 x 1
+            nn.ConvTranspose2d(nz, ngf * 8, 4, 1, 0, bias=False),
+            nn.BatchNorm2d(ngf * 8),
+            nn.ReLU(True),
+            # State: (ngf*8) x 4 x 4
+            
+            nn.ConvTranspose2d(ngf * 8, ngf * 4, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(ngf * 4),
+            nn.ReLU(True),
+            # State: (ngf*4) x 8 x 8
+            
+            nn.ConvTranspose2d(ngf * 4, ngf * 2, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(ngf * 2),
+            nn.ReLU(True),
+            # State: (ngf*2) x 16 x 16
+            
+            nn.ConvTranspose2d(ngf * 2, ngf, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(ngf),
+            nn.ReLU(True),
+            # State: (ngf) x 32 x 32
+            
+            nn.ConvTranspose2d(ngf, nc, 4, 2, 1, bias=False),
+            nn.Tanh()
+            # Output: nc x 64 x 64
+        )
+    
+    def forward(self, input):
+        return self.main(input)
+
+# Complete Discriminator
+class Discriminator(nn.Module):
+    def __init__(self, nc=3, ndf=64):
+        super(Discriminator, self).__init__()
+        self.main = nn.Sequential(
+            # Input: nc x 64 x 64
+            nn.Conv2d(nc, ndf, 4, 2, 1, bias=False),
+            nn.LeakyReLU(0.2, inplace=True),
+            # State: ndf x 32 x 32
+            
+            nn.Conv2d(ndf, ndf * 2, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(ndf * 2),
+            nn.LeakyReLU(0.2, inplace=True),
+            # State: (ndf*2) x 16 x 16
+            
+            nn.Conv2d(ndf * 2, ndf * 4, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(ndf * 4),
+            nn.LeakyReLU(0.2, inplace=True),
+            # State: (ndf*4) x 8 x 8
+            
+            nn.Conv2d(ndf * 4, ndf * 8, 4, 2, 1, bias=False),
+            nn.BatchNorm2d(ndf * 8),
+            nn.LeakyReLU(0.2, inplace=True),
+            # State: (ndf*8) x 4 x 4
+            
+            nn.Conv2d(ndf * 8, 1, 4, 1, 0, bias=False),
+            nn.Sigmoid()
+            # Output: 1 x 1 x 1
+        )
+    
+    def forward(self, input):
+        return self.main(input)
+```
+
+*Suggested Image: PyTorch architecture diagram with tensor shapes, training loop visualization*
+
+---
+
+### Slide 24 (Revised): GAN Architecture for Traffic Generation
+
+**Title:** Network Traffic GAN Design - Complete Architecture
+
+```python
+import torch.nn as nn
+
+# Complete Traffic Generator with proper depth
+class TrafficGenerator(nn.Module):
+    def __init__(self, noise_dim=100, output_dim=41):
+        super().__init__()
+        self.network = nn.Sequential(
+            # Input layer
+            nn.Linear(noise_dim, 256),
+            nn.BatchNorm1d(256),
+            nn.LeakyReLU(0.2),
+            nn.Dropout(0.3),
+            
+            # Hidden layers
+            nn.Linear(256, 512),
+            nn.BatchNorm1d(512),
+            nn.LeakyReLU(0.2),
+            nn.Dropout(0.3),
+            
+            nn.Linear(512, 512),
+            nn.BatchNorm1d(512),
+            nn.LeakyReLU(0.2),
+            nn.Dropout(0.3),
+            
+            nn.Linear(512, 256),
+            nn.BatchNorm1d(256),
+            nn.LeakyReLU(0.2),
+            
+            # Output layer
+            nn.Linear(256, output_dim),
+            nn.Tanh()  # Normalize to [-1, 1]
+        )
+    
+    def forward(self, z):
+        return self.network(z)
+
+# Complete Traffic Discriminator
+class TrafficDiscriminator(nn.Module):
+    def __init__(self, input_dim=41):
+        super().__init__()
+        self.network = nn.Sequential(
+            nn.Linear(input_dim, 256),
+            nn.LeakyReLU(0.2),
+            nn.Dropout(0.3),
+            
+            nn.Linear(256, 512),
+            nn.LeakyReLU(0.2),
+            nn.Dropout(0.3),
+            
+            nn.Linear(512, 256),
+            nn.LeakyReLU(0.2),
+            nn.Dropout(0.3),
+            
+            nn.Linear(256, 1),
+            nn.Sigmoid()
+        )
+    
+    def forward(self, x):
+        return self.network(x)
+```
+
+**Features Explained:**
+• **41-dimensional vectors**: Representing packet characteristics
+  - 9 basic features (duration, protocol, service, etc.)
+  - 13 content features (urgent packets, logged in, etc.)
+  - 9 traffic features (same host connections, etc.)
+  - 10 host-based features (count, srv_count, etc.)
+
+*Suggested Image: Complete neural network architecture diagram for both Generator and Discriminator, feature mapping visualization*
+
+---
+
+### Slide 50 (Revised): Next Steps and Practical Assignments
+
+**Title:** Continuing Your GAN Security Journey
+
+**Immediate Practical Assignments:**
+
+**Week 1-2: Foundation**
+✓ Set up development environment with GPU support
+✓ Complete MNIST GAN tutorial
+✓ Implement basic DCGAN from scratch
+✓ Study GAN training techniques
+
+**Week 3-4: Cybersecurity Applications**
+✓ Network traffic generation with NSL-KDD dataset
+✓ Test against IDS (Snort/Suricata)
+✓ Measure evasion success rate
+✓ Document findings
+
+**Week 5-6: Advanced Topics**
+✓ Face morphing implementation
+✓ Adversarial example generation
+✓ Defense mechanism development
+✓ Final project: Choose one application
+
+**Resources with Direct Links:**
+
+**Tutorials:**
+• PyTorch GAN Tutorial: pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html
+• TensorFlow GAN: tensorflow.org/tutorials/generative/dcgan
+
+**Research Papers:**
+• Original GAN paper (Goodfellow et al., 2014)
+• StyleGAN (Karras et al., 2019)
+• GAN-based IDS Evasion (Latest publications on arXiv)
+
+**Datasets:**
+• CelebA: mmlab.ie.cuhk.edu.hk/projects/CelebA.html
+• NSL-KDD: kaggle.com/datasets/hassan06/nslkdd
+• DeepFake Detection: kaggle.com/c/deepfake-detection-challenge
+
+**Communities:**
+• r/MachineLearning (Reddit)
+• GAN Security Research Group (LinkedIn)
+• Black Hat/DEF CON conference materials
+
+**GitHub Repositories:**
+• github.com/eriklindernoren/PyTorch-GAN
+• github.com/tensorflow/gan
+• github.com/NVlabs/stylegan2-ada-pytorch
+
+**Final Project Options:**
+1. Build IDS-evading malware traffic generator
+2. Create facial recognition attack/defense system
+3. Develop deepfake detection tool
+4. Research novel GAN security application
+
+*Suggested Image: Learning roadmap with weekly milestones, resource collection visualization, project showcase examples*
+
+---
+
+## **Tổng Kết Các Slides Bổ Sung**
+
+**Đã thêm tổng cộng 10 slides mới:**
+1. Slide 9A: GAN Training Challenges
+2. Slide 9B: Solutions to Training Problems
+3. Slide 15A: Computational Requirements
+4. Slide 15B: Dataset Considerations
+5. Slide 25A: Evaluating GAN Performance
+6. Slide 25B: Common Errors and Debugging
+7. Slide 40A: Real-World Tools
+8. Slide 40B: Lab Infrastructure Setup
+9. Slide 47A: Hands-On Lab Exercises
+10. Slide 47B: Evaluation Criteria
+
+**Đã sửa lại 5 slides:**
+- Slide 4: Updated statistics
+- Slide 12: Complete TensorFlow code
+- Slide 13: Complete PyTorch code
+- Slide 24: Complete Traffic GAN architecture
+- Slide 50: Detailed assignments and resources
+
+**Tổng số slides mới: 60 slides** (từ 50 lên 60)
+
+Các slides này giải quyết tất cả vấn đề tôi đã chỉ ra trong review. Bạn có cần tôi giải thích chi tiết thêm phần nào không?
+
+---
+
 # Mermaid Diagrams cho CÁC MODULE CHÍNH của Khóa Học CSAI
 
 Tôi sẽ tạo diagrams minh họa cho **tất cả các modules** (không chỉ Module 8):
@@ -1117,5 +1889,6 @@ morphed_face = alpha * face1 + (1-alpha) * face2
 ---
 
 This comprehensive 50-slide presentation provides detailed coverage of Module 8, with specific image suggestions for each slide to help create an engaging visual presentation. Each slide builds upon the previous concepts while providing practical examples and real-world applications.
+
 
 
