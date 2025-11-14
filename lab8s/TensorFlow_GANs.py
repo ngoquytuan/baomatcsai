@@ -8,8 +8,77 @@ from tensorflow.keras import layers, models
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+import os
 
 print("TensorFlow version:", tf.__version__)
+
+# ============================================================
+# GPU CONFIGURATION - QUAN TRỌNG!
+# ============================================================
+def check_gpu_availability():
+    """
+    Kiểm tra và cấu hình GPU
+    """
+    print("\n" + "="*60)
+    print("🔍 KIỂM TRA GPU")
+    print("="*60)
+
+    # Liệt kê tất cả GPU
+    gpus = tf.config.list_physical_devices('GPU')
+
+    if gpus:
+        print(f"✅ Tìm thấy {len(gpus)} GPU:")
+        for i, gpu in enumerate(gpus):
+            print(f"   GPU {i}: {gpu.name}")
+
+        # Cấu hình GPU memory growth (tránh chiếm hết VRAM)
+        try:
+            for gpu in gpus:
+                tf.config.experimental.set_memory_growth(gpu, True)
+            print("✅ Đã bật GPU memory growth")
+        except RuntimeError as e:
+            print(f"⚠️  Không thể cấu hình memory growth: {e}")
+
+        # Hiển thị GPU details
+        print("\n📊 Chi tiết GPU:")
+        for gpu in gpus:
+            gpu_details = tf.config.experimental.get_device_details(gpu)
+            if gpu_details:
+                print(f"   {gpu_details}")
+
+        print("✅ TensorFlow SẼ SỬ DỤNG GPU")
+        return True
+    else:
+        print("❌ KHÔNG TÌM THẤY GPU!")
+        print("\n💡 HƯỚNG DẪN SỬA LỖI:")
+        print("   Bạn có GPU nhưng TensorFlow không thấy:")
+        print()
+        print("   1️⃣  Kiểm tra CUDA Toolkit:")
+        print("      - TensorFlow 2.20.0 cần CUDA 12.3")
+        print("      - Download: https://developer.nvidia.com/cuda-downloads")
+        print()
+        print("   2️⃣  Kiểm tra cuDNN:")
+        print("      - Cần cuDNN 8.9 cho CUDA 12.3")
+        print("      - Download: https://developer.nvidia.com/cudnn")
+        print()
+        print("   3️⃣  Cài đặt TensorFlow (nếu chưa có):")
+        print("      pip install tensorflow[and-cuda]")
+        print()
+        print("   4️⃣  Kiểm tra biến môi trường:")
+        print("      - CUDA_HOME hoặc CUDA_PATH")
+        print("      - PATH phải chứa đường dẫn đến CUDA bin")
+        print()
+        print("   5️⃣  Restart terminal sau khi cài CUDA/cuDNN")
+        print()
+        print("   📝 Kiểm tra compatibility:")
+        print("      https://www.tensorflow.org/install/source#gpu")
+        print()
+        print("⚠️  Script sẽ chạy trên CPU (chậm hơn)")
+        return False
+
+# Gọi function kiểm tra GPU
+gpu_available = check_gpu_availability()
+print("="*60)
 
 # ============================================================
 # 1. GENERATOR MODEL - Tạo ảnh giả từ noise
