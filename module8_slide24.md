@@ -28,7 +28,7 @@ Hypertext Transfer Protocol
     Host: example.com
 ```
 
-## Hướng dẫn giải thích cho học viên
+## Giải thích
 
 * Source IP: 192.168.1.50 → máy tính trong LAN
 * Destination IP: 93.184.216.34 → web server
