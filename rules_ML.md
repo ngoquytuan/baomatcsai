@@ -559,3 +559,1606 @@ Bạn muốn tôi:
 2. 🐍 Tạo Python template với tất cả rules?
 3. 📊 Tạo flowchart visual cho toàn bộ process?
 4. 📝 Giải thích chi tiết rule nào cụ thể?
+
+---
+
+# 📧 PHASE 1: HIỂU BÀI TOÁN - EMAIL THREAT DETECTION
+
+---
+
+## SLIDE 1: BÀI TOÁN CỤ THỂ
+
+**Tên dự án:** Email Threat Detection System
+
+**Mô tả:** 
+Xây dựng hệ thống AI tự động phân loại email vào 5 categories:
+- Legitimate (Hợp pháp)
+- Spam (Thư rác)
+- Phishing (Lừa đảo)
+- Malware (Chứa mã độc)
+- BEC (Business Email Compromise)
+
+**Bối cảnh:**
+- Công ty nhận 100,000 emails/ngày
+- 30% là threats
+- Cần phát hiện tự động trong <1 giây
+
+---
+
+## SLIDE 2: ✅ 1.1 - XÁC ĐỊNH LOẠI BÀI TOÁN
+
+### **Câu hỏi:** Đây là bài toán gì?
+
+**Phân tích:**
+
+**✅ Classification** (Phân loại)
+- Đầu vào: Email (text + metadata)
+- Đầu ra: 1 trong 5 categories
+- Có labeled data để học
+
+**Loại classification:**
+- ✅ **Multiclass Classification** (5 classes)
+- ❌ Không phải Binary (chỉ có 2 classes)
+- ❌ Không phải Multilabel (1 email chỉ thuộc 1 class)
+- ❌ Không phải Regression (không dự đoán số)
+
+---
+
+## SLIDE 3: CÁC CLASS CHI TIẾT
+
+| Class | Label | Mô tả | Ví dụ |
+|-------|-------|-------|-------|
+| **Legitimate** | 0 | Email công việc bình thường | "Meeting at 3 PM" |
+| **Spam** | 1 | Quảng cáo, marketing không mong muốn | "Buy cheap viagra now!" |
+| **Phishing** | 2 | Giả mạo để đánh cắp thông tin | "Verify your bank account" |
+| **Malware** | 3 | Chứa attachment/link độc hại | "Invoice.pdf" (malicious) |
+| **BEC** | 4 | Giả mạo CEO/CFO yêu cầu chuyển tiền | "CEO: Wire $50K urgently" |
+
+---
+
+## SLIDE 4: PHÂN BIỆT CÁC LOẠI THREATS
+
+### **Spam vs Phishing vs BEC**
+
+**Spam:**
+- Mục tiêu: Quảng cáo, bán hàng
+- Gửi hàng loạt (bulk)
+- Không nhắm mục tiêu cụ thể
+- Ít nguy hiểm (chỉ làm phiền)
+
+**Phishing:**
+- Mục tiêu: Đánh cắp credentials
+- Giả mạo tổ chức (bank, PayPal)
+- Có link giả mạo
+- Nguy hiểm trung bình
+
+**BEC:**
+- Mục tiêu: Lừa chuyển tiền
+- Giả mạo người trong công ty (CEO, CFO)
+- Nhắm mục tiêu cụ thể
+- RẤT NGUY HIỂM (loss trung bình $50K-$5M)
+
+**Malware:**
+- Mục tiêu: Cài đặt virus/ransomware
+- Có attachment hoặc link độc hại
+- Cực kỳ nguy hiểm
+
+---
+
+## SLIDE 5: VÍ DỤ CỤ THỂ TỪNG LOẠI
+
+### **1. Legitimate Email**
+```
+From: john@company.com
+To: team@company.com
+Subject: Q4 Sales Report Ready
+
+Hi Team,
+
+The Q4 sales report has been finalized and uploaded 
+to SharePoint. Please review by Friday.
+
+Best regards,
+John
+```
+
+**Đặc điểm:**
+- From internal domain
+- Business tone
+- Clear purpose
+- No urgency pressure
+- No suspicious links
+
+---
+
+## SLIDE 6: VÍ DỤ - SPAM
+
+### **2. Spam Email**
+```
+From: deals@bestoffers2024.com
+To: you@company.com
+Subject: 🔥 LOSE 20 LBS IN 2 WEEKS! LIMITED OFFER!
+
+CONGRATULATIONS! You've been selected for our 
+EXCLUSIVE weight loss program!
+
+✅ Lose weight FAST
+✅ No exercise needed
+✅ 100% natural ingredients
+
+Click here NOW! Offer expires in 24 hours!
+[SUSPICIOUS LINK]
+
+Unsubscribe: [tiny link]
+```
+
+**Đặc điểm:**
+- External, unknown sender
+- Excessive punctuation (!!!)
+- CAPITALS và emojis
+- Too good to be true claims
+- Generic greeting
+- Unsubscribe link (but still unwanted)
+
+---
+
+## SLIDE 7: VÍ DỤ - PHISHING
+
+### **3. Phishing Email**
+```
+From: security@paypa1.com  ← Chú ý: "1" thay "l"
+To: victim@company.com
+Subject: Urgent: Your PayPal Account Has Been Suspended
+
+Dear Valued Customer,
+
+We have detected unusual activity on your PayPal account.
+For your security, we have SUSPENDED your account.
+
+To restore access, please verify your information immediately:
+
+[CLICK HERE TO VERIFY] ← Link giả: http://paypa1-verify.com
+
+If you do not verify within 24 hours, your account will 
+be permanently closed.
+
+Thank you,
+PayPal Security Team
+```
+
+**Đặc điểm:**
+- Giả mạo sender (typosquatting: paypa1 vs paypal)
+- Urgency + Fear tactics
+- Request credentials
+- Suspicious link domain
+- Generic greeting "Dear Customer"
+- Threat of account closure
+
+---
+
+## SLIDE 8: VÍ DỤ - MALWARE
+
+### **4. Malware Delivery Email**
+```
+From: accounting@suspicious-domain.com
+To: finance@company.com
+Subject: Invoice #2024-10892
+
+Dear Sir/Madam,
+
+Please find attached the invoice for your recent order.
+
+Payment is due within 7 days.
+
+Attachment: Invoice_Oct_2024.pdf.exe  ← Nguy hiểm!
+
+Regards,
+Accounting Department
+```
+
+**Đặc điểm:**
+- Có attachment đáng ngờ (.exe, .zip, .scr)
+- Double extension (.pdf.exe)
+- Generic content
+- External sender pretending to be business
+- No specific details about "order"
+- Low IP reputation
+
+---
+
+## SLIDE 9: VÍ DỤ - BEC (Business Email Compromise)
+
+### **5. BEC Email**
+```
+From: ceo@company.com  ← Email thật hoặc spoofed
+To: cfo@company.com
+Subject: Urgent Wire Transfer Required
+
+Hi Sarah,
+
+I'm in a meeting with potential investors and we need 
+to wire $80,000 immediately to secure the deal.
+
+Please process this transfer ASAP:
+Bank: [Details]
+Account: [Number]
+Reason: Investment deposit
+
+This is time-sensitive and confidential. Don't mention 
+this to anyone until I'm back.
+
+Thanks,
+Michael Chen
+CEO
+```
+
+**Đặc điểm:**
+- Giả mạo executive (CEO, CFO)
+- Urgency + Confidentiality
+- Request wire transfer
+- Bypass normal approval process
+- "Don't tell anyone"
+- Time pressure
+- Sophisticated language (không như spam)
+
+---
+
+## SLIDE 10: ✅ 1.2 - XÁC ĐỊNH SUCCESS METRICS
+
+### **Câu hỏi:** Metric nào quan trọng nhất?
+
+**Phân tích theo business impact:**
+
+| Threat Type | Business Impact | Primary Metric |
+|-------------|-----------------|----------------|
+| Spam | Thấp (chỉ phiền) | Precision |
+| Phishing | Cao (mất credentials) | Recall |
+| Malware | Rất cao (ransomware) | Recall |
+| BEC | Cực cao ($50K-$5M loss) | Recall |
+
+**Kết luận:** 
+- **Recall** quan trọng hơn Precision
+- Không được bỏ sót threats (FN nguy hiểm!)
+- Chấp nhận một số FP (block nhầm, có thể recover)
+
+---
+
+## SLIDE 11: METRIC REQUIREMENTS CỤ THỂ
+
+### **Minimum Acceptable Performance:**
+
+**Overall:**
+- Accuracy: >95%
+- Macro F1-Score: >0.90
+
+**Per-Class Requirements:**
+
+| Class | Recall (Min) | Precision (Min) | Lý do |
+|-------|-------------|-----------------|-------|
+| Legitimate | 98% | 95% | Không block nhầm email quan trọng |
+| Spam | 90% | 95% | OK nếu bỏ sót một số (ít nguy hiểm) |
+| Phishing | 95% | 90% | KHÔNG được bỏ sót |
+| Malware | 98% | 90% | TUYỆT ĐỐI không bỏ sót |
+| BEC | 99% | 85% | Ưu tiên catch tất cả, dù có FP |
+
+**Giải thích:**
+- BEC recall 99%: Bỏ sót 1% = $50K-$5M loss!
+- Legitimate precision 95%: Block nhầm 5% email = chấp nhận được
+- Spam recall 90%: Bỏ sót 10% spam = OK, user có thể delete manually
+
+---
+
+## SLIDE 12: CONFUSION MATRIX ANALYSIS
+
+### **Cost Analysis:**
+
+**False Positive (Loại I Error):**
+```
+Legitimate → Predicted as Threat
+Cost: User annoyance, productivity loss
+Severity: Medium
+```
+
+**False Negative (Loại II Error):**
+```
+Spam → Predicted as Legitimate: Low cost
+Phishing → Predicted as Legitimate: High cost
+Malware → Predicted as Legitimate: Very high cost
+BEC → Predicted as Legitimate: CRITICAL cost
+```
+
+**Trade-off Decision:**
+→ Ưu tiên **Recall** (catch threats) hơn **Precision** (avoid FP)
+→ Thiết lập threshold để favor Recall
+
+---
+
+## SLIDE 13: ✅ 1.3 - THU THẬP YÊU CẦU HỆ THỐNG
+
+### **Performance Requirements:**
+
+**1. Inference Time:**
+- Requirement: <1 second/email
+- Lý do: Real-time filtering cần nhanh
+- Giới hạn: Không dùng models quá phức tạp
+
+**2. Model Size:**
+- Requirement: <100 MB
+- Lý do: Deploy trên email server (limited memory)
+- Giới hạn: Không dùng deep learning nặng
+
+**3. Throughput:**
+- Requirement: 100 emails/second
+- Lý do: Peak time có thể đến 360K emails/hour
+- Giải pháp: Cần batch processing hoặc parallel
+
+---
+
+## SLIDE 14: YÊU CẦU HỆ THỐNG (tt)
+
+### **4. Interpretability:**
+- Requirement: HIGH
+- Lý do: 
+  - Cần giải thích tại sao email bị block
+  - Compliance/audit requirements
+  - User có thể appeal decision
+- Giới hạn: 
+  - Ưu tiên: Logistic Regression, Tree-based
+  - Tránh: Black-box deep learning
+
+**5. Update Frequency:**
+- Requirement: Retrain weekly
+- Lý do: Threats evolve rapidly
+- Cần: Automated training pipeline
+
+**6. Deployment:**
+- Environment: On-premise email server
+- OS: Linux (Ubuntu 20.04)
+- Integration: SMTP gateway
+- Fallback: Rule-based backup system
+
+---
+
+## SLIDE 15: YÊU CẦU COMPLIANCE & LEGAL
+
+### **Privacy & Legal:**
+
+**GDPR Compliance:**
+- [ ] Không store email content lâu dài
+- [ ] Chỉ extract features cần thiết
+- [ ] Có consent để analyze emails
+- [ ] Right to explanation (interpretability)
+
+**Company Policy:**
+- [ ] Không scan personal emails (chỉ work emails)
+- [ ] Log tất cả decisions để audit
+- [ ] Có manual review process cho disputed cases
+- [ ] Encrypt all data in transit và at rest
+
+**Ethical Considerations:**
+- [ ] False positives: Có process để unblock
+- [ ] Transparency: User biết email được scan
+- [ ] No discrimination: Model không bias theo sender
+
+---
+
+## SLIDE 16: STAKEHOLDER REQUIREMENTS
+
+### **Các bên liên quan:**
+
+**1. End Users (Employees):**
+- Muốn: Ít false positives (không block nhầm)
+- Muốn: Interface để report FP/FN
+- Muốn: Nhanh (không delay emails)
+
+**2. IT Security Team:**
+- Muốn: High recall (catch all threats)
+- Muốn: Dashboard để monitor
+- Muốn: Logs để investigate incidents
+
+**3. Management:**
+- Muốn: ROI positive (giảm losses từ BEC)
+- Muốn: Compliance đảm bảo
+- Muốn: Low maintenance cost
+
+**4. Legal/Compliance:**
+- Muốn: Audit trail đầy đủ
+- Muốn: GDPR compliant
+- Muốn: Explainable decisions
+
+---
+
+## SLIDE 17: TÓM TẮT PHASE 1
+
+### **✅ Những gì đã xác định:**
+
+**1. Problem Type:**
+- Multiclass Classification (5 classes)
+- Supervised Learning
+- Text + Metadata input
+
+**2. Success Metrics:**
+- Primary: Recall (per-class: 90-99%)
+- Secondary: Precision (per-class: 85-95%)
+- Overall: Accuracy >95%, Macro F1 >0.90
+
+**3. Constraints:**
+- Inference: <1 second/email
+- Model size: <100 MB
+- Interpretability: HIGH
+- Throughput: 100 emails/second
+
+**4. Compliance:**
+- GDPR compliant
+- Audit trail required
+- Privacy-preserving
+
+---
+
+## SLIDE 18: DECISION SUMMARY TABLE
+
+| Aspect | Decision | Rationale |
+|--------|----------|-----------|
+| **Problem Type** | Multiclass Classification (5 classes) | Clear categories, labeled data available |
+| **Primary Metric** | Recall (weighted by severity) | Cost of FN >> Cost of FP in security |
+| **Secondary Metric** | Precision, F1-Score | Balance needed for user experience |
+| **Minimum Recall** | BEC: 99%, Malware: 98%, Phishing: 95%, Others: 90% | Based on financial impact |
+| **Model Complexity** | Medium (not deep learning) | Interpretability + Speed requirements |
+| **Update Cadence** | Weekly retraining | Threats evolve rapidly |
+| **Deployment** | On-premise email gateway | Data privacy requirements |
+
+---
+
+## SLIDE 19: COMPARISON - EMAIL THREATS
+
+### **Độ nguy hiểm (Severity):**
+
+```
+Legitimate ━━━━━━━━━━ 0% risk
+    ↓
+Spam       ━━━━━━━━━━ 10% risk (annoyance only)
+    ↓
+Phishing   ━━━━━━━━━━ 60% risk (credential theft)
+    ↓
+Malware    ━━━━━━━━━━ 80% risk (ransomware, data loss)
+    ↓
+BEC        ━━━━━━━━━━ 100% risk (direct financial loss $50K-$5M)
+```
+
+**Kết luận:**
+→ Model phải tập trung detect BEC > Malware > Phishing > Spam
+
+---
+
+## SLIDE 20: NEXT STEPS - PHASE 2
+
+**Chuẩn bị cho Phase 2 (Data Collection):**
+
+**Cần thu thập:**
+- [ ] 50,000+ emails đã labeled (10K/class)
+- [ ] Cân bằng distribution hoặc có strategy cho imbalance
+- [ ] Email headers (From, To, Subject, Date, Reply-To)
+- [ ] Email body (text + HTML)
+- [ ] Attachments info (filename, type, size)
+- [ ] URLs trong email
+- [ ] Metadata (IP sender, SPF/DKIM status)
+
+**Sources:**
+- Production email logs (with consent)
+- Public datasets: Enron, SpamAssassin
+- Honeypots để catch threats
+- User reports (manual labels)
+
+---
+
+## SLIDE 21: FEATURES PREVIEW (Sẽ DETAIL Ở PHASE 3)
+
+**Categories của features:**
+
+**1. Sender Features:**
+- Email domain reputation
+- SPF/DKIM/DMARC pass/fail
+- Sender trong company whitelist?
+- Sender history (first time sender?)
+
+**2. Content Features:**
+- Subject line keywords
+- Body text (TF-IDF, sentiment)
+- Urgency words count
+- Money amount mentions
+- URL count và reputation
+- Attachment presence & type
+
+**3. Behavioral Features:**
+- Time of send (work hours?)
+- Reply patterns
+- Email chain analysis
+
+---
+
+## SLIDE 22: EXPECTED CHALLENGES
+
+**Challenges dự kiến:**
+
+**1. Imbalanced Data:**
+- BEC rất hiếm (~0.1% emails)
+- Legitimate rất nhiều (~70%)
+- Solution: SMOTE, class weights, stratified split
+
+**2. Evolving Threats:**
+- Attackers thay đổi tactics liên tục
+- Solution: Weekly retraining, continuous monitoring
+
+**3. Sophisticated BEC:**
+- Rất giống legitimate emails
+- Language professional, no obvious red flags
+- Solution: Behavioral features, executive impersonation detection
+
+**4. False Positives Impact:**
+- Block nhầm legitimate emails = serious
+- Solution: Lower threshold, manual review queue
+
+---
+
+## SLIDE 23: RISK MITIGATION
+
+**Risk Management:**
+
+| Risk | Impact | Probability | Mitigation |
+|------|--------|-------------|------------|
+| High FP rate | High | Medium | Lower threshold, A/B testing |
+| Miss critical BEC | Critical | Low | Prioritize recall, manual review for high-value targets |
+| Model drift | High | High | Weekly retraining, performance monitoring |
+| Adversarial attacks | Medium | Medium | Ensemble models, anomaly detection backup |
+| Privacy violation | Critical | Low | Strict data governance, compliance checks |
+
+---
+
+## SLIDE 24: SUCCESS CRITERIA CHECKLIST
+
+**Project sẽ thành công nếu:**
+
+- [ ] Overall accuracy >95%
+- [ ] BEC recall ≥99% (bỏ sót <1%)
+- [ ] Malware recall ≥98%
+- [ ] Phishing recall ≥95%
+- [ ] Legitimate precision ≥95% (FP <5%)
+- [ ] Inference time <1s per email
+- [ ] Model size <100MB
+- [ ] Can explain any decision (interpretability)
+- [ ] GDPR compliant
+- [ ] ROI positive (losses prevented > system cost)
+
+---
+
+## SLIDE 25: PHASE 1 DELIVERABLES
+
+**Documents đã hoàn thành:**
+
+✅ **Problem Definition Document:**
+- Problem type: Multiclass classification
+- 5 classes defined with examples
+- Use cases và business context
+
+✅ **Metrics Requirement Document:**
+- Primary: Recall (per-class thresholds)
+- Secondary: Precision, F1, Accuracy
+- Business justification cho từng metric
+
+✅ **System Requirements Document:**
+- Performance: <1s inference, 100 emails/sec
+- Model constraints: <100MB, interpretable
+- Deployment: On-premise, Linux
+- Compliance: GDPR, audit trail
+
+✅ **Stakeholder Sign-off:**
+- Requirements approved by IT Security, Legal, Management
+
+---
+
+## SLIDE 26: APPROVAL CHECKLIST
+
+**Trước khi proceed to Phase 2:**
+
+**Technical Approval:**
+- [ ] Data Science Lead: Metrics achievable?
+- [ ] ML Engineer: Technical constraints realistic?
+- [ ] Security Team: Requirements comprehensive?
+
+**Business Approval:**
+- [ ] IT Director: Budget approved?
+- [ ] Legal: Compliance requirements clear?
+- [ ] CFO: ROI projection acceptable?
+
+**Risk Assessment:**
+- [ ] Risk register reviewed
+- [ ] Mitigation strategies approved
+- [ ] Fallback plan documented
+
+**→ ALL APPROVED? Proceed to Phase 2! 🚀**
+
+---
+
+## SLIDE 27: TÓM TẮT - PHASE 1 COMPLETE
+
+**Phase 1: Hiểu Bài Toán ✅**
+
+```
+✅ 1.1 Xác định loại: Multiclass Classification (5 classes)
+✅ 1.2 Success Metrics: Recall-focused, per-class thresholds
+✅ 1.3 System Requirements: Speed, size, interpretability
+✅ Stakeholder alignment: All parties agree
+✅ Risk assessment: Identified & mitigated
+✅ Go/No-Go decision: GO! 🚀
+```
+
+**Next Phase 2: Data Collection & EDA**
+- Thu thập 50K+ labeled emails
+- Analyze distribution
+- Check data quality
+- Identify challenges
+
+---
+
+## SLIDE 28: BÀI TẬP
+
+**Exercise: Apply Phase 1 to Your Problem**
+
+Chọn 1 trong các bài toán sau và complete Phase 1:
+
+**Option 1: Credit Card Fraud Detection**
+- Binary classification
+- Highly imbalanced (0.1% fraud)
+- Real-time requirement
+
+**Option 2: Customer Churn Prediction**
+- Binary classification
+- Balanced data
+- Interpretability critical
+
+**Option 3: Product Review Sentiment**
+- Multiclass (5 stars)
+- Large dataset available
+- Speed not critical
+
+**Yêu cầu:** Complete slides 10-16 template for your chosen problem
+
+---
+
+Bạn muốn tôi:
+1. 📊 Tiếp tục Phase 2 (Data Collection & EDA) cho Email Threat?
+2. 🔍 Đi sâu vào feature engineering cho email?
+3. 📝 Tạo template Phase 1 để áp dụng cho bài toán khác?
+4. 🎯 Giải thích chi tiết hơn về metric selection?
+
+---
+
+\# 📊 PHASE 1: HIỂU BÀI TOÁN - MALWARE THREAT DETECTION WITH AI
+
+---
+
+## SLIDE 1: MODULE 5 OVERVIEW
+
+**Welcome to Module 5: Advanced Malware Analysis**
+
+**Focus Areas:**
+- AI-driven detection techniques
+- Modern malware classification
+- Real-time threat response
+
+**Duration:** Comprehensive deep-dive session
+
+**Learning Outcomes:**
+- Master modern malware detection
+- Build ML models for threat classification
+- Deploy production-ready systems
+
+---
+
+## SLIDE 2: BÀI TOÁN THỰC TẾ
+
+**Tình huống:**
+Bạn là Security Analyst tại công ty antivirus
+
+**Thực trạng hàng ngày:**
+- 450,000+ malware mẫu mới mỗi ngày
+- Signature-based detection bị bypass bởi polymorphic malware
+- Zero-day malware không có signature
+- Phân tích thủ công: 1-2 samples/giờ
+- Cần: Phân tích hàng nghìn samples/giờ
+
+**Thách thức:**
+→ Làm thế nào phát hiện malware chưa từng thấy?
+
+---
+
+## SLIDE 3: PHASE 1.1 - XÁC ĐỊNH LOẠI BÀI TOÁN
+
+**Câu hỏi 1: Đây là loại bài toán gì?**
+
+**Phân tích:**
+- Input: File executable (.exe, .dll, .apk)
+- Output: Malware hay Benign?
+- Có label sẵn (malware/benign)
+- 2 classes
+
+**→ Đây là bài toán BINARY CLASSIFICATION**
+
+---
+
+## SLIDE 4: TẠI SAO LÀ BINARY CLASSIFICATION?
+
+**Binary Classification nghĩa là:**
+- Chỉ có 2 classes (categories)
+- Class 0: Benign (file an toàn)
+- Class 1: Malware (file độc hại)
+
+**So sánh với các loại khác:**
+```
+Binary:      Malware vs Benign
+Multiclass:  Trojan vs Worm vs Virus vs Ransomware
+Regression:  Dự đoán risk score (0-100)
+Clustering:  Nhóm malware có hành vi tương tự
+```
+
+**→ Lab này: Binary Classification**
+
+---
+
+## SLIDE 5: NÂng CAO - MULTICLASS CLASSIFICATION
+
+**Nếu muốn phân loại chi tiết hơn:**
+
+**Multiclass Problem:**
+- Class 0: Benign
+- Class 1: Trojan
+- Class 2: Worm
+- Class 3: Virus
+- Class 4: Ransomware
+- Class 5: Rootkit
+- Class 6: Spyware
+
+**Khác biệt:**
+- Model phức tạp hơn
+- Cần nhiều data hơn mỗi class
+- Harder to achieve high accuracy
+
+---
+
+## SLIDE 6: PHASE 1.2 - XÁC ĐỊNH SUCCESS METRICS
+
+**Câu hỏi 2: Làm sao biết model "tốt"?**
+
+**Không chỉ là Accuracy!**
+
+Với antivirus, cần cân nhắc:
+- False Positive (FP): File tốt bị nhận nhầm là malware
+- False Negative (FN): Malware bị bỏ sót
+
+**→ Cần định nghĩa rõ success metrics**
+
+---
+
+## SLIDE 7: HIỂU FALSE POSITIVE VÀ FALSE NEGATIVE
+
+**False Positive (Type I Error):**
+```
+Truth: File AN TOÀN
+Model dự đoán: MALWARE
+Hậu quả: 
+- User không dùng được software hợp pháp
+- Mất lòng tin vào antivirus
+- Tốn thời gian whitelist
+```
+
+**False Negative (Type II Error):**
+```
+Truth: MALWARE
+Model dự đoán: An toàn
+Hậu quả:
+- Malware vào được hệ thống
+- Data bị đánh cắp
+- Ransomware mã hóa files
+- ★ NGUY HIỂM HƠN!
+```
+
+---
+
+## SLIDE 8: CHỌN METRICS CHO ANTIVIRUS
+
+**Trong antivirus: False Negative nguy hiểm hơn!**
+
+**Priority Metrics (Theo thứ tự):**
+
+1. **Recall (Sensitivity)** - Cao nhất!
+   - "Trong tất cả malware thật, bắt được bao nhiêu?"
+   - Target: >95% (bỏ sót <5%)
+
+2. **Precision**
+   - "Trong các dự đoán malware, đúng bao nhiêu?"
+   - Target: >90% (chấp nhận 10% FP)
+
+3. **F1-Score**
+   - Cân bằng Precision và Recall
+   - Target: >0.92
+
+4. **Accuracy**
+   - Tổng quan
+   - Target: >93%
+
+---
+
+## SLIDE 9: CÔNG THỨC METRICS
+
+**Confusion Matrix:**
+```
+                Predicted
+              Benign  Malware
+Actual Benign   TN      FP
+       Malware  FN      TP
+```
+
+**Formulas:**
+```
+Accuracy  = (TP + TN) / (TP + TN + FP + FN)
+Precision = TP / (TP + FP)
+Recall    = TP / (TP + FN)  ← Quan trọng nhất!
+F1-Score  = 2 × (Precision × Recall) / (Precision + Recall)
+```
+
+---
+
+## SLIDE 10: VÍ DỤ TÍNH METRICS
+
+**Scenario:** Test trên 1000 files
+```
+True Benign: 700 files
+True Malware: 300 files
+
+Model predictions:
+- Detected correctly as Benign: 680 (TN)
+- Benign wrongly as Malware: 20 (FP)
+- Malware wrongly as Benign: 10 (FN) ← Nguy hiểm!
+- Detected correctly as Malware: 290 (TP)
+```
+
+**Confusion Matrix:**
+```
+        Benign  Malware
+Benign    680     20
+Malware    10    290
+```
+
+---
+
+## SLIDE 11: TÍNH TOÁN KẾT QUẢ
+
+**Từ confusion matrix trước:**
+
+```
+Accuracy  = (680 + 290) / 1000 = 97.0%
+Precision = 290 / (290 + 20) = 93.5%
+Recall    = 290 / (290 + 10) = 96.7% ★
+F1-Score  = 2 × (0.935 × 0.967) / (0.935 + 0.967) = 0.951
+```
+
+**Đánh giá:**
+- ✅ Recall 96.7% → Tốt! Chỉ bỏ sót 10/300 malware
+- ✅ Precision 93.5% → OK, chấp nhận 20 FP
+- ✅ F1 0.951 → Excellent
+- ✅ Model đạt yêu cầu!
+
+---
+
+## SLIDE 12: TARGET METRICS CHO PROJECT
+
+**Minimum Requirements:**
+
+| Metric | Target | Lý do |
+|--------|--------|-------|
+| **Recall** | **≥ 95%** | Không được bỏ sót >5% malware |
+| Precision | ≥ 90% | Chấp nhận ≤10% false alarms |
+| F1-Score | ≥ 0.92 | Cân bằng tốt |
+| Accuracy | ≥ 93% | Tổng quan |
+
+**Stretch Goals (Lý tưởng):**
+- Recall: 98%
+- Precision: 95%
+- F1: 0.96
+
+---
+
+## SLIDE 13: PHASE 1.3 - YÊU CẦU VỀ TỐC ĐỘ
+
+**Câu hỏi 3: Model phải nhanh như thế nào?**
+
+**Real-time Scanning Requirements:**
+- User scan 1 file: Kết quả trong <1 giây
+- Background scan: 1000+ files/phút
+- On-access scan: <100ms (không làm chậm system)
+
+**Training Time:**
+- Có thể lâu (vài giờ đến vài ngày)
+- Chỉ train 1 lần, dùng lại nhiều lần
+
+**→ Inference speed quan trọng hơn training speed!**
+
+---
+
+## SLIDE 14: YÊU CẦU MODEL SIZE
+
+**Deployment Constraints:**
+
+**Desktop Antivirus:**
+- Model size: <100 MB
+- RAM usage: <500 MB
+- CPU only (không có GPU)
+
+**Mobile Antivirus:**
+- Model size: <10 MB
+- RAM usage: <100 MB
+- Battery friendly
+
+**Cloud-based:**
+- Model size: Không giới hạn
+- Có GPU
+- Nhưng cần internet
+
+**→ Lab này: Desktop deployment**
+
+---
+
+## SLIDE 15: YÊU CẦU VỀ INTERPRETABILITY
+
+**Câu hỏi 4: Cần giải thích được không?**
+
+**Hai trường phái:**
+
+**Black-box Models (Deep Learning):**
+- ✅ Accuracy cao hơn
+- ❌ Không giải thích được
+- ❌ Khó debug
+
+**Interpretable Models (Traditional ML):**
+- ✅ Hiểu được tại sao dự đoán vậy
+- ✅ Dễ debug
+- ✅ User tin tưởng hơn
+- ❌ Accuracy có thể thấp hơn một chút
+
+**→ Lab này: Traditional ML (interpretable)**
+
+---
+
+## SLIDE 16: TẠI SAO CẦN INTERPRETABILITY?
+
+**Use Cases cần giải thích:**
+
+**1. Security Analyst Review:**
+```
+File: suspicious.exe
+Prediction: MALWARE (95% confidence)
+Reasons:
+- Packs code with UPX
+- Modifies registry keys
+- Makes network connections to unknown IPs
+- High entropy section (encrypted code)
+```
+
+**2. False Positive Analysis:**
+```
+File: legitimate.exe (Office Software)
+Prediction: MALWARE (60% confidence)
+Why wrong:
+- Legitimate code packer
+- Normal registry access
+→ Add to whitelist
+```
+
+---
+
+## SLIDE 17: DEPLOYMENT ENVIRONMENT
+
+**Câu hỏi 5: Model sẽ chạy ở đâu?**
+
+**3 Options:**
+
+**Option 1: On-device (Endpoint)**
+- ✅ Offline, không cần internet
+- ✅ Fast, low latency
+- ✅ Privacy (data không rời máy)
+- ❌ Limited resources
+
+**Option 2: Cloud-based**
+- ✅ Powerful, có GPU
+- ✅ Dễ update model
+- ❌ Cần internet
+- ❌ Latency cao
+
+**Option 3: Hybrid**
+- Light model on-device
+- Heavy analysis in cloud
+
+**→ Lab này: On-device (endpoint)**
+
+---
+
+## SLIDE 18: TÓM TẮT BÀI TOÁN
+
+**Bài toán được định nghĩa rõ:**
+
+```
+Problem Type: Binary Classification
+Classes: 
+  - 0 = Benign (safe files)
+  - 1 = Malware (malicious files)
+
+Success Metrics:
+  - Recall ≥ 95% (priority #1)
+  - Precision ≥ 90%
+  - F1-Score ≥ 0.92
+  - Accuracy ≥ 93%
+
+Performance Requirements:
+  - Inference: <1 second per file
+  - Model size: <100 MB
+  - CPU only (no GPU)
+
+Deployment: Desktop endpoint
+Interpretability: High (need explanations)
+```
+
+---
+
+## SLIDE 19: INPUT VÀ OUTPUT
+
+**INPUT: Executable File**
+```
+File types:
+- Windows: .exe, .dll, .sys
+- Android: .apk, .dex
+- Linux: ELF binaries
+- Scripts: .ps1, .bat, .sh
+
+Typical size: 100 KB - 10 MB
+```
+
+**OUTPUT: Classification + Confidence**
+```
+{
+  "prediction": "malware",
+  "confidence": 0.95,
+  "risk_level": "high",
+  "detected_behaviors": [...]
+}
+```
+
+---
+
+## SLIDE 20: BUSINESS CONTEXT
+
+**Stakeholders:**
+
+**1. End Users**
+- Muốn: Bảo vệ tốt, ít false positive
+- KPI: User satisfaction score
+
+**2. Security Team**
+- Muốn: Detect rate cao, analysis tools
+- KPI: Malware catch rate
+
+**3. Product Team**
+- Muốn: Fast, small size, easy deploy
+- KPI: System performance
+
+**4. Business**
+- Muốn: Cost-effective, scalable
+- KPI: Cost per detection, ROI
+
+---
+
+## SLIDE 21: COST ANALYSIS
+
+**Cost của False Positive:**
+- Support ticket: $50
+- User frustration
+- Potential churn
+- Whitelist maintenance
+
+**Cost của False Negative:**
+- Data breach: $4.35M average
+- Ransomware damage: $1.85M average
+- Reputation loss
+- Legal liability
+
+**→ FN cost >> FP cost (hàng nghìn lần!)**
+**→ Ưu tiên Recall cao!**
+
+---
+
+## SLIDE 22: CONSTRAINTS VÀ ASSUMPTIONS
+
+**Technical Constraints:**
+- Chỉ có file binary (không có source code)
+- Không thể execute file (sandbox limit)
+- Static analysis only
+- Limited compute resources
+
+**Assumptions:**
+- File format valid (không corrupt)
+- Có thể extract features
+- Labels reliable (dataset quality)
+- Malware behaviors stable (không thay đổi quá nhanh)
+
+---
+
+## SLIDE 23: SUCCESS CRITERIA - CHI TIẾT
+
+**Định nghĩa "Success" rõ ràng:**
+
+**Phase 1: Development (Lab)**
+- Recall ≥ 95% trên test set
+- F1-Score ≥ 0.92
+- Model trains trong <30 phút
+- Inference <1s per file
+
+**Phase 2: Production (Real-world)**
+- Maintain 95% recall for 90 days
+- False positive rate <1% daily
+- 99.9% uptime
+- Handle 10K files/hour
+
+---
+
+## SLIDE 24: OUT OF SCOPE
+
+**Những gì KHÔNG làm trong lab này:**
+
+❌ Dynamic analysis (không chạy malware)
+❌ Sandbox environment
+❌ Network behavior analysis
+❌ Real-time monitoring
+❌ Automatic malware removal
+❌ Cross-platform support (chỉ focus 1 platform)
+❌ Production deployment pipeline
+
+**→ Focus: Core ML model for static analysis**
+
+---
+
+## SLIDE 25: RELATED PROBLEMS
+
+**Bài toán tương tự:**
+
+**Spam Detection:**
+- Binary classification
+- Text analysis
+- Similar metrics priority
+
+**Fraud Detection:**
+- Imbalanced data
+- High cost of FN
+- Real-time requirements
+
+**Intrusion Detection:**
+- Anomaly detection
+- Network traffic analysis
+- Same security domain
+
+**→ Techniques có thể tái sử dụng!**
+
+---
+
+## SLIDE 26: BASELINE COMPARISON
+
+**So với existing solutions:**
+
+**Signature-based Antivirus:**
+- Detection rate: 70-80%
+- False positive: <0.1%
+- Speed: Very fast
+- ❌ Miss zero-day malware
+
+**Behavioral Analysis:**
+- Detection rate: 85-90%
+- False positive: 5-10%
+- Speed: Slow
+- ❌ Need execution
+
+**Our ML Approach (Target):**
+- Detection rate: 95%+
+- False positive: 1-2%
+- Speed: Fast
+- ✅ Detect unknown malware
+
+---
+
+## SLIDE 27: DATA REQUIREMENTS PREVIEW
+
+**Cần bao nhiêu data?**
+
+**Minimum:**
+- 1,000 samples (500 benign + 500 malware)
+- 10-50 samples per feature
+
+**Good:**
+- 10,000 samples (7,000 benign + 3,000 malware)
+- Cover multiple malware families
+
+**Ideal:**
+- 100,000+ samples
+- Balanced across families
+- Recent samples (<1 year old)
+
+**→ Lab này: 10,000 samples**
+
+---
+
+## SLIDE 28: FEATURE TYPES PREVIEW
+
+**Cần extract features gì từ malware?**
+
+**Static Features:**
+- File properties (size, entropy, headers)
+- PE structure (sections, imports, exports)
+- String patterns (URLs, IPs, registry keys)
+- Code characteristics (opcodes, API calls)
+
+**→ Chi tiết ở Phase 2 (Feature Engineering)**
+
+---
+
+## SLIDE 29: TIMELINE ESTIMATION
+
+**Project Timeline:**
+
+```
+Week 1: Data collection & EDA (2-3 days)
+Week 2: Feature engineering (3-4 days)
+Week 3: Model training & selection (2-3 days)
+Week 4: Evaluation & tuning (2-3 days)
+Week 5: Documentation & presentation (1-2 days)
+
+Total: 4-5 weeks for complete project
+Lab: 2-3 sessions (6-9 hours)
+```
+
+---
+
+## SLIDE 30: RISK ANALYSIS
+
+**Potential Risks:**
+
+**Technical Risks:**
+- Imbalanced dataset → Use stratification, class weights
+- Feature extraction errors → Robust parsing
+- Model overfitting → Cross-validation, regularization
+- New malware families → Regular retraining
+
+**Business Risks:**
+- High false positive → Careful threshold tuning
+- Slow inference → Model optimization
+- Large model size → Compression techniques
+
+---
+
+## SLIDE 31: ETHICAL CONSIDERATIONS
+
+**Ethics trong Malware Detection:**
+
+**Privacy:**
+- ✅ Analyze file structure only
+- ❌ Không scan user documents
+- ✅ Local processing (no cloud upload)
+
+**Bias:**
+- Avoid bias against:
+  - Legitimate crackers/debuggers
+  - Open-source tools
+  - Security research tools
+
+**Transparency:**
+- Clear về false positive possibility
+- Give users override option
+- Explain detections
+
+---
+
+## SLIDE 32: REGULATORY COMPLIANCE
+
+**Compliance Requirements:**
+
+**GDPR (EU):**
+- Data minimization
+- User consent
+- Right to explanation
+
+**CCPA (California):**
+- Privacy notice
+- User rights
+
+**Industry Standards:**
+- AMTSO (Anti-Malware Testing Standards)
+- Common Criteria certification
+
+---
+
+## SLIDE 33: COMPETITIVE LANDSCAPE
+
+**Existing Solutions:**
+
+| Product | Detection Rate | FP Rate | Method |
+|---------|----------------|---------|--------|
+| Vendor A | 95% | 0.5% | Signature + Cloud |
+| Vendor B | 92% | 1.0% | Behavioral |
+| Vendor C | 88% | 0.3% | Signature only |
+| **Our Target** | **95%** | **1-2%** | **ML-based** |
+
+**Differentiation: Balance accuracy với low FP**
+
+---
+
+## SLIDE 34: USER PERSONAS
+
+**Who will use this?**
+
+**Persona 1: Home User**
+- Needs: Easy to use, no false alarms
+- Priority: Don't block legitimate software
+- Tech level: Low
+
+**Persona 2: Enterprise IT Admin**
+- Needs: Detailed reports, configurability
+- Priority: Catch all threats
+- Tech level: High
+
+**Persona 3: Security Researcher**
+- Needs: Explainability, analysis tools
+- Priority: Understand detections
+- Tech level: Expert
+
+---
+
+## SLIDE 35: CHECKLIST - PHASE 1 HOÀN THÀNH
+
+**✅ Đã xác định:**
+
+- [x] Problem type: Binary Classification
+- [x] Classes: Benign (0) vs Malware (1)
+- [x] Success metrics: Recall ≥95%, Precision ≥90%, F1 ≥0.92
+- [x] Performance: <1s inference, <100MB model
+- [x] Deployment: Desktop endpoint
+- [x] Interpretability: High (need explanations)
+- [x] Stakeholders: Users, Security, Product, Business
+- [x] Constraints: Static analysis, no execution
+- [x] Risks identified và mitigation plans
+- [x] Timeline: 4-5 weeks / 2-3 lab sessions
+
+---
+
+## SLIDE 36: CÂNH BÁO THƯỜNG GẶP
+
+**Common Mistakes trong Phase 1:**
+
+❌ Chỉ nhìn Accuracy
+→ ✅ Focus vào Recall cho security
+
+❌ Ignore inference speed
+→ ✅ Set clear performance targets
+
+❌ Không xác định deployment environment
+→ ✅ Biết model chạy ở đâu
+
+❌ Vague success criteria
+→ ✅ Số liệu cụ thể (≥95% recall)
+
+❌ Không tính business cost
+→ ✅ Hiểu FN cost >> FP cost
+
+---
+
+## SLIDE 37: BÀI TẬP TƯ DUY
+
+**Câu hỏi 1:**
+Nếu model có Recall=99% và Precision=50%, bạn có deploy không? Tại sao?
+
+**Câu hỏi 2:**
+Làm thế nào để giảm False Positive mà không làm giảm Recall?
+
+**Câu hỏi 3:**
+Nếu phát hiện malware mới mỗi ngày tăng 50%, strategy nào để model vẫn effective?
+
+---
+
+## SLIDE 38: ĐÁP ÁN BÀI TẬP
+
+**Câu 1: Recall=99%, Precision=50%**
+```
+Phân tích:
+- Bắt được 99% malware ✅
+- Nhưng 50% detections là false alarms ❌
+- 1000 detections → 500 là FP
+- User sẽ rất phiền!
+
+Decision: KHÔNG deploy production
+→ Cần balance tốt hơn (min Precision 90%)
+```
+
+---
+
+## SLIDE 39: ĐÁP ÁN BÀI TẬP (tt)
+
+**Câu 2: Giảm FP mà giữ Recall**
+
+**Strategies:**
+- Adjust classification threshold
+- Add whitelisting cho known-good software
+- Combine multiple models (ensemble)
+- Feature engineering tốt hơn
+- More training data cho benign samples
+- Post-processing rules
+
+---
+
+## SLIDE 40: ĐÁP ÁN BÀI TẬP (tt)
+
+**Câu 3: Malware tăng 50%/ngày**
+
+**Strategies:**
+- Active learning: Prioritize labeling new samples
+- Online learning: Update model incrementally
+- Anomaly detection: Catch unknown patterns
+- Regular retraining: Weekly → Daily
+- Community threat intelligence feeds
+- Automated labeling pipeline
+
+---
+
+## SLIDE 41: PHASE 1 → PHASE 2 TRANSITION
+
+**Đã hoàn thành Phase 1:**
+✅ Hiểu rõ bài toán
+✅ Định nghĩa success metrics
+✅ Xác định constraints
+
+**Tiếp theo - Phase 2: Data Collection**
+- Tìm nguồn malware samples
+- Build dataset với labels
+- Exploratory Data Analysis
+- Feature extraction planning
+
+**Preview: Sẽ cần ~10,000 samples!**
+
+---
+
+## SLIDE 42: TÀI LIỆU THAM KHẢO
+
+**Papers:**
+- "Deep Learning for Malware Detection" (IEEE 2019)
+- "Static Malware Analysis Using Machine Learning Methods" (2020)
+
+**Datasets:**
+- VirusShare (millions of samples)
+- MalwareBazaar
+- EMBER dataset
+
+**Tools:**
+- PEiD - PE analysis
+- radare2 - Reverse engineering
+- YARA - Pattern matching
+
+---
+
+## SLIDE 43: INDUSTRY BENCHMARKS
+
+**State-of-the-art (SOTA) Results:**
+
+| Approach | Dataset | Accuracy | Recall | Precision |
+|----------|---------|----------|--------|-----------|
+| CNN | EMBER | 96.5% | 95.8% | 97.2% |
+| Random Forest | Custom | 95.2% | 94.5% | 95.9% |
+| XGBoost | VirusTotal | 97.1% | 96.5% | 97.7% |
+| Ensemble | EMBER | 98.2% | 97.8% | 98.5% |
+
+**Our Target: Competitive với Random Forest**
+
+---
+
+## SLIDE 44: LEARNING RESOURCES
+
+**Để hiểu sâu hơn:**
+
+**Courses:**
+- Malware Analysis Course (Practical Malware Analysis book)
+- Machine Learning for Security (Coursera)
+
+**Blogs:**
+- Malwarebytes Labs
+- Kaspersky Threatpost
+- FireEye Blog
+
+**Communities:**
+- r/malware (Reddit)
+- MalwareTech forum
+- VirusTotal community
+
+---
+
+## SLIDE 45: SUMMARY - PHASE 1 COMPLETED
+
+**Đã học được gì:**
+- ✅ Binary Classification problem
+- ✅ Recall là metric quan trọng nhất
+- ✅ Balance Precision và Recall
+- ✅ Inference speed matters
+- ✅ Interpretability valuable
+- ✅ FN cost >> FP cost
+- ✅ Deployment constraints matter
+
+**Key Takeaway:**
+> "Trong security, KHÔNG BỎ SÓT (Recall) quan trọng hơn KHÔNG BÁO ĐỘNG GIẢ (Precision), nhưng cần balance!"
+
+---
+
+## SLIDE 46: NEXT SESSION PREVIEW
+
+**Session tiếp theo: Phase 2 - Data Collection & EDA**
+
+**Nội dung:**
+- Thu thập malware samples
+- Labeling strategy
+- Dataset quality checks
+- Exploratory Data Analysis
+- Feature extraction planning
+
+**Chuẩn bị:**
+- Đọc về PE file format
+- Install analysis tools
+- Review dataset sources
+
+---
+
+## SLIDE 47: BÀI TẬP VỀ NHÀ
+
+**Bài 1: Research (Bắt buộc)**
+Tìm hiểu 3 malware families gần đây:
+- Tên malware
+- Cách lây nhiễm
+- Hành vi chính
+- Làm sao detect
+
+**Bài 2: Metrics Calculation (Bắt buộc)**
+Cho confusion matrix, tính tất cả metrics và quyết định deploy hay không
+
+**Bài 3: Tool Exploration (Optional)**
+Cài đặt và thử PE analysis tools
+
+---
+
+## SLIDE 48: THANK YOU!
+
+**Câu hỏi?**
+
+**Next Session:**
+- Date: [Ngày]
+- Time: [Giờ]
+- Topic: Data Collection & Feature Engineering
+
+**Contact:**
+- Email: [email]
+- Slack: #malware-detection-lab
+
+**Hẹn gặp lại!** 🛡️
+
+---
+
+Bạn muốn tôi:
+1. 📊 Tạo Phase 2 (Data Collection & EDA) cho Malware Detection?
+2. 🔄 Tạo Phase 1 cho bài toán khác (VD: Phishing Detection)?
+3. 📝 Tạo template Phase 1 chung cho mọi bài toán?
+4. 🎯 Giải thích chi tiết phần nào?
+
+---
+
+
+
+
