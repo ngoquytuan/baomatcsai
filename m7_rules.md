@@ -44,7 +44,7 @@ Bạn là Security Engineer tại NONameBank - ngân hàng số với 5 triệu 
 
 ---
 
-# ✅ **1. Binary Classification** (Phân loại nhị phân – 2 lớp)
+#  **1. Binary Classification** (Phân loại nhị phân – 2 lớp)
 
 **→ Đây là loại bài toán xuất hiện nhiều nhất trong CSAI.**
 
@@ -57,7 +57,7 @@ Ví dụ trong khóa học:
 
 ---
 
-# ✅ **2. Multiclass Classification** (Phân loại nhiều lớp – >2 lớp)
+#  **2. Multiclass Classification** (Phân loại nhiều lớp – >2 lớp)
 
 **→ Một đối tượng chỉ thuộc đúng *1* lớp.**
 
@@ -78,7 +78,7 @@ Phân loại malware gia đình:
 
 ---
 
-# ✅ **3. Regression** (Dự đoán giá trị số liên tục)
+#  **3. Regression** (Dự đoán giá trị số liên tục)
 
 **→ Xuất hiện trong Module 7 & Module 9.**
 
@@ -96,7 +96,7 @@ Ví dụ trong khóa học:
 
 ---
 
-# ✅ **4. Multilabel Classification** (Nhiều nhãn cùng lúc)
+#  **4. Multilabel Classification** (Nhiều nhãn cùng lúc)
 
 **→ Một mẫu có thể thuộc *nhiều nhãn* đồng thời.**
 
@@ -118,7 +118,7 @@ Xuất hiện trong:
 
 ---
 
-# ✅ **5. Anomaly Detection** (Phát hiện bất thường)
+#  **5. Anomaly Detection** (Phát hiện bất thường)
 
 **→ Rất quan trọng trong cybersecurity, xuất hiện trong nhiều module.**
 
@@ -141,7 +141,7 @@ Mô hình dùng:
 
 ---
 
-# ✅ **6. Clustering (Unsupervised)**
+#  **6. Clustering (Unsupervised)**
 
 **→ Không có nhãn, tự nhóm dữ liệu thành các cụm.**
 
@@ -163,7 +163,7 @@ Tự động nhóm log network thành các nhóm bất thường để SOC phân
 
 ---
 
-# ✅ **7. Generation (GANs & LLMs)** – *Module 8*
+#  **7. Generation (GANs & LLMs)** – *Module 8*
 
 **→ Đây không phải classification, mà là bài toán tạo dữ liệu.**
 
@@ -178,7 +178,7 @@ GAN không phân loại — nó *tạo ra* dữ liệu mới.
 
 ---
 
-# ✅ **8. Sequence Modeling / NLP**
+#  **8. Sequence Modeling / NLP**
 
 Áp dụng trong:
 
@@ -196,7 +196,7 @@ Mô hình:
 
 ---
 
-# 📌 **Tóm tắt cho slide giảng**
+#  **Tóm tắt **
 
 Bạn có thể đưa lên slide một bảng như sau:
 
@@ -231,7 +231,7 @@ Bạn có thể đưa lên slide một bảng như sau:
 
 ---
 
-## SLIDE 4: TẠI SAO CHỌN BINARY CLASSIFICATION?
+## TẠI SAO CHỌN BINARY CLASSIFICATION?
 
 **Phân tích:**
 
@@ -245,12 +245,11 @@ Bạn có thể đưa lên slide một bảng như sau:
 - Không cần phân loại chi tiết (VD: bot, insider, stolen credentials)
 - Chỉ cần biết: Nguy hiểm hay Không?
 
-**Không phải Regression vì:**
-- Không dự đoán số (VD: probability là số nhưng kết quả cuối là class)
+
 
 ---
 
-## SLIDE 5: ALTERNATIVE APPROACHES
+## ALTERNATIVE APPROACHES
 
 **Approach 1: Binary Classification** ✅ CHỌN
 ```
@@ -285,7 +284,7 @@ Login → Model → [Normal | Anomaly]
 
 ---
 
-## SLIDE 6: QUYẾT ĐỊNH FINAL APPROACH
+## Lựa chọn cuối cùng
 
 **Chọn: Binary Classification với Risk Score**
 
@@ -315,9 +314,9 @@ else:
 
 ---
 
-## SLIDE 7: CHECKLIST 1.2 - SUCCESS METRICS
+## SUCCESS METRICS
 
-**□ Xác định business metrics** ✅
+**□ Xác định business metrics** 
 
 **Primary Metrics (Quan trọng nhất):**
 1. **Fraud Reduction Rate**
@@ -332,7 +331,7 @@ else:
 
 ---
 
-## SLIDE 8: SUCCESS METRICS (tt)
+## SUCCESS METRICS 
 
 **Secondary Metrics:**
 
@@ -352,7 +351,7 @@ else:
 
 ---
 
-## SLIDE 9: BUSINESS METRICS vs ML METRICS
+## BUSINESS METRICS vs ML METRICS
 
 | Business Metric | ML Metric | Target | Priority |
 |----------------|-----------|--------|----------|
@@ -370,7 +369,7 @@ High Recall ←→ Low False Positive
 
 ---
 
-## SLIDE 10: ĐỊNH NGHĨA CONFUSION MATRIX
+## ĐỊNH NGHĨA CONFUSION MATRIX
 
 **Trong context Authentication Security:**
 
@@ -395,7 +394,7 @@ Actual  Safe     TN          FP
 
 ---
 
-## SLIDE 11: CONFUSION MATRIX (tt)
+## CONFUSION MATRIX 
 
 **False Negative (FN):**
 - Hacker đang tấn công
@@ -415,7 +414,7 @@ FN: Mất tiền, bad reputation, legal issues
 
 ---
 
-## SLIDE 12: COST ANALYSIS
+## COST ANALYSIS
 
 **Chi phí của từng loại error:**
 
@@ -441,7 +440,7 @@ Cost = (20 × 50K) + (5 × 5M) = 26M VNĐ/ngày
 
 ---
 
-## SLIDE 13: CHỌN OPTIMAL METRIC
+## CHỌN OPTIMAL METRIC
 
 **Dựa vào cost analysis:**
 
@@ -468,7 +467,7 @@ where w_FP = 50K, w_FN = 5M
 
 ---
 
-## SLIDE 14: FINAL SUCCESS CRITERIA
+## FINAL SUCCESS CRITERIA
 
 **Phase 1 Outcome: Định nghĩa Success**
 
@@ -505,7 +504,7 @@ PROJECT SUCCESS =
 
 ---
 
-## SLIDE 16: YÊU CẦU KỸ THUẬT (tt)
+## YÊU CẦU KỸ THUẬT (tt)
 
 **□ Kích thước model tối đa** ✅
 - Requirement: <50MB
@@ -527,7 +526,7 @@ PROJECT SUCCESS =
 
 ---
 
-## SLIDE 17: YÊU CẦU DEPLOY
+## YÊU CẦU DEPLOY
 
 **□ Điều kiện deploy** ✅
 
@@ -563,7 +562,7 @@ PROJECT SUCCESS =
 
 ---
 
-## SLIDE 19: STAKEHOLDER REQUIREMENTS (tt)
+## STAKEHOLDER REQUIREMENTS (tt)
 
 **3. Engineering Team (CTO)**
 - ✅ Easy to deploy & maintain
@@ -584,7 +583,7 @@ PROJECT SUCCESS =
 
 ---
 
-## SLIDE 20: CONSTRAINTS & ASSUMPTIONS
+## CONSTRAINTS & ASSUMPTIONS
 
 **Constraints:**
 - ⏰ Timeline: 3 tháng (12 weeks)
@@ -602,7 +601,7 @@ PROJECT SUCCESS =
 
 ---
 
-## SLIDE 21: RISK ANALYSIS
+## RISK ANALYSIS
 
 **Technical Risks:**
 
@@ -620,7 +619,7 @@ PROJECT SUCCESS =
 
 ---
 
-## SLIDE 22: OUT OF SCOPE
+## OUT OF SCOPE
 
 **Rõ ràng những gì KHÔNG làm:**
 
