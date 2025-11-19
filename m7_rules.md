@@ -4,7 +4,7 @@
 
 ---
 
-## SLIDE 1: PHASE 1 OVERVIEW
+## PHASE 1 OVERVIEW
 
 **Phase 1: Problem Understanding**
 
@@ -20,10 +20,10 @@
 
 ---
 
-## SLIDE 2: BÀI TOÁN THỰC TẾ
+## BÀI TOÁN THỰC TẾ
 
 **Scenario:**
-Bạn là Security Engineer tại VietBank - ngân hàng số với 5 triệu khách hàng
+Bạn là Security Engineer tại NONameBank - ngân hàng số với 5 triệu khách hàng
 
 **Vấn đề hiện tại:**
 - 10 triệu login attempts/ngày
@@ -38,7 +38,181 @@ Bạn là Security Engineer tại VietBank - ngân hàng số với 5 triệu kh
 
 ---
 
-## SLIDE 3: CHECKLIST 1.1 - XÁC ĐỊNH LOẠI BÀI TOÁN
+## CHECKLIST 1.1 - XÁC ĐỊNH LOẠI BÀI TOÁN
+
+**Các loại bài toán Machine Learning** phù hợp với an ninh mạng
+
+---
+
+# ✅ **1. Binary Classification** (Phân loại nhị phân – 2 lớp)
+
+**→ Đây là loại bài toán xuất hiện nhiều nhất trong CSAI.**
+
+Ví dụ trong khóa học:
+
+* Spam vs Not Spam (Module 4)
+* Malware vs Benign (Module 5)
+* Login Normal vs Suspicious (Module 7)
+* Network traffic Normal vs Attack (Module 6)
+
+---
+
+# ✅ **2. Multiclass Classification** (Phân loại nhiều lớp – >2 lớp)
+
+**→ Một đối tượng chỉ thuộc đúng *1* lớp.**
+
+Xuất hiện trong:
+
+* Phân loại **nhiều loại email threat**: spam / phishing / malware / BEC
+* Phân loại **malware families**: Trojan / Worm / Ransomware / Adware
+* Nhận diện **loại traffic**: DNS / HTTP / SSH / FTP
+* GAN discriminator đôi khi phân loại >2 dạng ảnh/traffic
+
+**Ví dụ thực tế trong Module 5**:
+Phân loại malware gia đình:
+
+* 0 = Benign
+* 1 = Trojan
+* 2 = Ransomware
+* 3 = Spyware
+
+---
+
+# ✅ **3. Regression** (Dự đoán giá trị số liên tục)
+
+**→ Xuất hiện trong Module 7 & Module 9.**
+
+Regression dự đoán *một con số*, không phải một lớp.
+
+Ví dụ trong khóa học:
+
+* **Risk Score Prediction** (Module 7)
+  → Predict risk từ 0–100 cho mỗi login event.
+* **Threat Severity Score**
+* **Time-to-Compromise Prediction** trong PT/Red Team AI
+* Trong tập dữ liệu phishing: dự đoán “mức độ nguy hiểm” thay vì chỉ 0/1.
+
+**Mô hình dùng:** Linear Regression, Regression Trees, SVR, Logistic Regression (dự đoán xác suất).
+
+---
+
+# ✅ **4. Multilabel Classification** (Nhiều nhãn cùng lúc)
+
+**→ Một mẫu có thể thuộc *nhiều nhãn* đồng thời.**
+
+Xuất hiện trong:
+
+* Phân tích email: Email vừa là *spam*, vừa *phishing*, vừa *malware-embedded*.
+* Malware có thể gắn nhiều thuộc tính:
+
+  * Phát tán qua USB
+  * Keylogging
+  * Persistence
+  * Ransom capability
+
+**Ví dụ:** Một mẫu malware có thể có labels:
+
+* [Keylogger = 1]
+* [Downloader = 1]
+* [Ransom = 0]
+
+---
+
+# ✅ **5. Anomaly Detection** (Phát hiện bất thường)
+
+**→ Rất quan trọng trong cybersecurity, xuất hiện trong nhiều module.**
+
+Dùng khi dữ liệu bất cân bằng (rất ít attack).
+
+Ứng dụng:
+
+* Network Anomaly Detection (Module 6)
+* User Behavioral Analytics UBA (Module 7)
+* Insider threats
+* Fraud detection
+* Lateral movement detection
+
+Mô hình dùng:
+
+* Isolation Forest
+* One-Class SVM
+* Autoencoders
+* LOF (Local Outlier Factor)
+
+---
+
+# ✅ **6. Clustering (Unsupervised)**
+
+**→ Không có nhãn, tự nhóm dữ liệu thành các cụm.**
+
+Xuất hiện trong:
+
+* Malware family grouping (Module 5)
+* Network traffic clustering (Module 6)
+* GAN latent space analysis (Module 8)
+* PT AI: grouping attack behaviors (Module 9)
+
+Ví dụ:
+
+* K-means
+* DBSCAN
+* Hierarchical clustering
+
+**Ứng dụng thực tế:**
+Tự động nhóm log network thành các nhóm bất thường để SOC phân tích.
+
+---
+
+# ✅ **7. Generation (GANs & LLMs)** – *Module 8*
+
+**→ Đây không phải classification, mà là bài toán tạo dữ liệu.**
+
+GAN dùng để:
+
+* Sinh network traffic giả
+* Sinh malware variants giả
+* Tạo adversarial examples để bypass IDS
+* Tạo fake faces để bypass authentication
+
+GAN không phân loại — nó *tạo ra* dữ liệu mới.
+
+---
+
+# ✅ **8. Sequence Modeling / NLP**
+
+Áp dụng trong:
+
+* Phishing email detection (Module 4)
+* Malware code sequence modeling (Module 5)
+* Network log sequence (Module 6)
+
+Mô hình:
+
+* HMM (Hidden Markov Models)
+* LSTM / GRU
+* Transformer / BERT / CodeBERT
+
+Đây là dạng bài toán thời gian + ngôn ngữ.
+
+---
+
+# 📌 **Tóm tắt cho slide giảng**
+
+Bạn có thể đưa lên slide một bảng như sau:
+
+| Loại bài toán         | Mô tả              | Module liên quan |
+| --------------------- | ------------------ | ---------------- |
+| Binary Classification | 2 lớp              | 4,5,6,7          |
+| Multiclass            | >2 lớp             | 4,5,6            |
+| Multilabel            | Nhiều nhãn         | 4,5              |
+| Regression            | Dự đoán giá trị số | 7,9              |
+| Anomaly Detection     | Tìm bất thường     | 6,7              |
+| Clustering            | Tự nhóm dữ liệu    | 5,6,9            |
+| GAN Generation        | Sinh dữ liệu       | 8                |
+| Sequence Modeling     | Dự đoán chuỗi      | 4,5,6            |
+
+---
+
 
 **□ Classification (phân loại)** ✅
 - **□ Binary (2 classes)** ✅ CHỌN
@@ -48,8 +222,11 @@ Bạn là Security Engineer tại VietBank - ngân hàng số với 5 triệu kh
 - □ Multilabel (nhiều labels) ❌
 
 **□ Regression** ❌ Không phải
+
 **□ Clustering** ❌ Không phải
+
 **□ Anomaly Detection** ⚠️ Có thể dùng bổ sung
+
 **□ Time Series** ⚠️ Có thể phân tích trends
 
 ---
