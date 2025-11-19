@@ -1,4 +1,4 @@
-# 🎯 CHECKLIST & RULES CHO MỌI DỰ ÁN MACHINE LEARNING
+# CHECKLIST & RULES CHO MỌI DỰ ÁN MACHINE LEARNING
 
 **BEST PRACTICES** chung cho hầu hết dự án ML, không riêng gì bài toán security này.
 
@@ -8,7 +8,7 @@
 
 ---
 
-## ✅ PHASE 1: HIỂU BÀI TOÁN (PROBLEM UNDERSTANDING)
+## PHASE 1: HIỂU BÀI TOÁN (PROBLEM UNDERSTANDING)
 
 ### **1.1 Xác định loại bài toán**
 - [ ] Classification (phân loại)
@@ -38,7 +38,7 @@
 
 ---
 
-## ✅ PHASE 2: THU THẬP & PHÂN TÍCH DỮ LIỆU (DATA COLLECTION)
+## PHASE 2: THU THẬP & PHÂN TÍCH DỮ LIỆU (DATA COLLECTION)
 
 ### **2.1 Thu thập data**
 - [ ] Xác định nguồn data: Production logs, APIs, Databases, Public datasets
@@ -66,7 +66,7 @@
 
 ---
 
-## ✅ PHASE 3: FEATURE ENGINEERING
+## PHASE 3: FEATURE ENGINEERING
 
 ### **3.1 Feature Selection**
 - [ ] Domain expertise: Chọn features có ý nghĩa business
@@ -92,7 +92,7 @@
 
 ---
 
-## ✅ PHASE 4: DATA SPLITTING (QUAN TRỌNG!)
+## PHASE 4: DATA SPLITTING (QUAN TRỌNG!)
 
 ### **4.1 Train/Validation/Test Split**
 **RULE 1: Luôn chia data TRƯỚC KHI làm bất cứ điều gì khác!**
@@ -151,11 +151,11 @@ test = df[df['date'] >= '2024-01-01']
 **RULE 6: KHÔNG BAO GIỜ để test data "nhìn thấy" trong training!**
 
 ```python
-# ❌ SAI - Fit scaler trên toàn bộ data
+# SAI - Fit scaler trên toàn bộ data
 scaler.fit(X)  # Leak test data info!
 X_train, X_test = train_test_split(X)
 
-# ✅ ĐÚNG - Fit chỉ trên training data
+# ĐÚNG - Fit chỉ trên training data
 X_train, X_test = train_test_split(X)
 scaler.fit(X_train)  # Chỉ học từ train
 X_train_scaled = scaler.transform(X_train)
@@ -172,7 +172,7 @@ assert len(overlap) == 0, "Data leakage detected!"
 
 ---
 
-## ✅ PHASE 5: DATA PREPROCESSING
+## PHASE 5: DATA PREPROCESSING
 
 ### **5.1 Handle Missing Values**
 - [ ] Identify missing patterns: `df.isnull().sum()`
@@ -227,7 +227,7 @@ MinMaxScaler: (x - min) / (max - min)
 
 ---
 
-## ✅ PHASE 6: MODEL SELECTION & TRAINING
+## PHASE 6: MODEL SELECTION & TRAINING
 
 ### **6.1 Baseline Model**
 **RULE 11: Luôn bắt đầu với baseline đơn giản!**
@@ -287,7 +287,7 @@ print(f"CV Accuracy: {scores.mean():.3f} (+/- {scores.std() * 2:.3f})")
 
 ---
 
-## ✅ PHASE 7: MODEL EVALUATION
+## PHASE 7: MODEL EVALUATION
 
 ### **7.1 Evaluation Metrics**
 **RULE 15: Dùng nhiều metrics, không chỉ accuracy!**
@@ -348,7 +348,7 @@ FN (False Negative): Bỏ sót → Nguy hiểm!
 
 ---
 
-## ✅ PHASE 8: HYPERPARAMETER TUNING
+## PHASE 8: HYPERPARAMETER TUNING
 
 ### **8.1 Tuning Strategy**
 **RULE 19: Tune trên validation set, KHÔNG phải test set!**
@@ -406,7 +406,7 @@ Solutions:
 
 ---
 
-## ✅ PHASE 9: MODEL COMPARISON
+## PHASE 9: MODEL COMPARISON
 
 ### **9.1 Comparison Criteria**
 **RULE 22: So sánh đa chiều, không chỉ accuracy**
@@ -427,7 +427,7 @@ Solutions:
 
 ---
 
-## ✅ PHASE 10: FINAL EVALUATION
+## PHASE 10: FINAL EVALUATION
 
 ### **10.1 Test Set Evaluation**
 **RULE 23: Test set chỉ dùng MỘT LẦN cuối cùng!**
@@ -438,7 +438,7 @@ for model in models:
     if test_score > best:
         best_model = model  # Overfitting to test set!
 
-# ✅ ĐÚNG - Select trên validation, test cuối
+# ĐÚNG - Select trên validation, test cuối
 best_model = select_on_validation()
 final_score = evaluate_once(best_model, X_test, y_test)
 ```
@@ -452,7 +452,7 @@ final_score = evaluate_once(best_model, X_test, y_test)
 
 ---
 
-## ✅ PHASE 11: MODEL DEPLOYMENT
+## PHASE 11: MODEL DEPLOYMENT
 
 ### **11.1 Model Saving**
 **RULE 24: Save model và preprocessing objects**
@@ -497,7 +497,7 @@ def predict_new_data(new_data):
 
 ---
 
-## ✅ PHASE 12: MONITORING & MAINTENANCE
+## PHASE 12: MONITORING & MAINTENANCE
 
 ### **12.1 Model Monitoring**
 **RULE 25: Luôn monitor model trong production**
