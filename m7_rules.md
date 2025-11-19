@@ -199,6 +199,7 @@ Mô hình:
 #  **Tóm tắt **
 
 
+
 | Loại bài toán         | Mô tả              | Module liên quan |
 | --------------------- | ------------------ | ---------------- |
 | Binary Classification | 2 lớp              | 4,5,6,7          |
