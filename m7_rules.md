@@ -198,7 +198,6 @@ Mô hình:
 
 #  **Tóm tắt **
 
-Bạn có thể đưa lên slide một bảng như sau:
 
 | Loại bài toán         | Mô tả              | Module liên quan |
 | --------------------- | ------------------ | ---------------- |
@@ -489,7 +488,7 @@ PROJECT SUCCESS =
 
 ---
 
-## SLIDE 15: CHECKLIST 1.3 - YÊU CẦU KỸ THUẬT
+## YÊU CẦU KỸ THUẬT
 
 **□ Độ chính xác cần thiết** ✅
 - Accuracy: >95%
@@ -544,7 +543,7 @@ PROJECT SUCCESS =
 
 ---
 
-## SLIDE 18: STAKEHOLDER REQUIREMENTS
+## STAKEHOLDER REQUIREMENTS
 
 **Đã thu thập requirements từ:**
 
@@ -637,7 +636,7 @@ PROJECT SUCCESS =
 
 ---
 
-## SLIDE 23: PHASE 1 DELIVERABLES
+## PHASE 1 DELIVERABLES
 
 **Document cần hoàn thành:**
 
@@ -656,7 +655,7 @@ Success Criteria: 90% recall, <0.5% FPR, <100ms latency
 
 ---
 
-## SLIDE 24: PHASE 1 DELIVERABLES (tt)
+## PHASE 1 DELIVERABLES (tt)
 
 **3. Metrics Definition**
 ```python
@@ -680,79 +679,8 @@ total_cost = FP*50K + FN*5M # Minimize
 
 ---
 
-## SLIDE 25: SIGN-OFF CHECKLIST
 
-**Trước khi chuyển sang Phase 2:**
-
-- [x] ✅ Problem type confirmed: Binary Classification
-- [x] ✅ Success metrics defined và agreed
-- [x] ✅ Requirements từ tất cả stakeholders
-- [x] ✅ Constraints và assumptions documented
-- [x] ✅ Risks identified với mitigation plans
-- [x] ✅ Out of scope rõ ràng
-- [x] ✅ Timeline và milestones agreed
-- [x] ✅ Budget approved
-- [x] ✅ Sign-off từ CISO, CPO, CTO
-
----
-
-## SLIDE 26: BÀI TẬP THỰC HÀNH
-
-**Exercise 1: Metric Selection**
-
-Với các scenarios sau, chọn metric nào quan trọng nhất?
-
-**Scenario A:** Banking - detect credit card fraud
-- a) Accuracy
-- b) Precision
-- c) Recall ✅
-- d) F1-Score
-
-**Tại sao?** Bỏ sót fraud (FN) nguy hiểm hơn nhiều so với alert nhầm (FP)
-
----
-
-## SLIDE 27: BÀI TẬP THỰC HÀNH (tt)
-
-**Exercise 2: Cost Analysis**
-
-Given:
-- FP cost: 50K VNĐ
-- FN cost: 5M VNĐ
-- Model A: FP=50, FN=10
-- Model B: FP=100, FN=5
-
-Chọn model nào?
-
-**Đáp án:**
-```
-Model A: (50×50K) + (10×5M) = 52.5M
-Model B: (100×50K) + (5×5M) = 30M
-→ Chọn Model B ✅
-```
-
----
-
-## SLIDE 28: BÀI TẬP THỰC HÀNH (tt)
-
-**Exercise 3: Requirements Gathering**
-
-Bạn đang họp với CEO. CEO nói:
-"Tôi muốn hệ thống AI bảo mật tốt nhất!"
-
-**Câu hỏi bạn cần hỏi?** (Chọn 3 quan trọng nhất)
-
-a) "Tốt nhất" nghĩa là gì? (Accuracy? Cost reduction?)
-b) Budget bao nhiêu?
-c) Timeline khi nào?
-d) Có chấp nhận block nhầm user không?
-e) Algorithm nào muốn dùng?
-
-**Đáp án:** a, c, d (e là technical detail, chưa cần hỏi CEO)
-
----
-
-## SLIDE 29: COMMON MISTAKES - PHASE 1
+## COMMON MISTAKES - PHASE 1
 
 **❌ Lỗi thường gặp:**
 
@@ -776,7 +704,7 @@ e) Algorithm nào muốn dùng?
 
 ---
 
-## SLIDE 30: COMMON MISTAKES (tt)
+## COMMON MISTAKES (tt)
 
 **4. Không analyze trade-offs**
 ```
@@ -798,10 +726,10 @@ e) Algorithm nào muốn dùng?
 
 ---
 
-## SLIDE 31: PHASE 1 CHECKLIST FINAL
+## PHASE 1 CHECKLIST FINAL
 
 ```
-✅ PHASE 1: PROBLEM UNDERSTANDING
+PHASE 1: PROBLEM UNDERSTANDING
 ├─ [x] Xác định loại bài toán: Binary Classification
 ├─ [x] Chọn approach: Classification + Risk Score
 ├─ [x] Định nghĩa success metrics:
@@ -825,11 +753,9 @@ e) Algorithm nào muốn dùng?
 
 ---
 
-## SLIDE 32: NEXT STEPS
+## NEXT STEPS
 
-**Phase 1 hoàn thành! ✅**
 
-**Chuyển sang Phase 2: Data Collection & EDA**
 
 **Preview Phase 2:**
 - Load và explore 6 tháng production logs
@@ -847,78 +773,15 @@ e) Algorithm nào muốn dùng?
 
 ---
 
-## SLIDE 33: TEMPLATE - PROBLEM STATEMENT
-
-**Problem Statement Template:**
-
-```
-PROBLEM STATEMENT: User Authentication Security
-
-1. BUSINESS PROBLEM
-   Current situation: 1000 fraud cases/month
-   Impact: 5B VNĐ loss, reputation damage
-   Root cause: Rule-based system inadequate
-
-2. TECHNICAL PROBLEM
-   Task: Binary classification of login attempts
-   Input: User behavior features (8 features)
-   Output: Safe (0) or Risky (1)
-
-3. SUCCESS CRITERIA
-   - Recall ≥90% (catch 9/10 hackers)
-   - FPR ≤0.5% (block <0.5% legit users)
-   - Latency <100ms (no UX impact)
-   - Cost reduction ≥50%
-
-4. CONSTRAINTS
-   - Timeline: 12 weeks
-   - Team: 2 ML engineers
-   - Budget: $20K
-   - Model size: <50MB
-```
-
----
-
-## SLIDE 34: TEMPLATE - REQUIREMENTS DOC
-
-**Requirements Document Template:**
-
-```
-FUNCTIONAL REQUIREMENTS
-FR1: System shall classify login as Safe/Risky in <100ms
-FR2: System shall provide risk score 0-100
-FR3: System shall provide explanation for risky logins
-FR4: System shall log all predictions for audit
-
-NON-FUNCTIONAL REQUIREMENTS
-NFR1: 99.9% availability
-NFR2: Handle 115 req/sec
-NFR3: Auto-scale based on load
-NFR4: GDPR compliant
-
-CONSTRAINTS
-- Deploy on AWS
-- Model <50MB
-- Python 3.8+
-- Scikit-learn preferred
-
-ASSUMPTIONS
-- Historical data available
-- Labels accurate
-- Attack patterns stable
-```
-
----
-
-## SLIDE 35: KẾT LUẬN PHASE 1
+## KẾT LUẬN 
 
 **Những gì đã hoàn thành:**
-✅ Hiểu rõ business problem
-✅ Chọn technical approach đúng
-✅ Định nghĩa success metrics rõ ràng
-✅ Thu thập requirements đầy đủ
-✅ Identify constraints & risks
-✅ Stakeholder alignment
+ Hiểu rõ business problem
+ Chọn technical approach đúng
+ Định nghĩa success metrics rõ ràng
+ Thu thập requirements đầy đủ
+ Identify constraints & risks
+ Stakeholder alignment
 
 **Tại sao Phase 1 quan trọng:**
 - 20% effort, 80% impact
@@ -926,7 +789,6 @@ ASSUMPTIONS
 - Rõ ràng từ đầu → Ít rework sau này
 - Stakeholder buy-in → Support tốt hơn
 
-**Time well spent!** 🎯
 
 ---
 
