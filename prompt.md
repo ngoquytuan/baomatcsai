@@ -1,6 +1,5 @@
 # LLM Prompt Template for Recreating ML Security Labs
 
-Dưới đây là prompt chi tiết bạn có thể sử dụng để tái tạo lại các lab tương tự với LLM:
 
 ---
 
