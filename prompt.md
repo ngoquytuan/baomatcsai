@@ -119,7 +119,7 @@ Provide complete, runnable Python code for all 3 files with:
 ## STYLE REFERENCE:
 
 Use this style for comments:
-```python
+
 """
 Comprehensive Module Docstring
 ===============================
@@ -143,7 +143,7 @@ def function_name(param):
     # Explain the REASONING behind this step
     # Not just "calculate mean" but "calculate mean to establish baseline"
     code_here()
-```
+
 
 ## DELIVERABLES:
 
@@ -197,51 +197,32 @@ Please create all 3 Python files following the exact structure and style shown i
 ## 💡 Các Prompt Bổ Sung Hữu Ích
 
 ### 1. Khi Muốn Cải Thiện Code:
-```
+
 The code you provided is good, but please enhance it with:
 1. More detailed comments explaining the security implications
 2. Add a "Student Exercise" section where students modify parameters
 3. Include a comparison table showing algorithm performance
 4. Add more visualization showing feature distributions
 5. Include a section explaining common evasion techniques
-```
+
 
 ### 2. Khi Muốn Thêm Độ Khó:
-```
+
 Please create an advanced version of this lab that includes:
 1. Adversarial examples - how attackers can evade detection
 2. Feature engineering techniques
 3. Hyperparameter tuning with GridSearchCV
 4. Cross-validation for robust evaluation
 5. ROC curves and AUC analysis
-```
+
 
 ### 3. Khi Muốn Version Đơn Giản Hơn:
-```
+
 Please simplify this lab for absolute beginners by:
 1. Reducing to only ONE ML algorithm (the simplest one)
 2. Using smaller dataset (50-100 samples)
 3. Adding step-by-step execution instructions
 4. Including expected output examples in comments
 5. Adding more explanatory print statements
-```
 
----
-
-## 📋 Checklist Để Kiểm Tra Output Của LLM
-
-Sau khi LLM tạo code, kiểm tra:
-
-- [ ] ✅ Code chạy được ngay (no errors)
-- [ ] ✅ Dataset có patterns rõ ràng (visualize để xác nhận)
-- [ ] ✅ Comments giải thích đầy đủ WHY, không chỉ WHAT
-- [ ] ✅ Có verification script với plots
-- [ ] ✅ ML algorithms được implement đúng
-- [ ] ✅ Performance metrics được tính toán
-- [ ] ✅ Visualizations rõ ràng và có label
-- [ ] ✅ Print statements hữu ích cho học viên
-- [ ] ✅ Có phần "Security Implications"
-- [ ] ✅ Code structure professional và consistent
-
----
 
