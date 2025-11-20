@@ -196,17 +196,17 @@ Please create all 3 Python files following the exact structure and style shown i
 
 ## 💡 Các Prompt Bổ Sung Hữu Ích
 
-### 1. Khi Muốn Cải Thiện Code:
+### 1. Thêm tính năng:
 
 The code you provided is good, but please enhance it with:
 1. More detailed comments explaining the security implications
-2. Add a "Student Exercise" section where students modify parameters
+2. Add a "Exercise" section where I modify parameters
 3. Include a comparison table showing algorithm performance
 4. Add more visualization showing feature distributions
 5. Include a section explaining common evasion techniques
 
 
-### 2. Khi Muốn Thêm Độ Khó:
+### 2. Tạo version khó hơn
 
 Please create an advanced version of this lab that includes:
 1. Adversarial examples - how attackers can evade detection
@@ -216,7 +216,7 @@ Please create an advanced version of this lab that includes:
 5. ROC curves and AUC analysis
 
 
-### 3. Khi Muốn Version Đơn Giản Hơn:
+### 3. Tạo Version đơn giản hơn:
 
 Please simplify this lab for absolute beginners by:
 1. Reducing to only ONE ML algorithm (the simplest one)
