@@ -941,11 +941,9 @@ Kết quả:
 
 ---
 
-### 3. Vậy nên chỉnh Module GAN & slide tấn công thế nào?
+### 3. GAN hiện dùng mạnh cho phòng thủ / mô phỏng” vs “tấn công còn chủ yếu ở mức nghiên cứu”
 
-Em gợi ý anh/chị đổi framing cho Module 8 (GAN) theo hướng:
 
-**a. Chia rất rõ: “GAN hiện dùng mạnh cho phòng thủ / mô phỏng” vs “tấn công còn chủ yếu ở mức nghiên cứu”**
 
 * **Phòng thủ, đang dùng thật:**
 
@@ -959,9 +957,8 @@ Em gợi ý anh/chị đổi framing cho Module 8 (GAN) theo hướng:
     > “Nếu kẻ tấn công đủ điều kiện & có mô hình, ML‑based IDS có thể bị bypass bằng traffic/malware đã tinh chỉnh.”
   * Nhấn mạnh: **chưa có case hình sự public nào được LEA xác nhận là dùng những framework này trong campaign thực**; hiện tại chủ yếu nằm trên arXiv, conference, GitHub.
 
-**b. Thêm 1–2 slide riêng về “AI tấn công thực tế 2023–2025”**
+**AI tấn công thực tế 2023–2025**
 
-Ví dụ cấu trúc:
 
 1. **GenAI cho nội dung lừa đảo**
 
@@ -983,7 +980,7 @@ Ví dụ cấu trúc:
 
    * AI phân tích logs infostealer để chọn mục tiêu đắt giá ([Check Point Blog][10])
 
-Và kết luận 1 câu rất “thật” để nói với ban ATTT:
+
 
 > “Trong 5 năm tới, điều đáng sợ không phải là ‘GAN thần thánh tấn công real‑time’ mà là **GenAI kéo cả đám người kỹ năng trung bình lên mức có thể làm chiến dịch phức tạp**, còn APT/nhóm top thì dùng AI để mở rộng quy mô, tăng tốc và tinh vi hóa social engineering.”
 
