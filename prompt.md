@@ -246,12 +246,3 @@ Sau khi LLM tạo code, kiểm tra:
 
 ---
 
-## 🎓 Tips Để Tạo Lab Hay
-
-1. **Start với scenario thực tế**: Dựa trên tin tức bảo mật, CVE, hoặc incident reports
-2. **Make patterns obvious**: Đừng tạo data quá khó - mục đích là học, không phải nghiên cứu
-3. **Include failure cases**: Cho học viên thấy khi nào ML KHÔNG hoạt động tốt
-4. **Add exercises**: Để học viên tự tay modify và experiment
-5. **Document assumptions**: Giải thích rõ limitations của approach
-
-Bạn có muốn tôi tạo thêm ví dụ cho một security scenario cụ thể nào không?
