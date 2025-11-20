@@ -447,7 +447,7 @@ def handler(event, context):
 
 ---
 
-## 📚 Resources cho học viên (Updated 11/2025)
+## 📚 Resources (Updated 11/2025)
 
 **Tools mới cần biết:**
 - **Gandalf** - LLM security testing
@@ -762,7 +762,7 @@ def quantum_search(password, database):
 
 ---
 
-## 🎓 Tóm tắt cho học viên SOC/CSIRT
+## 🎓 Tóm tắt SOC/CSIRT
 
 ### **3 điều quan trọng nhất:**
 
@@ -794,4 +794,234 @@ def quantum_search(password, database):
 - CNSA 2.0 (NSA Quantum-Safe guidelines)
 
 ---
+
+### 1. GAN trong tấn công thực tế: đang ở mức *POC trong phòng lab*, không phải vũ khí chủ lực ngoài đời
+
+**a. Học thuật thì rất nhiều, nhưng chủ yếu là demo**
+
+Từ 2017–2025 có cả loạt paper kiểu:
+
+* **IDSGAN, SGAN‑IDS, Meta‑IDS‑GAN, DEMGAN…** tạo lưu lượng tấn công hoặc mẫu malware đã “chế” để đánh lừa IDS/AV dùng ML, đạt tỉ lệ né phát hiện rất cao trong lab (90–99%). ([SpringerLink][1])
+* Một số framework như MalGAN / GAPGAN tạo mã độc hoặc payload byte‑level để qua mặt các bộ lọc ML. ([arXiv][2])
+
+Nhưng tất cả đều có **giả định rất “đẹp”**:
+
+* Có dữ liệu huấn luyện tương tự bên phòng thủ
+* Có thời gian train / tinh chỉnh mô hình
+* Môi trường ít thay đổi, không bị signature/heuristic khác chặn mất trước khi tới được tầng ML
+
+Ngay cả các survey GAN mới nhất về an ninh mạng cũng chủ yếu nói tới **GAN cho phòng thủ (malware/anomaly detection, sinh dữ liệu tấn công để huấn luyện)** và “threat model tương lai”, chứ không ghi nhận case tấn công hình sự dùng GAN đã được điều tra, attribution rõ ràng. ([arXiv][3])
+
+**b. Báo cáo thực địa (Europol, vendor lớn, LEA)**
+
+* Báo cáo **IOCTA 2024 của Europol** nói rất kỹ về AI tội phạm dùng, nhưng tập trung vào **LLM không lọc prompt, deepfake, synthetic ID, AI hỗ trợ viết/mở rộng mã ransomware**, chứ **không hề nhắc tới chiến dịch dùng GAN để né IDS trong thực tế**. 
+* IOCTA nhấn mạnh xu hướng: tội phạm dùng AI để **lắp ghép & debug code nhanh**, tạo nội dung lừa đảo, và sinh giấy tờ giả (dịch vụ OnlyFake bán CMND/hộ chiếu AI‑generated để bypass KYC). 
+
+
+> “GAN né IDS hiện **rất đáng quan tâm ở mức nghiên cứu**, dùng tốt để *stress test* hệ thống phòng thủ, nhưng **chưa phải thứ mà các nhóm ransomware/APT đang chạy realtime ngoài đời**. Thực chiến 2023–2025, kẻ tấn công dùng nhiều nhất lại là **LLM, deepfake, các dịch vụ AI sẵn có**, hơn là tự train GAN network‑level.”
+
+**c. Tuy nhiên GAN vẫn “ẩn mặt” trong vài thứ *có thật***
+
+* Công nghệ **deepfake mặt/giọng** ban đầu dựa rất nhiều trên GAN và các biến thể (StyleGAN, GAN cho voice synthesis, sau này chuyển dần sang diffusion + vocoder). ([ScienceDirect][4])
+* Không nhất thiết phải nói “đây là GAN hay diffusion”, mà có thể gom chung là **generative AI cho deepfake / identity fraud** – vì với người phòng thủ, *kiến trúc* ít quan trọng hơn *use‑case* và *dấu hiệu nhận diện*.
+
+---
+
+### 2. Vậy **thực tế 2023–11/2025**: hacker đang dùng AI & công nghệ nào để tấn công?
+
+6 “đường tấn công” chính – đây là thứ **Europol, vendor lớn, và các ca vụ án thật** đều đang nhắc đến.
+
+---
+
+#### 2.1. LLM & GenAI cho **phishing/BEC và social engineering ở quy mô lớn**
+
+**Kẻ tấn công làm gì?**
+
+* Dùng **LLM không kiểm duyệt** (WormGPT, FraudGPT, DarkBERT… trên dark web) để:
+
+  * Viết email phishing/BEC **không lỗi chính tả**, đúng ngữ điệu, cá nhân hóa theo nạn nhân (chức danh, công ty, mối quan tâm…). ([All About AI][5])
+  * Dịch đa ngôn ngữ, localize nội dung (tiếng Việt, Nhật, Đức…) → phishing nội địa trông “rất bản địa”, khó nhận ra là mail spam từ nước ngoài.
+  * Sinh template SMS, nội dung lừa đảo trên mạng xã hội, chat app.
+
+**Bằng chứng / nghiên cứu**
+
+* Nghiên cứu “Spear Phishing with LLMs” cho thấy GPT‑3.5/GPT‑4 có thể tạo **email spear phishing riêng biệt cho hơn 600 nghị sĩ Anh** với chất lượng cao, gần như tự động. ([arXiv][6])
+* Europol & IOCTA 2024 cảnh báo rõ việc **LLM không lọc prompt đang được rao bán** để hỗ trợ phát triển, test mã độc và soạn nội dung lừa đảo. 
+
+
+> “Trong thực tế, *AI viết content* là mũi nhọn: nó làm BEC/phishing thành **‘tấn công tâm lý quy mô công nghiệp’** – mỗi người nhận một mail ‘đo ni đóng giày’. Phòng thủ phải chuyển từ nhận diện email tiếng Anh sai sai → tới phân tích **ngữ cảnh & hành vi** (BEC flow, bất thường về thanh toán, domain, thread hijacking…).”
+
+---
+
+#### 2.2. Deepfake video & voice cloning để **lừa chuyển tiền, lừa KYC**
+
+**Case rất ‘đinh’ để đưa vào slide**
+
+* Vụ **công ty đa quốc gia ở Hong Kong bị lừa ~25,6 triệu USD** (HK$200M) khi nhân viên tài chính tham gia video call, thấy “CFO và đồng nghiệp” yêu cầu chuyển tiền; tất cả đều là deepfake video/voice. ([CFO][7])
+* Dịch vụ dark‑web **OnlyFake** bán CMND/hộ chiếu AI‑generated để mở tài khoản tài chính, vượt qua KYC online. 
+
+**Công nghệ phía sau**
+
+* Model GAN/diffusion để:
+
+  * Sinh mặt/giọng mới
+  * Clone giọng sếp / người thân từ vài chục giây audio
+  * Tạo video call giả thời gian gần‑real‑time
+
+
+* Không dựa hoàn toàn vào **“nhìn mặt/giọng là tin”** trong quy trình high‑risk (chuyển tiền, đổi thông tin tài khoản, reset MFA).
+* Thiết kế **out‑of‑band verification**: gọi lại qua số nội bộ đã lưu, yêu cầu xác nhận bằng kênh thứ hai (ticket nội bộ, chữ ký số…).
+
+---
+
+#### 2.3. LLM làm “trợ lý lập trình” cho malware, ransomware & tool tấn công (*vibe hacking*)
+
+**Bằng chứng khá rõ, mới và rất đáng để kể**
+
+* Báo cáo Threat Intelligence 2025 của **Anthropic** cho biết tội phạm đã dùng Claude để:
+
+  * Tự động hóa reconnaissance, viết mã thu thập credential, hỗ trợ *network penetration* và viết thư tống tiền.
+  * Có nhóm gần như **không biết code**, nhưng vẫn xây được ransomware để bán với giá ~1.200 USD nhờ hỏi LLM từng bước. ([TechRadar][8])
+* IOCTA 2024 cũng ghi nhận **AI‑tool không filter** giúp ransomware affiliate “lắp ráp và debug code mới rất nhanh” trên nền source code rò rỉ (Conti, LockBit, HelloKitty). 
+
+**Điểm quan trọng để nhấn mạnh**
+
+* **Không phải model tự viết ra một siêu ransomware**; nó giống **“co‑pilot” cho lập trình viên tay ngang**:
+
+  * Gợi ý mã, chỉnh bug, giải thích API Windows, anti‑analysis, packing…
+* Kết quả: **ngưỡng kỹ năng để trở thành developer mã độc giảm xuống mạnh** → thị trường RaaS/MaaS dễ đông người chơi hơn.
+
+---
+
+#### 2.4. Generative AI để dựng **phishing site / portal giả** cực nhanh
+
+* 2025, Okta báo cáo hacker lạm dụng **v0 – một công cụ GenAI tạo website của Vercel** để sinh ra **trang login giả Okta** chỉ trong ~30 giây từ prompt ngôn ngữ tự nhiên. ([Axios][9])
+* Có cả bản clone của v0 trên GitHub, nên dù nhà cung cấp gốc xử lý thì bản fork vẫn còn.
+
+**Ý nghĩa thực tế**
+
+* Ngày xưa làm trang phishing đẹp, responsive, giống bản thật… cần tay front‑end kha khá.
+* Giờ: kẻ tấn công *ít kỹ năng web* vẫn có thể:
+
+  * Mô tả “Tạo trang đăng nhập giống portal VPN công ty X, có logo, màu sắc y như hình này”
+  * GenAI tạo HTML/CSS/JS hoàn chỉnh
+* Điều này kết hợp với **reverse‑proxy framework** (Evilginx2, EvilProxy, Modlishka…) giúp bypass MFA thời gian thực – dù cái này bản thân không cần ML.
+
+**Nên**
+
+> “Đừng trông đợi ‘trang phishing xấu, xấu là biết ngay’. Với GenAI, **phishing site sẽ ngày càng đẹp, đúng brand**, đến mức người dùng gần như không phân biệt được → phải đẩy mạnh passwordless, FIDO2, device binding, và training nhận diện *luồng đăng nhập bất thường*.”
+
+---
+
+#### 2.5. AI phân tích **dữ liệu bị đánh cắp** & tối ưu hóa mục tiêu tống tiền
+
+* Báo cáo **AI Security 2025 của Check Point** mô tả việc **infostealer & data miner dùng AI** để:
+
+  * Parse/logs khổng lồ chứa credential, session token, API key…
+  * Làm sạch & phân loại theo giá trị (tài khoản cloud, VPN công ty, admin panel, ví crypto…). ([Check Point Blog][10])
+
+Kết quả:
+
+* Thay vì bán “dump to” thô, bọn chúng có thể:
+
+  * Nhắm target tống tiền chính xác hơn
+  * Phân lô dữ liệu để bán/khai thác theo ngành, theo tổ chức
+
+Đây là mảnh ghép quan trọng để hiểu vì sao **một lần dính infostealer** có thể dẫn tới:
+
+* Bị nhắm BEC/phishing có ngữ cảnh rất đúng
+* Hoặc bị mã hóa/tống tiền nhiều tháng sau, khi dữ liệu đã được “AI xử lý xong”.
+
+---
+
+#### 2.6. AI cho **deepfake profile, bot mạng xã hội, synthetic identity**
+
+* Nghiên cứu large‑scale cho thấy **avatar AI‑generated** (thường từ GAN/diffusion) được sử dụng rất rộng cho profile ảo trên mạng xã hội, phục vụ chiến dịch disinfo, scam, lừa tình – lừa tiền. ([ACM Digital Library][11])
+* Dịch vụ như OnlyFake (ở trên) là ví dụ của **“synthetic identity as a service”**.
+
+---
+
+### 3. Vậy nên chỉnh Module GAN & slide tấn công thế nào?
+
+Em gợi ý anh/chị đổi framing cho Module 8 (GAN) theo hướng:
+
+**a. Chia rất rõ: “GAN hiện dùng mạnh cho phòng thủ / mô phỏng” vs “tấn công còn chủ yếu ở mức nghiên cứu”**
+
+* **Phòng thủ, đang dùng thật:**
+
+  * Sinh dữ liệu tấn công hiếm để huấn luyện IDS / malware detector
+  * Anomaly / malware detection dựa trên GAN (như nhiều survey đã tổng hợp) ([arXiv][3])
+
+* **Tấn công, nên gọi là “mô hình nghiên cứu”:**
+
+  * Giới thiệu IDSGAN, NIDSGAN, SGAN‑IDS, MalGAN… như **POC** chứng minh:
+
+    > “Nếu kẻ tấn công đủ điều kiện & có mô hình, ML‑based IDS có thể bị bypass bằng traffic/malware đã tinh chỉnh.”
+  * Nhấn mạnh: **chưa có case hình sự public nào được LEA xác nhận là dùng những framework này trong campaign thực**; hiện tại chủ yếu nằm trên arXiv, conference, GitHub.
+
+**b. Thêm 1–2 slide riêng về “AI tấn công thực tế 2023–2025”**
+
+Ví dụ cấu trúc:
+
+1. **GenAI cho nội dung lừa đảo**
+
+   * Phishing/BEC cá nhân hóa, đa ngôn ngữ (WormGPT/FraudGPT, LLM không filter) ([All About AI][5])
+
+2. **Deepfake & voice clone**
+
+   * Case Hong Kong 25,6M USD; synthetic ID, OnlyFake/KYC bypass ([CFO][7])
+
+3. **LLM = co‑pilot viết mã tấn công (vibe hacking)**
+
+   * Anthropic report: Claude bị dùng hỗ trợ end‑to‑end attack, từ recon đến ransom note ([TechRadar][8])
+
+4. **GenAI dựng hạ tầng phishing rất nhanh**
+
+   * v0 của Vercel bị lạm dụng để tạo portal login giả trong <1 phút ([Axios][9])
+
+5. **AI xử lý dữ liệu & tối ưu hóa tống tiền**
+
+   * AI phân tích logs infostealer để chọn mục tiêu đắt giá ([Check Point Blog][10])
+
+Và kết luận 1 câu rất “thật” để nói với ban ATTT:
+
+> “Trong 5 năm tới, điều đáng sợ không phải là ‘GAN thần thánh tấn công real‑time’ mà là **GenAI kéo cả đám người kỹ năng trung bình lên mức có thể làm chiến dịch phức tạp**, còn APT/nhóm top thì dùng AI để mở rộng quy mô, tăng tốc và tinh vi hóa social engineering.”
+
+---
+
+### 4. **GAN vs AI tấn công ngoài đời – Học gì để hữu ích?**
+>
+> * GAN/IDS‑evasion:
+>
+>   * → Quan trọng ở **mức mô hình đe dọa & lab** để harden hệ thống ML.
+> * AI tấn công đang xảy ra thực tế:
+>
+>   * LLM cho phishing/BEC, deepfake, synthetic ID
+>   * LLM làm co‑pilot viết/mở rộng malware
+>   * GenAI tạo hạ tầng phishing, AI phân tích dữ liệu bị đánh cắp
+> * **Bài học phòng thủ:** tập trung vào:
+>
+>   * Kiểm soát danh tính (MFA, passwordless, out‑of‑band)
+>   * Giám sát hành vi & bất thường thay vì chỉ “nhìn content”
+>   * Kiểm soát việc sử dụng AI nội bộ (prompt hygiene, data loss, model abuse)
+
+
+* [The Guardian](https://www.theguardian.com/world/2024/feb/05/hong-kong-company-deepfake-video-conference-call-scam?utm_source=chatgpt.com)
+* [Reuters](https://www.reuters.com/world/europe/europol-warns-ai-driven-crime-threats-2025-03-18/?utm_source=chatgpt.com)
+* [Axios](https://www.axios.com/2025/07/01/okta-phishing-sites-generative-ai?utm_source=chatgpt.com)
+* [TechRadar](https://www.techradar.com/pro/anthropic-warns-that-its-claude-ai-is-being-weaponized-by-hackers-to-write-malicious-code?utm_source=chatgpt.com)
+* [Business Insider](https://www.businessinsider.com/anthropic-agentic-ai-vibe-hacking-weaponized-cyberattack-2025-8?utm_source=chatgpt.com)
+* [The Verge](https://www.theverge.com/ai-artificial-intelligence/766435/anthropic-claude-threat-intelligence-report-ai-cybersecurity-hacking?utm_source=chatgpt.com)
+
+[1]: https://link.springer.com/chapter/10.1007/978-3-031-05981-0_7?utm_source=chatgpt.com "IDSGAN: Generative Adversarial Networks for Attack Generation Against ..."
+[2]: https://arxiv.org/pdf/2306.09925v1?utm_source=chatgpt.com "Query-Free Evasion Attacks Against Machine Learning-Based Malware ..."
+[3]: https://arxiv.org/html/2407.08839v1?utm_source=chatgpt.com "A Survey on the Application of Generative Adversarial Networks in ..."
+[4]: https://www.sciencedirect.com/science/article/pii/S2215016125004765?utm_source=chatgpt.com "Unmasking digital deceptions: An integrative review of deepfake ..."
+[5]: https://www.allaboutai.com/resources/how-ai-tools-like-wormgpt-fraudgpt-and-darkbert-are-transforming-cybercrime/?utm_source=chatgpt.com "How I Watched AI Tools Like WormGPT, FraudGPT, and DarkBERT Transform ..."
+[6]: https://arxiv.org/abs/2305.06972?utm_source=chatgpt.com "[2305.06972] Spear Phishing With Large Language Models"
+[7]: https://www.cfo.com/news/deepfake-cfo-hong-kong-25-million-fraud-cyber-crime/706529/?utm_source=chatgpt.com "Finance Employee Defrauded for $25M by Deepfake CFO"
+[8]: https://www.techradar.com/pro/anthropic-warns-that-its-claude-ai-is-being-weaponized-by-hackers-to-write-malicious-code?utm_source=chatgpt.com "Anthropic warns that its Claude AI is being 'weaponized' by hackers to write malicious code"
+[9]: https://www.axios.com/2025/07/01/okta-phishing-sites-generative-ai?utm_source=chatgpt.com "Hackers abuse generative AI tool to create phishing sites in 30 seconds"
+[10]: https://blog.checkpoint.com/research/ai-security-report-2025-understanding-threats-and-building-smarter-defenses/?utm_source=chatgpt.com "AI Security Report 2025: Understanding threats and building smarter ..."
+[11]: https://dl.acm.org/doi/fullHtml/10.1145/3678890.3678922?utm_source=chatgpt.com "AI-Generated Faces in the Real World: A Large-Scale Case Study of ..."
 
