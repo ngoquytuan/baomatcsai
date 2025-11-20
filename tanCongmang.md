@@ -463,3 +463,335 @@ def handler(event, context):
 - CIS Kubernetes Benchmarks v1.8
 
 ---
+# Tại sao Máy tính Lượng tử có thể phá mã hóa
+
+
+---
+
+## 🔐 1. Tại sao mã hóa hiện tại "an toàn"?
+
+### **Ví dụ: Mã hóa RSA (phổ biến nhất hiện nay)**
+
+**Nguyên lý cơ bản:**
+```
+Số công khai: n = p × q  (p, q là số nguyên tố lớn)
+Ví dụ: n = 15 = 3 × 5
+
+Mã hóa: Dễ
+  Message → (Message)^e mod n → Encrypted
+
+Giải mã: Khó (nếu không biết p, q)
+  Phải phân tích n = ? × ?
+```
+
+### **Tại sao máy tính thông thường không phá được?**
+
+**Ví dụ thực tế:**
+```
+RSA-2048 bit:
+n = 617 chữ số (2048 bit)
+n = p × q  (p và q đều là số nguyên tố ~309 chữ số)
+
+Nhiệm vụ: Tìm p và q
+```
+
+**Phương pháp máy tính thông thường:**
+```python
+# Brute force - thử từng số
+def factor(n):
+    for p in range(2, n):
+        if n % p == 0:
+            q = n / p
+            return p, q
+```
+
+**Thời gian cần thiết:**
+- RSA-1024 bit: ~1 tỷ năm (với supercomputer hiện tại)
+- RSA-2048 bit: ~10^21 năm (lâu hơn tuổi vũ trụ!)
+- RSA-4096 bit: Không thể tính được
+
+**Con người sẽ chết trước khi phá được → "An toàn"**
+
+---
+
+## ⚛️ 2. Tại sao máy tính lượng tử lại khác?
+
+### **Khác biệt cơ bản: Superposition (Chồng chập)**
+
+**Máy tính thông thường:**
+```
+Bit cổ điển: 0 HOẶC 1 (tại 1 thời điểm)
+
+Tính toán:
+- Thử p = 2 → Không
+- Thử p = 3 → Không
+- Thử p = 5 → Không
+- ... (tuần tự, từng cái một)
+```
+
+**Máy tính lượng tử:**
+```
+Qubit: 0 VÀ 1 ĐỒNG THỜI (cho đến khi đo)
+
+Tính toán:
+- Thử p = [2, 3, 5, 7, 11, ...] CÙNG LÚC
+- 1 phép tính = test hàng triệu giá trị song song
+```
+
+### **Ví dụ đơn giản:**
+
+**Bài toán: Tìm số bí mật trong 1,000,000 số**
+
+**Máy tính thường:**
+```
+for (i = 0; i < 1,000,000; i++) {
+    if (check(i) == secret) return i;
+}
+// Worst case: 1 triệu lần kiểm tra
+```
+
+**Máy tính lượng tử:**
+```
+|ψ⟩ = 1/√N (|0⟩ + |1⟩ + |2⟩ + ... + |999,999⟩)
+// Kiểm tra TẤT CẢ các số CÙNG LÚC
+// Chỉ cần ~1000 lần đo (√N lần)
+```
+
+---
+
+## 🧮 3. Thuật toán Shor - "Vũ khí hạt nhân" phá RSA
+
+### **Shor's Algorithm (1994) - Peter Shor**
+
+**Nguyên lý:**
+Thay vì thử từng số nguyên tố, Shor's algorithm tìm **chu kỳ (period)** của hàm số - việc này quantum computer làm cực nhanh.
+
+**Quy trình đơn giản hóa:**
+
+```
+Bước 1: Chọn số ngẫu nhiên a
+Bước 2: Tìm chu kỳ r của hàm f(x) = a^x mod n
+        (Quantum computer làm việc này trong O(log³ n) thời gian)
+Bước 3: Từ r, tính được p và q
+```
+
+### **So sánh thời gian:**
+
+| Key Size | Classical Computer | Quantum Computer (Shor) |
+|----------|-------------------|-------------------------|
+| RSA-1024 | ~1 tỷ năm | **~1 giờ** |
+| RSA-2048 | ~10²¹ năm | **~1 ngày** |
+| RSA-4096 | Không tính được | **~1 tuần** |
+
+### **Ví dụ minh họa:**
+
+**Phân tích n = 15 (ví dụ nhỏ)**
+
+**Máy tính thường:**
+```python
+n = 15
+for p in [2, 3, 5, 7, 11, 13]:
+    if 15 % p == 0:
+        q = 15 / p
+        break
+# Kết quả: p=3, q=5 (thử 3 lần)
+```
+
+**Quantum computer (Shor):**
+```python
+# Bước 1: Chọn a = 7
+# Bước 2: Tạo superposition
+|ψ⟩ = (|7¹ mod 15⟩ + |7² mod 15⟩ + |7³ mod 15⟩ + ...)
+    = (|7⟩ + |4⟩ + |13⟩ + |1⟩ + |7⟩ + |4⟩ + ...)
+    
+# Phát hiện pattern lặp lại sau 4 bước (period r=4)
+# Từ r=4 → tính được gcd(7^(r/2) ± 1, 15) → p=3, q=5
+```
+
+**Chỉ cần 1 lần chạy quantum circuit!**
+
+---
+
+## 🔍 4. Tại sao hiện tại chưa bị phá?
+
+### **4.1. Quantum computer hiện tại còn yếu**
+
+**Yêu cầu để phá RSA-2048:**
+```
+Cần: ~4000 qubit ổn định (logical qubits)
+      Thời gian coherence: >1 giờ
+      Error rate: <0.01%
+```
+
+**Thực tế hiện tại (11/2025):**
+```
+IBM Condor: 1,121 qubit (nhưng noisy, error rate cao)
+Google Willow: 105 qubit (chất lượng cao hơn)
+IonQ: 32 qubit (rất ổn định)
+
+→ Vẫn chưa đủ mạnh để phá RSA thực tế
+```
+
+### **4.2. Dự đoán timeline:**
+
+```
+2025 (hiện tại): Quantum computers ở giai đoạn "NISQ"
+                (Noisy Intermediate-Scale Quantum)
+                → Chưa phá được RSA
+
+2030-2035:      Quantum computers có thể phá RSA-1024
+                (Dự đoán của NSA, NIST)
+
+2035-2040:      Phá được RSA-2048, RSA-4096
+                → TẤT CẢ mã hóa hiện tại không còn an toàn
+```
+
+---
+
+## 🛡️ 5. Giải pháp: Post-Quantum Cryptography (PQC)
+
+### **NIST đã chọn các thuật toán "quantum-safe" (2024):**
+
+**5.1. CRYSTALS-Kyber (Key Exchange)**
+```
+Dựa trên: Bài toán Learning With Errors (LWE)
+Tại sao quantum không phá được: 
+  - Không có cấu trúc tuần hoàn
+  - Không thể dùng Shor's algorithm
+  - Ngay cả quantum computer cũng cần 2^128 operations
+```
+
+**5.2. CRYSTALS-Dilithium (Digital Signatures)**
+```
+Dựa trên: Lattice-based cryptography (mạng tinh thể)
+Quantum computer: Vẫn cần thời gian exponential
+```
+
+**5.3. SPHINCS+ (Signatures)**
+```
+Dựa trên: Hash functions
+Quantum advantage: Chỉ giảm từ 2^256 → 2^128 (vẫn an toàn)
+```
+
+---
+
+## 📊 6. So sánh trực quan
+
+### **Bảng phân tích thời gian phá mã:**
+
+| Thuật toán | Độ dài key | Classical Computer | Quantum Computer | Post-Quantum Safe? |
+|------------|------------|-------------------|------------------|-------------------|
+| RSA | 2048 bit | 10²¹ năm | **1 ngày** | ❌ Không |
+| ECC | 256 bit | 10¹⁵ năm | **Vài phút** | ❌ Không |
+| AES-128 | 128 bit | 10²⁷ năm | 10¹⁴ năm | ⚠️ Yếu hơn |
+| AES-256 | 256 bit | 10⁵⁴ năm | 10²⁷ năm | ✅ An toàn |
+| CRYSTALS-Kyber | Level 3 | 10³⁸ năm | 10³⁸ năm | ✅ An toàn |
+| SHA-256 | 256 bit | 10⁶⁴ năm | 10³² năm | ✅ An toàn |
+
+---
+
+## 🎯 7. Tại sao "Harvest Now, Decrypt Later" đáng lo?
+
+### **Kịch bản thực tế:**
+
+```
+Năm 2025 (BÂY GIỜ):
+  ├─ APT group intercept encrypted data
+  │  └─ TLS traffic, VPN connections, encrypted emails
+  │
+  ├─ Store data (storage rẻ: $10/TB)
+  │
+  └─ Chờ 10 năm...
+
+Năm 2035:
+  ├─ Quantum computer đủ mạnh
+  │
+  ├─ Giải mã toàn bộ data từ 2025
+  │  ├─ Government communications
+  │  ├─ Trade secrets
+  │  ├─ Medical records
+  │  └─ Financial transactions
+  │
+  └─ Data 10 năm trước vẫn có giá trị!
+```
+
+**Ví dụ thực tế:**
+```
+Hợp đồng M&A ký năm 2025 (encrypted)
+→ Năm 2035 decrypt → Phát hiện insider trading
+→ Lawsuit, công ty phá sản
+
+Bí mật quốc phòng năm 2025
+→ Năm 2035 decrypt → Lộ chiến lược quân sự
+```
+
+---
+
+## 🧪 8. Demo đơn giản (Conceptual)
+
+### **Mô phỏng sự khác biệt:**
+
+```python
+# CLASSICAL: Tìm password trong 1 triệu khả năng
+import time
+
+def classical_search(password, database):
+    """Thử tuần tự"""
+    for candidate in database:
+        if candidate == password:
+            return candidate
+    return None
+
+# Thời gian: O(N) = 1 triệu operations
+
+# QUANTUM: Grover's algorithm
+def quantum_search(password, database):
+    """Tìm trong ~√N bước"""
+    # Tạo superposition
+    superposition = create_superposition(database)
+    
+    # Quantum oracle marking
+    for _ in range(int(math.sqrt(len(database)))):
+        mark_target(superposition, password)
+        amplify_amplitude()
+    
+    return measure(superposition)
+
+# Thời gian: O(√N) = 1000 operations (nhanh gấp 1000 lần!)
+```
+
+---
+
+## 🎓 Tóm tắt cho học viên SOC/CSIRT
+
+### **3 điều quan trọng nhất:**
+
+1. **Quantum computer phá mã nhờ tính toán song song (superposition)**
+   - Classical: thử từng khả năng → chậm
+   - Quantum: thử tất cả cùng lúc → nhanh
+
+2. **Shor's algorithm phá RSA/ECC trong thời gian polynomial**
+   - RSA-2048: từ "tỷ năm" → "1 ngày"
+   - Timeline: 2030-2035 sẽ có quantum computers đủ mạnh
+
+3. **Phải hành động NGAY BÂY GIỜ:**
+   - Migrate sang post-quantum cryptography (PQC)
+   - Inventory: tất cả hệ thống dùng RSA/ECC
+   - Re-encrypt sensitive data với quantum-safe algorithms
+
+---
+
+## 📚 Resources:
+
+**Công cụ test PQC:**
+- **Open Quantum Safe (OQS)**: Thư viện PQC mã nguồn mở
+- **NIST PQC Toolkit**: Test quantum-resistant algorithms
+- **IBM Qiskit**: Học quantum computing (free online)
+
+**Chuẩn cần biết:**
+- NIST FIPS 203, 204, 205 (PQC standards - 2024)
+- RFC 9180 (Hybrid Public Key Encryption)
+- CNSA 2.0 (NSA Quantum-Safe guidelines)
+
+---
+
