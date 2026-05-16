@@ -9,7 +9,7 @@
 
 Slide 1: Giới thiệu Module 1
 
-```markdown
+
 # Module 1: Tổng quan về AI trong An ninh mạng & Bức tranh Mối đe dọa 2026
 
 **Khóa học:** Cyber Security Artificial Intelligence (CSAI) 2026
@@ -19,7 +19,7 @@ Slide 1: Giới thiệu Module 1
 - Tại sao bảo mật truyền thống không còn đủ mạnh
 - AI đang thay đổi cuộc chiến an ninh mạng như thế nào
 - Những mối đe dọa mới nhất của năm 2026 mà bạn PHẢI biết
-```
+
 
 💡 **Note:** Chào mừng học viên, tạo không khí thoải mái. Nhấn mạnh rằng khóa học không yêu cầu nền tảng AI/ML — mục tiêu là giúp IT Operations *sử dụng* AI như một công cụ, không phải trở thành nhà nghiên cứu. Hỏi nhanh: "Ai trong phòng đang phải đọc log thủ công mỗi ngày?" để khởi động thảo luận.
 
