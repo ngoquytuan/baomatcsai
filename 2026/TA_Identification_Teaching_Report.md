@@ -1,6 +1,6 @@
 # Báo Cáo Định Danh Nhóm Tấn Công — Dữ Liệu Thực Tế Honeypot
 *Nguồn: MikroTik Home Network SOC — Cowrie + OpenCanary + YARA*
-*Cập nhật: 2026-06-02 | Dùng cho: CSAI2026 Module M2, M5, M7*
+*Cập nhật: 2026-06-02 (v2 — thêm ML Lab results) | Dùng cho: CSAI2026 Module M2, M3, M5, M7*
 
 ---
 
@@ -193,7 +193,7 @@ SSH-2.0-PuTTY_Release_0.58, SSH-2.0-OpenSSH_3.9p1, SSH-2.0-paramiko_1.7.7.1 ...
 
 ---
 
-## 6. Bài Học Kinh Nghiệm
+## 6. Bài Học
 
 > **Threat Intelligence không phải là biết tên hacker.**
 > Threat Intelligence là **nhóm hành vi giống nhau lại** để:
@@ -207,3 +207,90 @@ SSH-2.0-PuTTY_Release_0.58, SSH-2.0-OpenSSH_3.9p1, SSH-2.0-paramiko_1.7.7.1 ...
 
 *Nguồn dữ liệu: Cowrie honeypot, DietPi 192.168.1.88, YARA v2.2, Ghidra 12.1*
 *File liên quan: `docs/ATTACK-LOG.md`, `pm/results/MALWARE_MEOW_DDOS_BOTNET_20260602.md`*
+
+---
+
+## 7. ML Lab Results — K-Means + Isolation Forest trên Dữ Liệu Thực
+
+*Script: `labs/attacker_clustering_lab.py` | Output: `labs/attacker_clusters.png`*
+*Dataset: 4,492 IPs (≥3 sessions), 8 features, 72 ngày Cowrie data*
+
+### 7.1 K-Means kết quả (k=7, Silhouette=0.388)
+
+| Cluster | Tên tự động | Số IP | Avg Sessions | Avg Cmds | Avg Clients | Known TAs |
+|---------|------------|-------|-------------|---------|------------|---------|
+| C0 | Low-volume generic | 1,984 | 8 | 0.1 | 0.9 | TA-10 MEOW dropper |
+| C1 | Low-volume generic | 915 | 154 | 84.7 | 1.1 | — |
+| **C2** | **Multi-client scanner** | **17** | **56** | **0** | **13.6** | **185.246.128.133** ✅ |
+| C3 | Low-volume generic | 91 | 8 | 30.3 | 1.1 | — |
+| C4 | Low-volume generic | 581 | 132 | 64.3 | 1.4 | TA-10 Beary (scanner+deployer) |
+| C5 | Low-volume generic | 882 | 4 | 2.3 | 1.1 | — |
+| **C6** | **Deployer (cmds cao)** | **22** | **1,689** | **129.9** | **1.3** | **TA-01 RedTail, TA-06 DutchGo** ✅ |
+
+**Quan sát:**
+- C2 (17 IP) = Multi-client scanner cluster → `185.246.128.133` rơi đúng vào đây mà không cần nhãn
+- C6 (22 IP) = Deployer cluster → TA-01 RedTail và TA-06 DutchGo tự động vào cùng nhóm
+- K-Means **không biết** về YARA hay HASSH — chỉ dựa vào 8 features hành vi
+
+### 7.2 Isolation Forest kết quả (contamination=5%, 4,492 IPs)
+
+**Top anomalies — IF tự phát hiện không cần nhãn:**
+
+| Rank | IP | Sessions | Cmds | Clients | Nhận dạng thực | IF Score |
+|------|-----|---------|-----|--------|--------------|---------|
+| #1 | 185.246.128.133 | 518 | 0 | **55** | Cred Scanner ✅ | -0.745 |
+| #2 | 160.191.88.19 | 1,076 | 1,062 | 1 | Unknown (high cmd) | -0.731 |
+| #3 | 80.66.66.10 | 4,351 | 0 | 1 | Unknown (high vol) | -0.725 |
+| #8 | 157.66.144.16 | 18,902 | **17,822** | 1 | TA-10 Beary deployer ✅ | -0.693 |
+| #9 | 130.12.181.254 | 20,342 | 992 | 1 | TA-09 GoRecon ✅ | -0.694 |
+
+**Kết quả quan trọng: 5/6 known TAs bị flag là anomaly** — model tự nhận ra mà không cần ground truth.
+
+> 💡 **Insight cho M3:** Isolation Forest đặc biệt hiệu quả khi anomaly có combo bất thường.
+> `185.246.128.133` bất thường vì: 55 clients + 0 commands (không IP nào khác có combo này).
+> `157.66.144.16` bất thường vì: 17,822 commands (cực kỳ cao so với 99% còn lại).
+
+### 7.3 Feature Importance (PCA PC1)
+
+| Rank | Feature | PC1 Loading | Ý nghĩa |
+|------|---------|------------|---------|
+| 1 | `log_cmds` | 0.626 | Số lệnh thực thi — phân biệt deployer vs scanner |
+| 2 | `log_sessions` | 0.454 | Khối lượng tấn công |
+| 3 | `login_ok_rate` | 0.441 | Tỷ lệ đăng nhập thành công |
+| 4 | `active_days` | — | Thời gian hoạt động |
+| 5 | `unique_clients` | — | Số client strings → cred scanner |
+
+### 7.4 Phát Hiện Mới Từ Dữ Liệu
+
+**103.61.122.229 — Temporal Pattern (không hoạt động 24h qua):**
+```
+2026-04-01  11,131  ████████████████████████
+2026-04-02  22,315  ████████████████████████████████████████ ← đỉnh
+2026-04-03  11,985  █████████████████████████
+            [nghỉ 7 tuần]
+2026-05-26   1,565  ███
+2026-05-27   7,907  ████████████████
+2026-05-28  10,770  █████████████████████
+2026-05-29   3,087  ██████
+            [offline 4 ngày đến nay]
+```
+Pattern: burst 3–4 ngày → nghỉ vài tuần → burst lại. Cùng pattern với 185.246.128.133.
+
+**Botnet cluster TA-10 lớn hơn dự kiến:**
+- HASSH `16443846...` liên kết **130+ IP** (không phải 20 IP như ban đầu)
+- Hoạt động từ **2026-03-24** (trước khi MEOW binary bị phát hiện)
+- Phase 1 (scan) → Phase 2 (deploy MEOW) là cùng 1 chiến dịch liên tục
+
+### 7.5 Thông điệp
+
+```
+Trước ML:  Analyst đọc từng IP, so sánh thủ công → chậm, bỏ sót nhiều
+Sau ML:    K-Means tự nhóm 4,492 IP thành 7 clusters trong < 5 giây
+           Isolation Forest tự flag top 5% bất thường mà không cần nhãn
+
+Điều quan trọng: Model KHÔNG thay thế analyst.
+Model làm công việc lọc 4,492 → 17 (C2) hoặc 22 (C6).
+Analyst phân tích 17–22 IP thay vì 4,492 → nhanh hơn 200x.
+```
+
+**Lab script:** `labs/attacker_clustering_lab.py` — chạy được trên dataset này luôn.
