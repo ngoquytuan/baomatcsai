@@ -1,0 +1,226 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720">
+  <defs>
+    <filter id="shadowLight" x="-4%" y="-4%" width="112%" height="112%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetBlur"/>
+      <feFlood flood-color="#000000" flood-opacity="0.06"/>
+      <feComposite in2="offsetBlur" operator="in"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="shadowBlue" x="-6%" y="-6%" width="118%" height="118%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+      <feOffset dx="0" dy="3" result="offsetBlur"/>
+      <feFlood flood-color="#1A56DB" flood-opacity="0.15"/>
+      <feComposite in2="offsetBlue" operator="in"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#2563EB"/>
+    </marker>
+    <marker id="arrowWhite" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#FFFFFF"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1280" height="720" fill="#F3F4F6"/>
+
+  <!-- ===== TITLE BAR ===== -->
+  <rect x="0" y="0" width="1280" height="72" fill="#1E3A5F"/>
+  <text x="640" y="30" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#93C5FD" font-weight="600" letter-spacing="2">THREAT INTELLIGENCE — CSAI 2026</text>
+  <text x="640" y="56" text-anchor="middle" font-family="sans-serif" font-size="22" fill="#FFFFFF" font-weight="700">Cơ Sở Định Danh Nhóm Tấn Công (Threat Actor Attribution)</text>
+
+  <!-- ===== LEFT PANEL: FUNNEL ===== -->
+  <rect x="20" y="88" width="300" height="612" rx="12" fill="#FFFFFF" filter="url(#shadowLight)"/>
+
+  <!-- Left panel header -->
+  <rect x="20" y="88" width="300" height="48" rx="12" fill="#1E3A5F"/>
+  <rect x="20" y="112" width="300" height="24" fill="#1E3A5F"/>
+  <text x="170" y="119" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#93C5FD" font-weight="600">DỮ LIỆU THỰC TẾ</text>
+
+  <!-- Total IPs block -->
+  <rect x="40" y="152" width="260" height="80" rx="8" fill="#EFF6FF"/>
+  <text x="170" y="178" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#4B5563">Tổng IP tấn công (7 ngày)</text>
+  <text x="170" y="208" text-anchor="middle" font-family="sans-serif" font-size="32" fill="#1E3A5F" font-weight="800">1,879+</text>
+
+  <!-- Arrow down -->
+  <line x1="170" y1="240" x2="170" y2="262" stroke="#2563EB" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+  <!-- Filter label -->
+  <rect x="80" y="268" width="180" height="28" rx="6" fill="#FEF3C7"/>
+  <text x="170" y="287" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#92400E" font-weight="600">Phân tích HASSH + TTP + Binary</text>
+
+  <!-- Arrow down -->
+  <line x1="170" y1="304" x2="170" y2="326" stroke="#2563EB" stroke-width="2" marker-end="url(#arrowBlue)"/>
+
+  <!-- Identified TAs -->
+  <rect x="40" y="332" width="260" height="80" rx="8" fill="#1E3A5F"/>
+  <text x="170" y="356" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#93C5FD">Nhóm đã định danh</text>
+  <text x="170" y="392" text-anchor="middle" font-family="sans-serif" font-size="38" fill="#FFFFFF" font-weight="800">10 TA</text>
+
+  <!-- Divider -->
+  <line x1="40" y1="430" x2="300" y2="430" stroke="#E5E7EB" stroke-width="1"/>
+
+  <!-- Breakdown -->
+  <text x="40" y="454" font-family="sans-serif" font-size="11" fill="#6B7280" font-weight="600">PHÂN LOẠI IP CHƯA ĐỊNH DANH:</text>
+
+  <!-- Generic brute force -->
+  <rect x="40" y="464" width="14" height="14" rx="3" fill="#DC2626"/>
+  <text x="62" y="476" font-family="sans-serif" font-size="11" fill="#1F2937" font-weight="600">~1,800 IP</text>
+  <text x="62" y="491" font-family="sans-serif" font-size="10" fill="#6B7280">Generic brute force (Mirai, Hydra)</text>
+
+  <!-- Credential scanner -->
+  <rect x="40" y="510" width="14" height="14" rx="3" fill="#F59E0B"/>
+  <text x="62" y="522" font-family="sans-serif" font-size="11" fill="#1F2937" font-weight="600">~50 IP</text>
+  <text x="62" y="537" font-family="sans-serif" font-size="10" fill="#6B7280">Credential scanner (0 cmd, multi-client)</text>
+
+  <!-- Unknown -->
+  <rect x="40" y="556" width="14" height="14" rx="3" fill="#9CA3AF"/>
+  <text x="62" y="568" font-family="sans-serif" font-size="11" fill="#1F2937" font-weight="600">~20 IP</text>
+  <text x="62" y="583" font-family="sans-serif" font-size="10" fill="#6B7280">Unknown (1–2 sự kiện, chưa đủ data)</text>
+
+  <!-- Key insight -->
+  <rect x="30" y="608" width="280" height="76" rx="8" fill="#FEF2F2"/>
+  <text x="170" y="628" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#991B1B" font-weight="700">💡 Tại sao không tạo TA cho tất cả?</text>
+  <text x="170" y="645" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#7F1D1D">Cần ≥ 2–3 đặc điểm độc đáo kết hợp.</text>
+  <text x="170" y="660" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#7F1D1D">IP mới dùng tool cũ ≠ nhóm mới.</text>
+  <text x="170" y="675" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#7F1D1D">Attribution cần bằng chứng, không phải phỏng đoán.</text>
+
+  <!-- ===== RIGHT PANEL: 6 CRITERIA ===== -->
+  <!-- Row 1 -->
+
+  <!-- Card 1: HASSH -->
+  <rect x="336" y="88" width="296" height="196" rx="12" fill="#FFFFFF" filter="url(#shadowLight)"/>
+  <rect x="336" y="88" width="296" height="44" rx="12" fill="#1E3A5F"/>
+  <rect x="336" y="112" width="296" height="20" fill="#1E3A5F"/>
+  <text x="358" y="106" font-family="sans-serif" font-size="11" fill="#93C5FD">① HASSH Fingerprint</text>
+  <text x="358" y="130" font-family="sans-serif" font-size="9" fill="#60A5FA">Dấu vân tay SSH — khó giả mạo</text>
+  <text x="352" y="156" font-family="sans-serif" font-size="10" fill="#1F2937">KEX algorithm list → MD5 hash</text>
+  <text x="352" y="172" font-family="sans-serif" font-size="10" fill="#1F2937">≠ client version string (dễ giả)</text>
+  <rect x="352" y="182" width="264" height="28" rx="6" fill="#EFF6FF"/>
+  <text x="484" y="200" text-anchor="middle" font-family="monospace" font-size="9" fill="#1D4ED8">TA-10: 16443846... → liên kết 20 IP</text>
+  <text x="352" y="228" font-family="sans-serif" font-size="10" fill="#6B7280">Module: M7 K-Means clustering</text>
+  <circle cx="602" cy="224" r="4" fill="#2563EB"/>
+  <text x="610" y="228" font-family="sans-serif" font-size="10" fill="#2563EB">M7</text>
+
+  <!-- Card 2: YARA -->
+  <rect x="648" y="88" width="296" height="196" rx="12" fill="#FFFFFF" filter="url(#shadowLight)"/>
+  <rect x="648" y="88" width="296" height="44" rx="12" fill="#1E3A5F"/>
+  <rect x="648" y="112" width="296" height="20" fill="#1E3A5F"/>
+  <text x="670" y="106" font-family="sans-serif" font-size="11" fill="#93C5FD">② YARA / Binary Analysis</text>
+  <text x="670" y="130" font-family="sans-serif" font-size="9" fill="#60A5FA">Chữ ký malware — bắt được variants</text>
+  <text x="664" y="156" font-family="sans-serif" font-size="10" fill="#1F2937">1 rule → 3 SHA256 khác nhau</text>
+  <text x="664" y="172" font-family="sans-serif" font-size="10" fill="#1F2937">Nhắm logic, không phải byte</text>
+  <rect x="664" y="182" width="264" height="28" rx="6" fill="#FEF2F2"/>
+  <text x="796" y="200" text-anchor="middle" font-family="monospace" font-size="9" fill="#DC2626">Go_PAM_Backdoor_eba3282b_v2_2</text>
+  <text x="664" y="228" font-family="sans-serif" font-size="10" fill="#6B7280">Module: M2 Threat Intel, M5 Features</text>
+  <circle cx="898" cy="224" r="4" fill="#DC2626"/>
+  <text x="906" y="228" font-family="sans-serif" font-size="10" fill="#DC2626">M2, M5</text>
+
+  <!-- Card 3: TTP -->
+  <rect x="960" y="88" width="300" height="196" rx="12" fill="#FFFFFF" filter="url(#shadowLight)"/>
+  <rect x="960" y="88" width="300" height="44" rx="12" fill="#1E3A5F"/>
+  <rect x="960" y="112" width="300" height="20" fill="#1E3A5F"/>
+  <text x="982" y="106" font-family="sans-serif" font-size="11" fill="#93C5FD">③ TTP — Chuỗi Hành Vi</text>
+  <text x="982" y="130" font-family="sans-serif" font-size="9" fill="#60A5FA">Tactics, Techniques, Procedures</text>
+  <text x="976" y="156" font-family="sans-serif" font-size="10" fill="#1F2937">Thay đổi chậm hơn IP và tool</text>
+  <text x="976" y="172" font-family="sans-serif" font-size="10" fill="#1F2937">Đặc trưng nhất — lớp bền nhất</text>
+  <rect x="976" y="182" width="268" height="28" rx="6" fill="#EFF6FF"/>
+  <text x="1110" y="196" text-anchor="middle" font-family="monospace" font-size="9" fill="#1D4ED8">ulimit -n 1020000 → wget → modzmodz</text>
+  <text x="976" y="212" font-family="monospace" font-size="8" fill="#DC2626">TA-10: ulimit signature trước download</text>
+  <text x="976" y="228" font-family="sans-serif" font-size="10" fill="#6B7280">Module: M5 Decision Tree features</text>
+  <circle cx="1224" cy="224" r="4" fill="#2563EB"/>
+  <text x="1232" y="228" font-family="sans-serif" font-size="10" fill="#2563EB">M5</text>
+
+  <!-- Row 2 -->
+
+  <!-- Card 4: Infrastructure -->
+  <rect x="336" y="300" width="296" height="200" rx="12" fill="#FFFFFF" filter="url(#shadowLight)"/>
+  <rect x="336" y="300" width="296" height="44" rx="12" fill="#0F4C81"/>
+  <rect x="336" y="324" width="296" height="20" fill="#0F4C81"/>
+  <text x="358" y="318" font-family="sans-serif" font-size="11" fill="#BAE6FD">④ Infrastructure Clustering</text>
+  <text x="358" y="338" font-family="sans-serif" font-size="9" fill="#7DD3FC">Nhóm IP dùng chung hạ tầng</text>
+  <text x="352" y="364" font-family="sans-serif" font-size="10" fill="#1F2937">Cùng VPS provider + HASSH</text>
+  <text x="352" y="380" font-family="sans-serif" font-size="10" fill="#1F2937">→ Cùng operator</text>
+  <rect x="352" y="390" width="264" height="36" rx="6" fill="#F0FDF4"/>
+  <text x="484" y="404" text-anchor="middle" font-family="monospace" font-size="9" fill="#166534">157.66.144.16 + 35.233.220.227</text>
+  <text x="484" y="418" text-anchor="middle" font-family="monospace" font-size="9" fill="#166534">+ 18 IP khác → TA-10 cluster</text>
+  <text x="352" y="448" font-family="sans-serif" font-size="10" fill="#6B7280">Module: M7 Graph clustering, M3 Isolation</text>
+  <circle cx="602" cy="444" r="4" fill="#059669"/>
+  <text x="610" y="448" font-family="sans-serif" font-size="10" fill="#059669">M7</text>
+
+  <!-- Card 5: Build Artifacts -->
+  <rect x="648" y="300" width="296" height="200" rx="12" fill="#FFFFFF" filter="url(#shadowLight)"/>
+  <rect x="648" y="300" width="296" height="44" rx="12" fill="#0F4C81"/>
+  <rect x="648" y="324" width="296" height="20" fill="#0F4C81"/>
+  <text x="670" y="318" font-family="sans-serif" font-size="11" fill="#BAE6FD">⑤ Build Artifacts</text>
+  <text x="670" y="338" font-family="sans-serif" font-size="9" fill="#7DD3FC">Dấu tay developer trong binary</text>
+  <text x="664" y="364" font-family="sans-serif" font-size="10" fill="#1F2937">Chỉ thấy khi phân tích binary</text>
+  <text x="664" y="380" font-family="sans-serif" font-size="10" fill="#1F2937">Developer thường không biết để xóa</text>
+  <rect x="664" y="390" width="264" height="36" rx="6" fill="#FEF2F2"/>
+  <text x="796" y="404" text-anchor="middle" font-family="monospace" font-size="9" fill="#DC2626">C:/Users/beary/go/pkg/mod/</text>
+  <text x="796" y="418" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#9B1C1C">→ Tên "beary", Windows, cross-compile</text>
+  <text x="664" y="448" font-family="sans-serif" font-size="10" fill="#6B7280">Module: M5 features (developer_os)</text>
+  <circle cx="898" cy="444" r="4" fill="#DC2626"/>
+  <text x="906" y="448" font-family="sans-serif" font-size="10" fill="#DC2626">M5</text>
+
+  <!-- Card 6: Timing -->
+  <rect x="960" y="300" width="300" height="200" rx="12" fill="#FFFFFF" filter="url(#shadowLight)"/>
+  <rect x="960" y="300" width="300" height="44" rx="12" fill="#0F4C81"/>
+  <rect x="960" y="324" width="300" height="20" fill="#0F4C81"/>
+  <text x="982" y="318" font-family="sans-serif" font-size="11" fill="#BAE6FD">⑥ Timing Pattern</text>
+  <text x="982" y="338" font-family="sans-serif" font-size="9" fill="#7DD3FC">Lịch hoạt động = loại operator</text>
+  <text x="976" y="364" font-family="sans-serif" font-size="10" fill="#1F2937">Bot: phẳng 24/7, không nghỉ</text>
+  <text x="976" y="380" font-family="sans-serif" font-size="10" fill="#1F2937">Người: theo múi giờ, nghỉ đêm</text>
+  <rect x="976" y="390" width="268" height="36" rx="6" fill="#FFFBEB"/>
+  <text x="1110" y="404" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#92400E">185.246.128.133: 3 ngày burst × 3 đợt</text>
+  <text x="1110" y="418" text-anchor="middle" font-family="sans-serif" font-size="9" fill="#92400E">TA-06: 68 ngày liên tiếp 24/7</text>
+  <text x="976" y="448" font-family="sans-serif" font-size="10" fill="#6B7280">Module: M7 UBA, M3 Isolation Forest</text>
+  <circle cx="1224" cy="444" r="4" fill="#F59E0B"/>
+  <text x="1232" y="448" font-family="sans-serif" font-size="10" fill="#D97706">M7</text>
+
+  <!-- ===== BOTTOM ROW: 4 EXAMPLE TAs ===== -->
+  <rect x="336" y="516" width="924" height="188" rx="12" fill="#1E3A5F" filter="url(#shadowBlue)"/>
+  <text x="798" y="540" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#93C5FD" font-weight="700" letter-spacing="1">VÍ DỤ 4 NHÓM TIÊU BIỂU — CÁCH PHÂN BIỆT</text>
+
+  <!-- TA-01 -->
+  <rect x="352" y="552" width="210" height="136" rx="8" fill="#FFFFFF" fill-opacity="0.07"/>
+  <text x="457" y="572" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#FCA5A5" font-weight="700">TA-01 RedTail</text>
+  <text x="352" y="590" font-family="sans-serif" font-size="9" fill="#E5E7EB">YARA: redtail ARM7 binary</text>
+  <text x="352" y="606" font-family="sans-serif" font-size="9" fill="#E5E7EB">TTP: kill c3pool → mine XMR</text>
+  <text x="352" y="622" font-family="sans-serif" font-size="9" fill="#E5E7EB">Infra: DigitalOcean USA/DE</text>
+  <text x="352" y="638" font-family="sans-serif" font-size="9" fill="#FCD34D">→ Cryptominer, active 2023–now</text>
+  <rect x="352" y="648" width="80" height="16" rx="4" fill="#DC2626" fill-opacity="0.3"/>
+  <text x="392" y="660" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#FCA5A5">🔴 ACTIVE</text>
+
+  <!-- TA-08 Krane -->
+  <rect x="578" y="552" width="210" height="136" rx="8" fill="#FFFFFF" fill-opacity="0.07"/>
+  <text x="683" y="572" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#FCA5A5" font-weight="700">TA-08 Krane</text>
+  <text x="578" y="590" font-family="sans-serif" font-size="9" fill="#E5E7EB">YARA: Go_PAM_Backdoor</text>
+  <text x="578" y="606" font-family="sans-serif" font-size="9" fill="#E5E7EB">TTP: sshd replace → PAM hook</text>
+  <text x="578" y="622" font-family="sans-serif" font-size="9" fill="#E5E7EB">Hôm nay: 3 variants vẫn hit</text>
+  <text x="578" y="638" font-family="sans-serif" font-size="9" fill="#FCD34D">→ Persistent backdoor, IoT DDoS</text>
+  <rect x="578" y="648" width="80" height="16" rx="4" fill="#DC2626" fill-opacity="0.3"/>
+  <text x="618" y="660" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#FCA5A5">🔴 ACTIVE</text>
+
+  <!-- TA-10 Beary -->
+  <rect x="804" y="552" width="210" height="136" rx="8" fill="#FFFFFF" fill-opacity="0.07"/>
+  <text x="909" y="572" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#FCA5A5" font-weight="700">TA-10 "Beary"</text>
+  <text x="804" y="590" font-family="sans-serif" font-size="9" fill="#E5E7EB">Build: C:/Users/beary/go/</text>
+  <text x="804" y="606" font-family="sans-serif" font-size="9" fill="#E5E7EB">TTP: ulimit → modzmodz</text>
+  <text x="804" y="622" font-family="sans-serif" font-size="9" fill="#E5E7EB">C2: 51.75.118.169:20037</text>
+  <text x="804" y="638" font-family="sans-serif" font-size="9" fill="#FCD34D">→ DDoS-for-hire, 8 methods</text>
+  <rect x="804" y="648" width="80" height="16" rx="4" fill="#DC2626" fill-opacity="0.3"/>
+  <text x="844" y="660" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#FCA5A5">🔴 NEW 06/2026</text>
+
+  <!-- TA-07 Lithuania -->
+  <rect x="1030" y="552" width="210" height="136" rx="8" fill="#FFFFFF" fill-opacity="0.07"/>
+  <text x="1135" y="572" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#A5B4FC" font-weight="700">PATTERN-10</text>
+  <text x="1030" y="590" font-family="sans-serif" font-size="9" fill="#E5E7EB">185.246.128.133 (hôm nay)</text>
+  <text x="1030" y="606" font-family="sans-serif" font-size="9" fill="#E5E7EB">55 SSH clients, 0 commands</text>
+  <text x="1030" y="622" font-family="sans-serif" font-size="9" fill="#E5E7EB">HASSH cố định = 1 tool</text>
+  <text x="1030" y="638" font-family="sans-serif" font-size="9" fill="#FCD34D">→ Credential validation scan</text>
+  <rect x="1030" y="648" width="100" height="16" rx="4" fill="#4B5563" fill-opacity="0.5"/>
+  <text x="1080" y="660" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#D1D5DB">⚠️ KHÔNG TẠO TA MỚI</text>
+
+</svg>
