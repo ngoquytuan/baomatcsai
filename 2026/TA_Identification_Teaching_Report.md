@@ -193,7 +193,7 @@ SSH-2.0-PuTTY_Release_0.58, SSH-2.0-OpenSSH_3.9p1, SSH-2.0-paramiko_1.7.7.1 ...
 
 ---
 
-## 6. Bài Học Cho Học Viên
+## 6. Bài Học Kinh Nghiệm
 
 > **Threat Intelligence không phải là biết tên hacker.**
 > Threat Intelligence là **nhóm hành vi giống nhau lại** để:
