@@ -613,8 +613,6 @@ In ra tự tick khi xây SOC thực tế:
 
 ---
 
-## Một Câu Chốt Cho Học Viên
-
 > **"Công cụ không tự chạy — SOC sống được nhờ con người và quy trình. Bắt đầu nhỏ, làm chắc phần cốt lõi, rồi mới mở rộng."**
 
 ---
