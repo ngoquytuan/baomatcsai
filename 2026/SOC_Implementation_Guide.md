@@ -2,7 +2,7 @@
 
 ---
 
-> **Câu chốt để nhớ:** "Khảo sát trước, biết mình có gì và yếu chỗ nào — rồi mới xây. Bắt đầu nhỏ, làm chắc cái cốt lõi, mở rộng dần."
+"Khảo sát trước, biết mình có gì và yếu chỗ nào — rồi mới xây. Bắt đầu nhỏ, làm chắc cái cốt lõi, mở rộng dần."
 
 ---
 
